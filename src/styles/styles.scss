@@ -1,0 +1,59 @@
+@import 'modules/index';
+
+.form-control[readonly] {
+  background-color: #fff;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.pagination {
+  align-items: center;
+  justify-content: center;
+}
+
+.table {
+  thead th,
+  tbody td {
+    vertical-align: middle;
+  }
+}
+
+.modal-header {
+  .close {
+    padding: 0;
+    margin: 0;
+  }
+
+  .modal-title {
+    margin: 0 auto;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.pac-container {
+  z-index: 1051 !important;
+}
+
+.fc-day-grid-event .fc-time {
+  display: none;
+}
+
+i.required {
+  color: #dc3545;
+}
+
+.text {
+  &--break {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+.bg--white {
+  background-color: #fff;
+}

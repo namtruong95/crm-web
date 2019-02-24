@@ -1,0 +1,11 @@
+.pdf-table.table {
+  thead th,
+  tbody td {
+    min-width: 200px;
+
+    &:last-child {
+      max-width: 150px;
+      width: 150px;
+    }
+  }
+}

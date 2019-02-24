@@ -1,0 +1,18 @@
+.wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  .nav {
+    width: 250px;
+    min-height: calc(100vh - 67px);
+  }
+
+  .content {
+    -ms-flex: 1;
+    -webkit-box-flex: 1;
+    flex: 1;
+    padding: 0 20px 20px;
+    width: calc(100% - 250px);
+  }
+}

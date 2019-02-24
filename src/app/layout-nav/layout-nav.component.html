@@ -1,0 +1,75 @@
+<nav id="sidebar">
+  <ul class="list-unstyled components">
+    <li id="cimLI">
+      <a href="#CIM" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <img width="40" src="/assets/img/icon_CIM.png" /> CIM</a>
+      <ul class="collapse list-unstyled" id="CIM">
+        <li>
+          <a [routerLink]="['/cim']" routerLinkActive="active">Customer Information</a>
+        </li>
+        <li>
+          <a [routerLink]="['/timeline']" routerLinkActive="active">Sale Activities</a>
+        </li>
+      </ul>
+    </li>
+
+    <li id="msmLI">
+      <a href="#MSM" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <img width="40" src="/assets/img/icon_SAM.png" /> MSM</a>
+      <ul class="collapse list-unstyled" id="MSM">
+        <li>
+          <a [routerLink]="['/msm']" routerLinkActive="active">Scheduler Information</a>
+        </li>
+      </ul>
+    </li>
+
+    <li id="ssmLI">
+      <a href="#SSM" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <img width="40" src="/assets/img/icon_SSM.png" /> SSM</a>
+      <ul class="collapse list-unstyled" id="SSM">
+        <li>
+          <a [routerLink]="['/ssm', 'policy']" routerLinkActive="active">Policy</a>
+        </li>
+        <li>
+          <a [routerLink]="['/ssm', 'bts']" routerLinkActive="active">BTS</a>
+        </li>
+        <li>
+          <a [routerLink]="['/ssm', 'quotation']" routerLinkActive="active">Quotation</a>
+        </li>
+        <li>
+          <a [routerLink]="['/ssm', 'proposal']" routerLinkActive="active">Proposal</a>
+        </li>
+      </ul>
+    </li>
+
+    <li id="ccmLI">
+      <a href="#CCM" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <img width="40" src="/assets/img/icon_CCM.png" /> CCM</a>
+      <ul class="collapse list-unstyled" id="CCM">
+        <li>
+          <a [routerLink]="['/ccm']" routerLinkActive="active">Customer Care Activity</a>
+        </li>
+      </ul>
+    </li>
+
+    <li id="dbrLI">
+      <a href="#DBR" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <img width="40" src="/assets/img/icon_DBR.png" /> DBR</a>
+      <ul class="collapse list-unstyled" id="DBR">
+        <li>
+          <a [routerLink]="['/dbr/dashboard']" routerLinkActive="active">Dashboard</a>
+        </li>
+      </ul>
+    </li>
+
+    <li id="dbrLI" *ngIf="role.is_admin">
+      <a href="#USER" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <img width="40" src="/assets/img/icon_DBR.png" /> USER</a>
+      <ul class="collapse list-unstyled" id="USER">
+        <li>
+          <a [routerLink]="['/users']" routerLinkActive="active">User</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

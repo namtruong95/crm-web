@@ -1,0 +1,194 @@
+<form #Policy="ngForm" novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="policyName">Policy Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="policyName"
+          autocomplete="new-policyName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': PolicyName.dirty && PolicyName.errors }"
+          name="policyName"
+          #PolicyName="ngModel"
+          required
+          placeholder="please enter policy name"
+          [(ngModel)]="policy.policyName">
+
+        <div class="invalid-feedback"
+          *ngIf="PolicyName.errors?.required">
+          Please enter policy name
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="serviceTerm">Type Of Service <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="serviceTerms"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingServiceTerm"
+          placeholder="please select type of service"
+          [searchable]="false"
+          name="serviceTerm"
+          #ServiceTerm="ngModel"
+          required
+          [(ngModel)]="policy.serviceTerm"
+          bindLabel="name">
+        </ng-select>
+
+        <div class="invalid-feedback"
+          *ngIf="ServiceTerm.errors?.required">
+          Please select type of service
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="bandWidth">Bandwidth (Mbps)</label>
+        <input type="text" id="bandWidth"
+          autocomplete="new-bandWidth"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': BandWidth.dirty && BandWidth.errors }"
+          name="bandWidth"
+          appNumbericValidator
+          min="1"
+          placeholder="please enter bandwidth"
+          [(ngModel)]="policy.bandWidth"
+          #BandWidth="ngModel">
+
+        <div class="invalid-feedback"
+          *ngIf="BandWidth.dirty && BandWidth.errors?.appNumbericValidator">Please enter a bandwidth greater than 0</div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="typeOfService">Service Term <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="typeOfServices"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfService"
+          placeholder="please select service term"
+          [searchable]="false"
+          name="typeOfServices"
+          #TypeOfService="ngModel"
+          required
+          [(ngModel)]="policy.typeOfService"
+          bindLabel="name">
+        </ng-select>
+
+        <div class="invalid-feedback"
+          *ngIf="TypeOfService.errors?.required">
+          Please select service term
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="minDistance">Min Distance (km)</label>
+        <input type="text" id="minDistance"
+          autocomplete="new-minDistance"
+          class="form-control"
+          name="minDistance"
+          appNumbericValidator
+          placeholder="please enter min distance"
+          [(ngModel)]="policy.minDistance">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="maxDistance">Max Distance (km)</label>
+        <input type="text" id="maxDistance"
+          autocomplete="new-maxDistance"
+          class="form-control"
+          name="maxDistance"
+          appNumbericValidator
+          placeholder="please enter max distance"
+          [(ngModel)]="policy.maxDistance">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="otc">OTC (MMK) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="otc"
+          autocomplete="new-otc"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': Otc.dirty && Otc.errors }"
+          name="otc"
+          #Otc="ngModel"
+          required
+          #OTC
+          placeholder="please enter OTC"
+          [ngModel]="policy.otc"
+          (ngModelChange)="changeOtc()">
+
+        <div class="invalid-feedback"
+          *ngIf="Otc.errors?.required">
+          Please enter otc
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="mrcMin">MRC Min (MMK) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="mrcMin"
+          autocomplete="new-mrcMin"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': MrcMin.dirty && MrcMin.errors }"
+          name="mrcMin"
+          #MrcMin="ngModel"
+          required
+          #MRCMin
+          placeholder="please enter MRC Min"
+          [ngModel]="policy.mrcMin"
+          (ngModelChange)="changeMRCMin()">
+
+        <div class="invalid-feedback"
+          *ngIf="MrcMin.errors?.required">
+          Please enter min MRC
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="mrcMax">MRC Max (MMK) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="mrcMax"
+          autocomplete="new-mrcMax"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': MrcMax.dirty && MrcMax.errors }"
+          name="mrcMax"
+          #MrcMax="ngModel"
+          required
+          #MRCMax
+          placeholder="please enter MRC Max"
+          [ngModel]="policy.mrcMax"
+          (ngModelChange)="changeMRCMax()">
+
+        <div class="invalid-feedback"
+          *ngIf="MrcMax.errors?.required">
+          Please enter max MRC
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary"
+      (click)="createPolicy(Policy)"
+      [disabled]="isLoading || Policy.form.invalid">
+      Create
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</form>

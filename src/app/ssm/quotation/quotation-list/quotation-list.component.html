@@ -1,0 +1,110 @@
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table quotation-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('customerName')">
+          Cusotmer Name
+          <i class="fa {{ getClassOrder('customerName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('typeOfServiceName')">
+          Service Term
+          <i class="fa {{ getClassOrder('typeOfServiceName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('serviceTermName')">
+          Type Of Service
+          <i class="fa {{ getClassOrder('serviceTermName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('bandWidth')">
+          Bandwidth (Mbps)
+          <i class="fa {{ getClassOrder('bandWidth') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('distance')">
+          Distance  (km)
+          <i class="fa {{ getClassOrder('distance') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('otcNum')">
+          OTC (MMK)
+          <i class="fa {{ getClassOrder('otcNum') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('mrcNum')">
+          MRC (MMK)
+          <i class="fa {{ getClassOrder('mrcNum') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('total')">
+          Total Price (MMK)
+          <i class="fa {{ getClassOrder('total') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('reduceMrc')">
+          Reduce MRC (%)
+          <i class="fa {{ getClassOrder('reduceMrc') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('reduceOtc')">
+          Reduce OTC (%)
+          <i class="fa {{ getClassOrder('reduceOtc') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('totalTax')">
+          Real Price (MMK)
+          <i class="fa {{ getClassOrder('totalTax') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('timeForHire')">
+          Time For Hire (months)
+          <i class="fa {{ getClassOrder('timeForHire') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('timeForProvide')">
+          Time For Provide (days)
+          <i class="fa {{ getClassOrder('timeForProvide') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staffName')">
+          Sale Staff
+          <i class="fa {{ getClassOrder('staffName') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let quotation of quotationList;">
+        <td>
+          <button type="button" class="mr-1 btn btn-info" (click)="exportQuotation(quotation.id)"><i class="fa fa-file"></i></button>
+          <button type="button" class="mr-1 btn btn-info" (click)="editQuotation(quotation)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removeQuotation(quotation)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ quotation.customerName }}</td>
+        <td>{{ quotation.typeOfServiceName }}</td>
+        <td>{{ quotation.serviceTermName }}</td>
+        <td>{{ quotation.bandWidth }}</td>
+        <td>{{ quotation.distance }}</td>
+        <td>{{ quotation.otc }}</td>
+        <td>{{ quotation.mrc }}</td>
+        <td>{{ quotation.totalStr }}</td>
+        <td>{{ quotation.reduceMrc }}</td>
+        <td>{{ quotation.reduceOtc }}</td>
+        <td>{{ quotation.totalTaxStr }}</td>
+        <td>{{ quotation.timeForHire }}</td>
+        <td>{{ quotation.timeForProvide }}</td>
+        <td>{{ quotation.staffName }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': quotationList.length > 0 }">
+        <td colspan="14" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': quotationList.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

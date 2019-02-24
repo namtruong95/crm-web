@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-12">
+    <!-- <button class="btn btn-primary mr-2">Send Mail</button>
+    <button class="btn btn-primary mx-2">Send Message</button> -->
+    <button type="button" class="btn btn-primary mx-2" (click)="exportSaleActivity()">Export</button>
+  </div>
+</div>
+
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table sale-activity-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('name')">
+          Name
+          <i class="fa {{ getClassOrder('name') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('time')">
+          Start
+          <i class="fa {{ getClassOrder('time') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('date')">
+          End
+          <i class="fa {{ getClassOrder('date') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('actionOfSaleName')">
+          Activity Type
+          <i class="fa {{ getClassOrder('actionOfSaleName') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sAc of saleActivities;">
+        <td>
+          <button type="button" class="mr-1 btn btn-info" (click)="sendMail(sAc)"><i class="fa fa-envelope"></i></button>
+          <button type="button" class="mr-1 btn btn-info" (click)="editSaleActivity(sAc)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removeSaleActivity(sAc)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ sAc.nameOfSale }}</td>
+        <td>{{ sAc.start }}</td>
+        <td>{{ sAc.end }}</td>
+        <td>{{ sAc.actionOfSaleName }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': saleActivities.length > 0 }">
+        <td colspan="5" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': saleActivities.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

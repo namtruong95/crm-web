@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h5 class="modal-title">Assign For Staff</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="modal-body customer-edit">
+  <form #CustomerForm="ngForm" autocomplete="off" novalidate>
+    <div class="row mb-4">
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="Name">Assigned For Sale</label>
+        <ng-select
+          [items]="users"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingUser"
+          placeholder="please select user"
+          [searchable]="false"
+          name="user"
+          [(ngModel)]="customer.assignedStaff"
+          bindLabel="fullName">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary w-25 mr-2" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-primary w-25 ml-2"
+          (click)="assignCustomerForStaff()"
+          [disabled]="isLoading || CustomerForm.form.invalid">
+          OK
+          <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

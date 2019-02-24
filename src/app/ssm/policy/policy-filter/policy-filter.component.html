@@ -1,0 +1,67 @@
+<form novalidate>
+  <div class="row">
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="PolicyName">Policy Name</label>
+        <input type="text" id="PolicyName"
+          autocomplete="new-name"
+          class="form-control"
+          name="policyName"
+          placeholder="please enter policy name"
+          [(ngModel)]="filterTerm.policyName">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="serviceTerm">Type Of Service</label>
+        <ng-select
+          [items]="serviceTerms"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingServiceTerm"
+          placeholder="please select type of service"
+          [searchable]="false"
+          name="serviceTerm"
+          [(ngModel)]="filterTerm.serviceTerm"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="typeOfService">Service Term</label>
+        <ng-select
+          [items]="typeOfServices"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfService"
+          placeholder="please select service term"
+          [searchable]="false"
+          name="typeOfServices"
+          [(ngModel)]="filterTerm.typeOfService"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group policy-filter__btn">
+      <button type="button" class="btn btn-primary"
+        (click)="filterPolicy()">
+        <i class="fa fa-search mr-2"></i>
+        Filter
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <button type="button" class="btn btn-primary mr-2"
+        (click)="exportPolicy()">Export</button>
+      <!-- <button type="button" class="btn btn-primary mx-2">Import</button> -->
+    </div>
+  </div>
+</form>

@@ -1,0 +1,89 @@
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table care-activity-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('customerName')">
+          Customer Name
+          <i class="fa {{ getClassOrder('customerName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('customerAddress')">
+          Address
+          <i class="fa {{ getClassOrder('customerAddress') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('customerContactName')">
+          Person
+          <i class="fa {{ getClassOrder('customerContactName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('customerPosition')">
+          Position
+          <i class="fa {{ getClassOrder('customerPosition') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('dateActivityFormat')">
+          Date
+          <i class="fa {{ getClassOrder('dateActivityFormat') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('reason')">
+          Reason
+          <i class="fa {{ getClassOrder('reason') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('type')">
+          Type
+          <i class="fa {{ getClassOrder('type') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('status')">
+          Status
+          <i class="fa {{ getClassOrder('status') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staffName')">
+          Sale Care
+          <i class="fa {{ getClassOrder('staffName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('giftPrice')">
+          Gift Price (MMK)
+          <i class="fa {{ getClassOrder('giftPrice') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let careActivity of careActivities;">
+        <td>
+          <button type="button" class="mr-1 btn btn-info" (click)="editCareActivity(careActivity)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removeCareActivity(careActivity)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ careActivity.customerName }}</td>
+        <td>{{ careActivity.customerAddress }}</td>
+        <td>{{ careActivity.customerContactName }}</td>
+        <td>{{ careActivity.customerPosition }}</td>
+        <td>{{ careActivity.dateActivityFormat }}</td>
+        <td>{{ careActivity.reason }}</td>
+        <td>{{ careActivity.type }}</td>
+        <td>{{ careActivity.statusStr }}</td>
+        <td>{{ careActivity.staffName }}</td>
+        <td>{{ careActivity.giftPrice }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': careActivities.length > 0 }">
+        <td colspan="11" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': careActivities.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

@@ -1,0 +1,133 @@
+<form #BtsForm="ngForm" novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="siteCode">Site Code <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="siteCode"
+          autocomplete="new-siteCode"
+          class="form-control"
+          name="siteCode"
+          [ngClass]="{ 'is-invalid': SiteCode.dirty && SiteCode.errors }"
+          #SiteCode="ngModel"
+          required
+          placeholder="please enter site code"
+          [(ngModel)]="bts.siteCode">
+
+        <div class="invalid-feedback"
+          *ngIf="SiteCode.errors?.required">
+          Please enter site code
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="address">Address <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="address"
+          autocomplete="new-address"
+          class="form-control"
+          name="address"
+          [ngClass]="{ 'is-invalid': Address.dirty && Address.errors }"
+          #Address="ngModel"
+          required
+          #Address
+          placeholder="please enter address"
+          [(ngModel)]="bts.address">
+
+        <div class="invalid-feedback"
+          *ngIf="Address.errors?.required">
+          Please enter address
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="latitude">Latitude <i class="required">&#40;*&#41;</i></label>
+        <input type="number" id="latitude"
+          autocomplete="new-latitude"
+          class="form-control"
+          name="latitude"
+          [ngClass]="{ 'is-invalid': Latitude.dirty && Latitude.errors }"
+          #Latitude="ngModel"
+          required
+          placeholder="please enter latitude"
+          [(ngModel)]="bts.latitude">
+
+        <div class="invalid-feedback"
+          *ngIf="Latitude.errors?.required">
+          Please enter latitude
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="longitude">Longitude <i class="required">&#40;*&#41;</i></label>
+        <input type="number" id="longitude"
+          autocomplete="new-longitude"
+          class="form-control"
+          name="longitude"
+          [ngClass]="{ 'is-invalid': Longitude.dirty && Longitude.errors }"
+          #Longitude="ngModel"
+          required
+          placeholder="please enter longitude"
+          [(ngModel)]="bts.longitude">
+
+        <div class="invalid-feedback"
+          *ngIf="Longitude.errors?.required">
+          Please enter longitude
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="stateRegion">State/Region <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="stateRegion"
+          autocomplete="new-stateRegion"
+          class="form-control"
+          name="stateRegion"
+          [ngClass]="{ 'is-invalid': StateRegion.dirty && StateRegion.errors }"
+          #StateRegion="ngModel"
+          required
+          placeholder="please enter state/region"
+          [(ngModel)]="bts.stateRegion">
+
+        <div class="invalid-feedback"
+          *ngIf="StateRegion.errors?.required">
+          Please enter state/region
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="townShip">Township <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="townShip"
+          autocomplete="new-townShip"
+          class="form-control"
+          name="townShip"
+          [ngClass]="{ 'is-invalid': TownShip.dirty && TownShip.errors }"
+          #TownShip="ngModel"
+          required
+          placeholder="please enter township"
+          [(ngModel)]="bts.townShip">
+
+        <div class="invalid-feedback"
+          *ngIf="TownShip.errors?.required">
+          Please enter township
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary"
+      (click)="createBts(BtsForm)"
+      [disabled]="isLoading || BtsForm.form.invalid">
+      Create
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</form>

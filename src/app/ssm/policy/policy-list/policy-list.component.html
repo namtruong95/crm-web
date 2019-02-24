@@ -1,0 +1,84 @@
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table policy-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('policyName')">
+          Policy Name
+          <i class="fa {{ getClassOrder('policyName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('serviceTermName')">
+          Type Of Service
+          <i class="fa {{ getClassOrder('serviceTermName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('bandWidth')">
+          Bandwidth (Mbps)
+          <i class="fa {{ getClassOrder('bandWidth') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('typeOfServiceName')">
+          Service Term
+          <i class="fa {{ getClassOrder('typeOfServiceName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('minDistance')">
+          Min Distance
+          <i class="fa {{ getClassOrder('minDistance') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('maxDistance')">
+          Max Distance (km)
+          <i class="fa {{ getClassOrder('maxDistance') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('otc')">
+          OTC (MMK)
+          <i class="fa {{ getClassOrder('otc') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('mrcMin')">
+          MRC Min (MMK)
+          <i class="fa {{ getClassOrder('mrcMin') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('mrcMax')">
+          MRC Max (MMK)
+          <i class="fa {{ getClassOrder('mrcMax') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let policy of policyList;">
+        <td>
+          <button type="button" class="mr-1 btn btn-info" (click)="editPolicy(policy)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removePolicy(policy)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ policy.policyName }}</td>
+        <td>{{ policy.serviceTermName }}</td>
+        <td>{{ policy.bandWidth }}</td>
+        <td>{{ policy.typeOfServiceName }}</td>
+        <td>{{ policy.minDistance }}</td>
+        <td>{{ policy.maxDistance }}</td>
+        <td>{{ policy.otc }}</td>
+        <td>{{ policy.mrcMin }}</td>
+        <td>{{ policy.mrcMax }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': policyList.length > 0 }">
+        <td colspan="10" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': policyList.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

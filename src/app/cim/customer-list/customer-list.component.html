@@ -1,0 +1,110 @@
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table customer-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('customerName')">
+          Customer Name
+          <i class="fa {{ getClassOrder('customerName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('address')">
+          Address
+          <i class="fa {{ getClassOrder('address') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('catalogName')">
+          Catalog
+          <i class="fa {{ getClassOrder('catalogName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('customerStatusString')">
+          Status
+          <i class="fa {{ getClassOrder('customerStatusString') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('contactName')">
+          Contact Name
+          <i class="fa {{ getClassOrder('contactName') }}"></i>
+        </th>
+        <!-- <th class="cursor-pointer" (click)="addOrder('typeOfContactName')">
+          Status Of Process
+          <i class="fa {{ getClassOrder('typeOfContactName') }}"></i>
+        </th> -->
+        <th class="cursor-pointer" (click)="addOrder('phone')">
+          Phone
+          <i class="fa {{ getClassOrder('phone') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('typeOfInvestmentName')">
+          Type of investment
+          <i class="fa {{ getClassOrder('typeOfInvestmentName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('typeOfSaleName')">
+          Type of Sale
+          <i class="fa {{ getClassOrder('typeOfSaleName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('email')">
+          Email
+          <i class="fa {{ getClassOrder('email') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('position')">
+          Position
+          <i class="fa {{ getClassOrder('position') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('service')">
+          Service
+          <i class="fa {{ getClassOrder('service') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('customerDateFormat')">
+          Date
+          <i class="fa {{ getClassOrder('customerDateFormat') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('assignedForSale')">
+          Assigned Staff
+          <i class="fa {{ getClassOrder('assignedForSale') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customerList;">
+        <td>
+          <button type="button" class="mr-1 btn btn-success" (click)="assignedFotStaff(customer)"><i class="fa fa-user-plus"></i></button>
+          <button type="button" class="mr-1 btn btn-info" (click)="editCustomer(customer)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removeCustomer(customer)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ customer.customerName }}</td>
+        <td>{{ customer.address }}</td>
+        <td>{{ customer.catalogName }}</td>
+        <td>{{ customer.customerStatusString }}</td>
+        <td>{{ customer.contactName }}</td>
+        <!-- <td>{{ customer.typeOfContactName }}</td> -->
+        <td>{{ customer.phone }}</td>
+        <td>{{ customer.typeOfInvestmentName }}</td>
+        <td>{{ customer.typeOfSaleName }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.position }}</td>
+        <td>{{ customer.service }}</td>
+        <td>{{ customer.customerDateFormat }}</td>
+        <td>{{ customer.userName }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': customerList.length > 0 }">
+        <td colspan="13" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': customerList.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

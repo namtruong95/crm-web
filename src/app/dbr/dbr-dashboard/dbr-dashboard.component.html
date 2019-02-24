@@ -1,0 +1,118 @@
+<app-dbr-dashboard-filter></app-dbr-dashboard-filter>
+
+<div class="row p-0 mt-2">
+  <div class="col-12 form-group">
+    <h3>Activity Type</h3>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Sent Email</li>
+        <li class="list-group-item body">
+          <i class="fa fa-envelope fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupTypeOfContact?.sentEmail }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Called</li>
+        <li class="list-group-item body">
+          <i class="fa fa-phone-square fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupTypeOfContact?.called }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Meeting With Customer</li>
+        <li class="list-group-item body">
+          <i class="fa fa-comments fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupTypeOfContact?.meetingWithCustomer }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Made And Sent Quotation</li>
+        <li class="list-group-item body">
+          <i class="fa fa-th-list fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupTypeOfContact?.madeAndSentQuotation }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Negotiate</li>
+        <li class="list-group-item body">
+          <i class="fa fa-thumbs-up fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupTypeOfContact?.negotiate }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Signed Contract</li>
+        <li class="list-group-item body">
+          <i class="fa fa-check-square fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupTypeOfContact?.signedContract }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="row p-0 mt-2">
+  <div class="col-12 form-group">
+    <h3>Customer Care Status</h3>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">On going</li>
+        <li class="list-group-item body">
+          <i class="fa fa-cogs fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupCustomerCareStatus?.onGoing }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+    <div class="card d-card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item header">Completed</li>
+        <li class="list-group-item body">
+          <i class="fa fa-check fa-4x"></i>
+          <h3 class="pull-right my-3">{{ dashboard?.groupCustomerCareStatus?.completed }}</h3>
+        </li>
+        <li class="list-group-item footer"></li>
+      </ul>
+    </div>
+  </div>
+
+</div>

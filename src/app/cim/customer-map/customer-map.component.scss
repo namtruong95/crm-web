@@ -1,0 +1,10 @@
+agm-map {
+  height: 100%;
+}
+
+@media (max-width: 991.98px) {
+  agm-map {
+    height: 500px;
+    margin-top: 20px;
+  }
+}

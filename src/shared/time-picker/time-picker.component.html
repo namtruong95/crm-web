@@ -1,0 +1,62 @@
+<div class="timepicker-wrap" (click)="showTimepicker($event)">
+  <input type="text" class="form-control"
+    [(ngModel)]="selectedTime"
+    readonly>
+
+  <div class="timepicker-form"
+    [hidden]="!isShow">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <a (click)="setHour('up')">
+              <span class="fa fa-angle-up"></span>
+            </a>
+          </td>
+          <td class="separator"></td>
+          <td>
+            <a (click)="setMinute('up')">
+              <span class="fa fa-angle-up"></span>
+            </a>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="text"
+              class="input_time"
+              name="hour"
+              readonly
+              maxlength="2"
+              autocomplete="off"
+              [ngModel]="timer.hour_display">
+          </td>
+          <td class="separator">:</td>
+          <td>
+            <input type="text"
+              class="input_time"
+              name="min"
+              readonly
+              maxlength="2"
+              autocomplete="off"
+              [ngModel]="timer.minute_display">
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <a (click)="setHour('down')">
+              <span class="fa fa-angle-down"></span>
+            </a>
+          </td>
+          <td class="separator"></td>
+          <td>
+            <a (click)="setMinute('down')">
+              <span class="fa fa-angle-down"></span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

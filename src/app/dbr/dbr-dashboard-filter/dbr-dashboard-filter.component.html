@@ -1,0 +1,64 @@
+<form novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-3 col-md-6 form-group">
+      <label>Sale Staff</label>
+      <ng-select
+        [items]="staffs"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingStaff"
+        placeholder="please select staff"
+        [searchable]="false"
+        name="staff"
+        [(ngModel)]="filterTerm.saleSatff"
+        bindLabel="fullName">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="FromDate">From Date</label>
+      <div class="input-group">
+        <input type="text" name="dateFrom" id="FromDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateFrom }"
+          readonly
+          placeholder="please select date from"
+          bsDatepicker
+          [(bsValue)]="filterTerm.dateFrom"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateFrom">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateFrom = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="ToDate">To Date</label>
+      <div class="input-group">
+        <input type="text" name="dateTo" id="ToDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateTo }"
+          readonly
+          placeholder="please select date to"
+          bsDatepicker
+          [(bsValue)]="filterTerm.dateTo"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateTo">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateTo = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group dashboard-filter__btn">
+      <button type="button" class="btn btn-primary"
+      (click)="filterDashboard()">
+        <i class="fa fa-search mr-2"></i>
+        Filter
+      </button>
+    </div>
+  </div>
+
+</form>

@@ -1,0 +1,11 @@
+<nav class="nav nav-tabs cim-tabs mb-4">
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'filters']" routerLinkActive="active">Policy Information</a>
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'create']" routerLinkActive="active">Policy Create</a>
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'pdf']" routerLinkActive="active">Policy Pdf</a>
+</nav>
+
+<router-outlet></router-outlet>
+
+<div [hidden]="isHiddenList">
+  <app-policy-list></app-policy-list>
+</div>

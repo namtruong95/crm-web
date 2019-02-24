@@ -1,0 +1,97 @@
+
+
+<form novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-6 col-md-12 form-group">
+      <label>Customer</label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="filterTerm.customer"
+        bindLabel="customerName"
+        [typeahead]="customerInput$">
+      </ng-select>
+    </div>
+
+    <!-- <div class="col-lg-6 col-md-12 form-group">
+      <label for="Name">Staff</label>
+      <ng-select
+        [items]="staffs"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingStaff"
+        placeholder="please select staff"
+        [searchable]="false"
+        name="staff"
+        [(ngModel)]="filterTerm.staff"
+        bindLabel="fullName">
+      </ng-select>
+    </div> -->
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="FromDate">From Date</label>
+      <div class="input-group">
+        <input type="text"
+          name="dateFrom"
+          id="FromDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateFrom }"
+          readonly
+          placeholder="please select date from"
+          bsDatepicker
+          [(bsValue)]="filterTerm.dateFrom"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateFrom">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateFrom = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="ToDate">To Date</label>
+      <div class="input-group">
+        <input type="text" name="dateTo" id="ToDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateTo }"
+          readonly
+          placeholder="please select date to"
+          bsDatepicker
+          [(bsValue)]="filterTerm.dateTo"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateTo">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateTo = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="form-group">
+        <button type="button" class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="filterSaleActivities()">
+          <i class="fa fa-search mr-2"></i>
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<ul class="timeline" *ngIf="saleActivities.length > 0" [hidden]="!filterTerm.customer || !filterTerm.customer.id">
+  <li *ngFor="let event of saleActivities;">
+    <app-timeline-event [event]="event"></app-timeline-event>
+  </li>
+</ul>
+
+<button type="button"
+  class="btn btn-primary" [disabled]="!filterTerm.customer || !filterTerm.customer.id"
+  (click)="addActivity()">Add Activity</button>

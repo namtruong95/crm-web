@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col" *ngIf="role.is_sale_director">
+    <button class="btn btn-primary"
+      (click)="FileUpload.click()"
+      [disabled]="isUploading">
+      Upload Pdf
+      <i *ngIf="isUploading" class="fa fa-refresh fa-spin"></i>
+    </button>
+
+    <input
+      type="file"
+      hidden
+      name="file"
+      #FileUpload
+      multiple
+      (change)="getFile()"
+      [attr.accept]="accept_file">
+  </div>
+</div>
+
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table pdf-table">
+    <thead>
+      <tr>
+        <th class="cursor-pointer">
+          File Name
+        </th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of files;">
+        <td>{{ file.fileName }}</td>
+        <td>
+          <button type="button" class="mr-1 btn btn-primary" (click)="downloadFile(file)"><i class="fa fa-download"></i></button>
+          <button type="button" *ngIf="role.is_sale_director" class="mr-1 btn btn-danger" (click)="removeFile(file)"><i class="fa fa-trash"></i></button>
+        </td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': files.length > 0 }">
+        <td colspan="2" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': files.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

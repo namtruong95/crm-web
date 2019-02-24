@@ -1,0 +1,59 @@
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table bts-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('siteCode')">
+          Site Code
+          <i class="fa {{ getClassOrder('siteCode') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('address')">
+          Address
+          <i class="fa {{ getClassOrder('address') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('stateRegion')">
+          State/Region
+          <i class="fa {{ getClassOrder('stateRegion') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('townShip')">
+          TownShip
+          <i class="fa {{ getClassOrder('townShip') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bts of btsList;">
+        <td>
+          <button type="button" class="mr-1 btn btn-info" (click)="editBts(bts)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removeBts(bts)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ bts.siteCode }}</td>
+        <td>{{ bts.address }}</td>
+        <td>{{ bts.stateRegion }}</td>
+        <td>{{ bts.townShip }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': btsList.length > 0 }">
+        <td colspan="5" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': btsList.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

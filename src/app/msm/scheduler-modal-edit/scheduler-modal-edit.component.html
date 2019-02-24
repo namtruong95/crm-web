@@ -1,0 +1,158 @@
+<div class="modal-header">
+  <h5 class="modal-title">Update Sheduler</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="modal-body customer-edit">
+  <form #SchedulerForm="ngForm" autocomplete="off" novalidate>
+    <div class="row mb-4">
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Name">Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="Name"
+          class="form-control"
+          name="name"
+          [(ngModel)]="scheduler.nameOfSale"
+          placeholder="please enter name"
+          required>
+      </div>
+
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Name">Customer <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="customers | async"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingCusotmer"
+          placeholder="please select customer"
+          [searchable]="true"
+          name="customer"
+          [(ngModel)]="scheduler.customer"
+          bindLabel="customerName"
+          [typeahead]="customerInput$"
+          required>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Date">Date <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="Date"
+          class="form-control"
+          name="date"
+          readonly
+          placeholder="please select date"
+          bsDatepicker
+          [(bsValue)]="scheduler.date"
+          [bsConfig]="DATEPICKER_CONFIG"
+          required>
+      </div>
+
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Name">Time Start <i class="required">&#40;*&#41;</i></label>
+          <!-- <app-time-picker
+            [(ngModel)]="scheduler.time_start"
+            name="time_start"
+            required></app-time-picker> -->
+
+        <input type="text"
+          id="TimeStart"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': TimeStart.dirty && TimeStart.errors }"
+          [(ngModel)]="scheduler.time_start"
+          placeholder="please enter start time"
+          name="time_start"
+          required
+          appTimeValidator
+          #TimeStart="ngModel">
+
+        <div class="invalid-feedback"
+          *ngIf="TimeStart.errors?.required">
+          Please enter time start
+        </div>
+
+        <div class="invalid-feedback"
+          *ngIf="TimeStart.errors?.appTimeValidator">
+          The time start format is incorrect
+        </div>
+      </div>
+
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Name">Time End <i class="required">&#40;*&#41;</i></label>
+          <!-- <app-time-picker
+            [(ngModel)]="scheduler.time_end"
+            name="time_end"
+            required></app-time-picker> -->
+
+        <input type="text"
+          id="EndTime"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': EndTime.dirty && EndTime.errors }"
+          [(ngModel)]="scheduler.time_end"
+          placeholder="please enter end time"
+          name="time_end"
+          required
+          appTimeValidator
+          #EndTime="ngModel">
+
+        <div class="invalid-feedback"
+          *ngIf="EndTime.errors?.required">
+          Please enter time end
+        </div>
+
+        <div class="invalid-feedback"
+          *ngIf="EndTime.errors?.appTimeValidator">
+          The time end format is incorrect
+        </div>
+      </div>
+
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Name">Staff <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="staffs"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingStaff"
+          placeholder="please select staff"
+          [searchable]="false"
+          name="staff"
+          [compareWith]="compareWithFn"
+          [(ngModel)]="scheduler.staff"
+          bindLabel="fullName"
+          required>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-md-6 col-sm-12">
+        <label for="Name">Activity Type</label>
+        <ng-select
+          [items]="typeOfContacts"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfContact"
+          placeholder="please select activity type"
+          [searchable]="false"
+          name="typeOfContacts"
+          [(ngModel)]="scheduler.actionOfSale"
+          bindLabel="name">
+        </ng-select>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary w-25 mr-2" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-primary w-25 ml-2"
+          (click)="updateScheduler()"
+          [disabled]="isLoading || SchedulerForm.form.invalid || !scheduler.endAfterStart">
+          OK
+          <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

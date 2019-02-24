@@ -1,0 +1,23 @@
+div.spinner {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  left: 50%;
+  background: url('/assets/img/spinners/spinner_medium.gif') no-repeat;
+}
+
+body.loading-non-block {
+  .page-spinner {
+    display: block !important;
+  }
+}
+
+.page-spinner {
+  display: none !important;
+  left: calc(50% + 125px) !important;
+}
+
+.loading-table {
+  left: calc(50vw - 250px) !important;
+}

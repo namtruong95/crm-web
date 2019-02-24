@@ -1,0 +1,110 @@
+<div class="modal-header">
+  <h5 class="modal-title">Update Care Activity</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="modal-body customer-edit">
+  <form #SareActivityForm="ngForm" autocomplete="off" novalidate>
+    <div class="row mb-4">
+      <div class="col-lg-6 col-md-12 form-group">
+        <label>Customer <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="customers | async"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingCusotmer"
+          placeholder="please select customer"
+          [searchable]="true"
+          name="customer"
+          [(ngModel)]="saleActivity.customer"
+          bindLabel="customerName"
+          [typeahead]="customerInput$"
+          required>
+        </ng-select>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="Name">Staff</label>
+        <ng-select
+          [items]="staffs"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingStaff"
+          placeholder="please select staff"
+          [searchable]="false"
+          name="staff"
+          [(ngModel)]="saleActivity.staff"
+          bindLabel="fullName">
+        </ng-select>
+      </div>
+
+      <!-- <div class="col-lg-6 col-md-12 form-group">
+        <label for="Department">Department</label>
+        <input type="text" id="Department"
+          autocomplete="new-department"
+          class="form-control"
+          name="department"
+          placeholder="please enter department"
+          [(ngModel)]="saleActivity.department">
+      </div> -->
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="typeOfContact">Activity Type</label>
+        <ng-select
+          [items]="statusOfProcesses"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingstatusOfProcess"
+          placeholder="please select activity type"
+          [searchable]="false"
+          name="statusOfProcess"
+          [(ngModel)]="saleActivity.statusOfProcess"
+          bindLabel="name">
+        </ng-select>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="SaleDate">Sale Date</label>
+        <input type="text" id="SaleDate"
+          autocomplete="new-SaleDate"
+          readonly
+          placeholder="please select sale date"
+          class="form-control"
+          name="saleDate"
+          bsDatepicker
+          [(bsValue)]="saleActivity.dateBinding"
+          [ngModel]="saleActivity.dateBinding"
+          [bsConfig]="DATEPICKER_CONFIG"
+          (bsValueChange)="onValueChange($event)">
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="Note">Note</label>
+        <textarea name="note"
+          class="form-control"
+          id="Note"
+          rows="5"
+          autocomplete="new-note"
+          placeholder="please enter note"
+          [(ngModel)]="saleActivity.note"></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary w-25 mr-2" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-primary w-25 ml-2"
+          (click)="updateSareActivity()"
+          [disabled]="isLoading || SareActivityForm.form.invalid">
+          OK
+          <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

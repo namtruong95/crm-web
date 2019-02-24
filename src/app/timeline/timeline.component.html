@@ -1,0 +1,10 @@
+<nav class="nav nav-tabs timeline-tabs mb-4">
+  <a class="nav-item nav-link" [routerLink]="['/timeline', 'list']" routerLinkActive="active">Sale Activities</a>
+  <a class="nav-item nav-link"
+    [routerLink]="['/timeline', 'create']"
+    routerLinkActive="active">Create Sale Activity</a>
+</nav>
+
+<router-outlet></router-outlet>
+
+<app-timeline-list></app-timeline-list>

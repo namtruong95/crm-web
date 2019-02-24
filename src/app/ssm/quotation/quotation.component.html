@@ -1,0 +1,18 @@
+<nav class="nav nav-tabs cim-tabs mb-4">
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'quotation', 'filters']" routerLinkActive="active">Quotation Information</a>
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'quotation', 'create']" routerLinkActive="active">Quotation Create</a>
+</nav>
+
+<div class="row m-0">
+  <div class="col-lg-6 col-md-12">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="col-lg-6 col-md-12 gmap">
+    <app-quotation-map></app-quotation-map>
+  </div>
+</div>
+
+<div>
+  <app-quotation-list></app-quotation-list>
+</div>

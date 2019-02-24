@@ -1,0 +1,18 @@
+<agm-map
+  [latitude]="lat"
+  [longitude]="lng"
+  [zoom]="zoom"
+  [disableDoubleClickZoom]="true"
+  [disableDefaultUI]="false"
+  [zoomControl]="true"
+  [gestureHandling]="'coopeative'">
+
+  <agm-marker
+      *ngFor="let m of markers; let i = index"
+      [latitude]="m.lat"
+      [longitude]="m.lng"
+      [label]="m.label"
+      [iconUrl]="m.iconUrl"
+      [markerDraggable]="m.draggable">
+  </agm-marker>
+</agm-map>

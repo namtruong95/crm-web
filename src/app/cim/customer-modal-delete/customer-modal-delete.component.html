@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h5 class="modal-title">Do you want to delete?</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="text-center">
+    <button type="button" class="btn btn-secondary w-25 mr-2" (click)="close()">Cancel</button>
+    <button type="button" class="btn btn-primary w-25 ml-2" (click)="removeCustomer()"
+      [disabled]="isLoading">
+      OK
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</div>

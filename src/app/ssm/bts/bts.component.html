@@ -1,0 +1,18 @@
+<nav class="nav nav-tabs cim-tabs mb-4">
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'bts', 'filters']" routerLinkActive="active">Bts Information</a>
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'bts', 'create']" routerLinkActive="active">Bts Create</a>
+</nav>
+
+<div class="row m-0">
+  <div class="col-lg-6 col-md-12">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="col-lg-6 col-md-12 gmap">
+    <app-bts-map mode="create"></app-bts-map>
+  </div>
+</div>
+
+<div>
+  <app-bts-list></app-bts-list>
+</div>

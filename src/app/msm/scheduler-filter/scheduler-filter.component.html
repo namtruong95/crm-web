@@ -1,0 +1,64 @@
+<form novalidate>
+  <div class="row">
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="SaleActivity">Customer</label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="filterTerm.customer"
+        bindLabel="customerName"
+        [typeahead]="customerInput$">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="FromDate">From Date</label>
+      <div class="input-group">
+        <input type="text" name="dateStart" id="FromDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateStart }"
+          readonly
+          bsDatepicker
+          placeholder="please select start date"
+          [(bsValue)]="filterTerm.dateStart"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateStart">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateStart = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="ToDate">To Date</label>
+      <div class="input-group">
+        <input type="text" name="dateEnd" id="ToDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateEnd }"
+          readonly
+          bsDatepicker
+          placeholder="please select end date"
+          [(bsValue)]="filterTerm.dateEnd"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateEnd">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateEnd = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group scheduler-filter__btn">
+      <button type="button" class="btn btn-primary"
+        (click)="filterScheduler()">
+        <i class="fa fa-search mr-2"></i>
+        Filter
+      </button>
+    </div>
+  </div>
+</form>

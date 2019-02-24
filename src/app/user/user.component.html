@@ -1,0 +1,14 @@
+<nav class="nav nav-tabs cim-tabs mb-4">
+  <!-- <a class="nav-item nav-link" [routerLink]="['/users', 'filters']" routerLinkActive="active">User Information</a> -->
+  <a class="nav-item nav-link" [routerLink]="['/users', 'create']" routerLinkActive="active">Users Create</a>
+</nav>
+
+<div class="row m-0">
+  <div class="col-lg-12">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div>
+  <app-user-list></app-user-list>
+</div>

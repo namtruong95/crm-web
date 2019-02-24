@@ -1,0 +1,270 @@
+<form #CustomerForm="ngForm" novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="CustomerName">Customer Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="CustomerName"
+          autocomplete="new-name"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': Name.dirty && Name.errors }"
+          name="customer_name"
+          placeholder="please enter name"
+          [(ngModel)]="customer.customerName"
+          #Name="ngModel"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="Name.errors?.required">
+          Please enter name
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="CustomerType">Customer Type <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="customerTypes"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [groupBy]="groupByFn"
+          [loading]="isLoadingCustomerType"
+          placeholder="please select type"
+          [searchable]="false"
+          name="customerTypes"
+          [(ngModel)]="customer.customerType"
+          bindLabel="name"
+          #CustomerType="ngModel"
+          required>
+        </ng-select>
+
+        <div class="invalid-feedback"
+          *ngIf="CustomerType.errors?.required">
+          Please select type
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="TypeInvestment">Type of investment</label>
+        <ng-select
+          [items]="typeOfInvestments"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfInvestment"
+          placeholder="please select type of investment"
+          [searchable]="false"
+          name="typeOfInvestments"
+          [(ngModel)]="customer.typeOfInvestment"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="TypeOfSale">Type of Sale</label>
+        <ng-select
+          [items]="typeOfSales"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfSale"
+          placeholder="please select type of sale"
+          [searchable]="false"
+          name="typeOfSales"
+          [(ngModel)]="customer.typeOfSale"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="CustomerStatus">Customer Status</label>
+        <ng-select
+          [items]="CUSTOMER_STATUSES"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          placeholder="please select status"
+          [searchable]="false"
+          name="CUSTOMER_STATUSES"
+          [(ngModel)]="customer.customerStatus"
+          bindLabel="name"
+          bindValue="value">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Addess">Address <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="Addess"
+          autocomplete="new-address"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': Address.dirty && Address.errors }"
+          name="address"
+          #Address
+          #Address="ngModel"
+          placeholder="please enter address"
+          [(ngModel)]="customer.address"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="Address.errors?.required">
+          Please enter address
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Catalog">Catalog</label>
+        <ng-select
+          [items]="catalogs"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingCatalog"
+          placeholder="please select catalog"
+          [searchable]="false"
+          name="catalogs"
+          [(ngModel)]="customer.catalog"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="ContactName">Contact Name</label>
+        <input type="text" id="ContactName"
+          autocomplete="new-catalog"
+          class="form-control"
+          name="contact_name"
+          placeholder="please enter contact name"
+          [(ngModel)]="customer.contactName">
+      </div>
+    </div>
+
+    <!-- <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="typeOfContact">Status Of Process</label>
+        <ng-select
+          [items]="typeOfContacts"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfContact"
+          placeholder="please select status of process"
+          [searchable]="false"
+          name="typeOfContacts"
+          [(ngModel)]="customer.typeOfContact"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div> -->
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Phone">Phone</label>
+        <input type="text" id="Phone"
+          autocomplete="new-phone"
+          class="form-control"
+          name="phone"
+          placeholder="please enter phone"
+          [(ngModel)]="customer.phone">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="text" id="Email"
+          autocomplete="new-email"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': Email.dirty && Email.errors }"
+          name="email"
+          placeholder="please enter email"
+          [(ngModel)]="customer.email"
+          #Email="ngModel"
+          [pattern]="rules.email">
+
+        <div class="invalid-feedback"
+          *ngIf="Email.errors?.pattern">
+          The email address format is incorrect
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Position">Position</label>
+        <input type="text" id="Position"
+          autocomplete="new-position"
+          class="form-control"
+          name="position"
+          placeholder="please enter position"
+          [(ngModel)]="customer.position">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Service">Service</label>
+        <input type="text" id="Service"
+          autocomplete="new-service"
+          class="form-control"
+          name="service"
+          placeholder="please enter service"
+          [(ngModel)]="customer.service">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Date">Date</label>
+        <input type="text" id="Date"
+          autocomplete="new-date"
+          readonly
+          placeholder="please select date"
+          class="form-control"
+          name="date"
+          bsDatepicker
+          [(bsValue)]="customer.customerDateBinding"
+          [ngModel]="customer.customerDateBinding"
+          [bsConfig]="DATEPICKER_CONFIG"
+          (bsValueChange)="onValueChange($event)">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Name">Assigned For Sale</label>
+      <ng-select
+        [items]="users"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingUser"
+        placeholder="please select user"
+        [searchable]="false"
+        name="user"
+        [(ngModel)]="customer.assignedStaff"
+        bindLabel="fullName">
+      </ng-select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary"
+      (click)="createCustomer(CustomerForm)"
+      [disabled]="isLoading || CustomerForm.form.invalid || !customer.has_address">
+      Create
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</form>

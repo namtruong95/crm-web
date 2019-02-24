@@ -1,0 +1,242 @@
+<div class="modal-header">
+  <h5 class="modal-title">Update Quotation</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="modal-body customer-edit">
+  <form #QuotationForm="ngForm" autocomplete="off" novalidate>
+    <div class="row">
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="SaleActivity">Customer Name <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="customers | async"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingCusotmer"
+          placeholder="please select customer"
+          [searchable]="true"
+          name="customer"
+          [(ngModel)]="quotation.customer"
+          bindLabel="customerName"
+          [typeahead]="customerInput$"
+          (change)="changeCusotmer()"
+          required>
+        </ng-select>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="typeOfService">Service Term <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="typeOfServices"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfService"
+          placeholder="please select service term"
+          [searchable]="false"
+          name="typeOfService"
+          [(ngModel)]="quotation.typeOfService"
+          (change)="filterPolicies()"
+          bindLabel="name"
+          required>
+        </ng-select>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="serviceTerm">Type Of Service <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="serviceTerms"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingServiceTerm"
+            placeholder="please select type of service"
+            [searchable]="false"
+            name="serviceTerm"
+            [(ngModel)]="quotation.serviceTerm"
+            (change)="filterPolicies()"
+            bindLabel="name"
+            required>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="bandWidth">Bandwidth (Mbps) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="bandWidth"
+          autocomplete="new-bandWidth"
+          class="form-control"
+          name="bandWidth"
+          appNumbericValidator
+          placeholder="please enter band width"
+          (keydown.enter)="filterPolicies()"
+          (blur)="filterPolicies()"
+          [(ngModel)]="quotation.bandWidth"
+          required>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="otc">OTC (MMK) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="otc"
+          autocomplete="new-otc"
+          class="form-control"
+          name="otc"
+          #OTC
+          placeholder="please enter otc site"
+          [ngModel]="quotation.otc"
+          (ngModelChange)="changeOtc()"
+          required>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="mrc">MRC (MMK)
+          <i class="required">&#40;*&#41;</i>
+          {{ minMaxMrc }}
+        </label>
+        <input type="text" id="mrc"
+          autocomplete="new-mrc"
+          class="form-control"
+          name="mrc"
+          #MRC
+          placeholder="please enter mrc"
+          [ngModel]="quotation.mrc"
+          (ngModelChange)="changeMrc()"
+          required>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="reduceOtc">Reduce OTC (%) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="reduceOtc"
+          autocomplete="new-reduceOtc"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': ReduceOTC1.dirty && ReduceOTC1.errors }"
+          name="reduceOtc"
+          appNumbericValidator
+          min="0"
+          max="100"
+          placeholder="please enter reduce OTC"
+          #ReduceOTC
+          #ReduceOTC1="ngModel"
+          [(ngModel)]="quotation.reduceOtc"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="ReduceOTC1.dirty && ReduceOTC1.errors?.appNumbericValidator">Reduce OTC operation must be an integer within 0 and 100</div>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="reduceMrc">Reduce MRC (%) <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="reduceMrc"
+          autocomplete="new-reduceMrc"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': ReduceMRC1.dirty && ReduceMRC1.errors }"
+          name="reduceMrc"
+          appNumbericValidator
+          max="100"
+          min="0"
+          #ReduceMRC
+          #ReduceMRC1="ngModel"
+          placeholder="please enter reduce MRC"
+          [(ngModel)]="quotation.reduceMrc"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="ReduceMRC1.dirty && ReduceMRC1.errors?.appNumbericValidator">Reduce MRC operation must be an integer within 0 and 100</div>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="timeForHire">Time For Hire (months)</label>
+        <input type="text" id="timeForHire"
+          autocomplete="new-timeForHire"
+          class="form-control"
+          name="timeForHire"
+          appNumbericValidator
+          min="0"
+          placeholder="please enter time for hire"
+          [(ngModel)]="quotation.timeForHire">
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="saleStaff">Sale Staff</label>
+          <ng-select
+            [items]="staffs"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingStaff"
+            placeholder="please select  sale staff"
+            [searchable]="false"
+            name="staff"
+            [compareWith]="compareWithFn"
+            [(ngModel)]="quotation.staff"
+            bindLabel="fullName">
+          </ng-select>
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="timeForProvide">Time For Provide (days)</label>
+        <input type="text" id="timeForProvide"
+          autocomplete="new-timeForProvide"
+          class="form-control"
+          name="timeForProvide"
+          appNumbericValidator
+          min="0"
+          placeholder="please enter time for provide"
+          [(ngModel)]="quotation.timeForProvide">
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label>distance (km)</label>
+        <input type="text"
+          class="form-control-plaintext"
+          name="distance"
+          readonly
+          [ngModel]="quotation.distance_km">
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="totalPrice">Total Price (MMK)</label>
+        <input type="text" id="totalPrice"
+          autocomplete="new-totalPrice"
+          class="form-control-plaintext"
+          name="totalPrice"
+          readonly
+          placeholder="please enter total rrice"
+          [ngModel]="quotation.totalStr">
+      </div>
+
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="realPrice">Real Price (MMK)</label>
+        <input type="text" id="realPrice"
+          autocomplete="new-realPrice"
+          class="form-control-plaintext"
+          name="realPrice"
+          readonly
+          [ngModel]="quotation.totalTaxStr">
+      </div>
+
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12 gmap">
+        <app-quotation-map [markersInput]="quotation.markers"></app-quotation-map>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary w-25 mr-2" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-primary w-25 ml-2"
+          (click)="updateQuotation()"
+          [disabled]="isLoading || QuotationForm.form.invalid">
+          OK
+          <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

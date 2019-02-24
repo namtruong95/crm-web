@@ -1,0 +1,49 @@
+<form novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-md-12 form-group">
+      <label for="SaleActivity">Customer</label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="filterTerm.customer"
+        bindLabel="customerName"
+        (change)="changeCustomer()"
+        [typeahead]="customerInput$">
+      </ng-select>
+    </div>
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="typeOfService">Service Term</label>
+        <ng-select
+          [items]="typeOfServices"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingTypeOfService"
+          placeholder="please select service term"
+          [searchable]="false"
+          name="typeOfServices"
+          [(ngModel)]="filterTerm.typeOfService"
+          bindLabel="name">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="form-group">
+        <button type="button" class="btn btn-primary"
+          (click)="filterQuotation()">
+          <i class="fa fa-search mr-2"></i>
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

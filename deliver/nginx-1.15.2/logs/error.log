@@ -1,0 +1,2 @@
+2018/08/10 12:57:14 [error] 7660#7708: *1 CreateFile() "D:\namtt\nginx-1.15.2/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2018/08/10 12:57:27 [error] 7660#7708: *5 CreateFile() "D:\namtt\nginx-1.15.2/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "mytel.test", referrer: "http://mytel.test/"

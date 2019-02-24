@@ -1,0 +1,74 @@
+<form novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-3 col-md-6 form-group">
+      <label>Customer</label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="filterTerm.customer"
+        bindLabel="customerName"
+        [typeahead]="customerInput$">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label>Status</label>
+      <ng-select
+        [items]="CARE_ACTIVITY_STATUSES"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="false"
+        placeholder="please select status"
+        [searchable]="false"
+        name="status"
+        [(ngModel)]="filterTerm.status"
+        bindLabel="name"
+        bindValue="value">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="Date">Date</label>
+      <div class="input-group">
+        <input type="text" id="Date"
+          readonly
+          placeholder="please select date"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateActivity }"
+          name="date"
+          bsDatepicker
+          [(bsValue)]="filterTerm.dateActivity"
+          [ngModel]="filterTerm.dateActivity"
+          [bsConfig]="DATEPICKER_CONFIG"
+          (bsValueChange)="onValueChange($event)">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateActivity">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateActivity = ''"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group ccm-filter__btn">
+      <button type="button" class="btn btn-primary"
+        (click)="filterCareActivity()">
+        <i class="fa fa-search"></i>
+        Filter
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <button type="button" class="btn btn-primary mr-2"
+        [disabled]="!ccmSv.date"
+        (click)="downloadCCM()">Export</button>
+    </div>
+  </div>
+</form>

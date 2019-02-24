@@ -1,0 +1,18 @@
+.customer-form-content {
+  border: 1px solid #ddd;
+  background: #eaeaea;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.nav.nav-tabs.cim-tabs {
+  a {
+    width: 255px;
+    color: #000;
+
+    &.active {
+      color: #39f;
+      border-bottom: 2px solid #39f;
+    }
+  }
+}

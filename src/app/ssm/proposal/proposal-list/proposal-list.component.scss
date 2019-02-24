@@ -1,0 +1,11 @@
+.proposal-table.table {
+  thead th,
+  tbody td {
+    min-width: 200px;
+
+    &:nth-child(11),
+    &:nth-child(12) {
+      min-width: 230px;
+    }
+  }
+}

@@ -1,0 +1,80 @@
+<form novalidate>
+  <div class="row customer-form-content mb-4">
+    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+      <label for="SaleActivity">Customer</label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="filterTerm.customer"
+        (change)="changeCustomer()"
+        bindLabel="customerName"
+        [typeahead]="customerInput$">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+      <label for="typeOfService">Service Term</label>
+      <ng-select
+        [items]="typeOfServices"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingTypeOfService"
+        placeholder="please select service term"
+        [searchable]="false"
+        name="typeOfServices"
+        [(ngModel)]="filterTerm.typeOfService"
+        bindLabel="name">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+      <label for="serviceTerm">Type Of Serivce</label>
+      <ng-select
+        [items]="serviceTerms"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingServiceTerm"
+        placeholder="please select type of serivce"
+        [searchable]="false"
+        name="serviceTerm"
+        [(ngModel)]="filterTerm.serviceTerm"
+        bindLabel="name">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+      <label for="bandWidth">Bandwidth (Mbps)</label>
+      <input type="text" id="bandWidth"
+        autocomplete="new-bandWidth"
+        class="form-control"
+        name="bandWidth"
+        appNumbericValidator
+        placeholder="please enter band width"
+        [(ngModel)]="filterTerm.bandWidth">
+    </div>
+
+    <div class="col-12 form-group policy-filter__btn">
+      <button type="button" class="btn btn-primary"
+        (click)="filterProposal()">
+        <i class="fa fa-search mr-2"></i>
+        Filter
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <button type="button" class="btn btn-primary mr-2"
+        [disabled]="!canCreatePdf"
+        (click)="exportProposal()">Create PDF</button>
+    </div>
+  </div>
+</form>

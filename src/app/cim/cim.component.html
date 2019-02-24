@@ -1,0 +1,18 @@
+<nav class="nav nav-tabs cim-tabs mb-4">
+  <a class="nav-item nav-link" [routerLink]="['/cim', 'filters']" routerLinkActive="active">Customer Information</a>
+  <a class="nav-item nav-link" [routerLink]="['/cim', 'create']" routerLinkActive="active">Customer Create</a>
+</nav>
+
+<div class="row m-0">
+  <div class="col-lg-6 col-md-12">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="col-lg-6 col-md-12 gmap">
+    <app-customer-map mode="create"></app-customer-map>
+  </div>
+</div>
+
+<div>
+  <app-customer-list></app-customer-list>
+</div>

@@ -1,0 +1,64 @@
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table sale-activity-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th class="cursor-pointer" (click)="addOrder('customerName')">
+          Customer
+          <i class="fa {{ getClassOrder('customerName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staffName')">
+          Staff
+          <i class="fa {{ getClassOrder('staffName') }}"></i>
+        </th>
+        <!-- <th class="cursor-pointer" (click)="addOrder('department')">
+          Department
+          <i class="fa {{ getClassOrder('department') }}"></i>
+        </th> -->
+        <th class="cursor-pointer" (click)="addOrder('statusOfProcessName')">
+          Activity Type
+          <i class="fa {{ getClassOrder('statusOfProcessName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('dateDisplay')">
+          Sale Date
+          <i class="fa {{ getClassOrder('dateDisplay') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let saleActivity of saleActivities;">
+        <td>
+          <button type="button" class="mr-1 btn btn-info" (click)="editSareActivity(saleActivity)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="mr-1 btn btn-danger" (click)="removeSareActivity(saleActivity)"><i class="fa fa-trash"></i></button>
+        </td>
+        <td>{{ saleActivity.customerName }}</td>
+        <td>{{ saleActivity.staffName }}</td>
+        <!-- <td>{{ saleActivity.department }}</td> -->
+        <td>{{ saleActivity.statusOfProcessName }}</td>
+        <td>{{ saleActivity.dateDisplay }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': saleActivities.length > 0 }">
+        <td colspan="5" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': saleActivities.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

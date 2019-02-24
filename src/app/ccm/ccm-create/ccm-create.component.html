@@ -1,0 +1,113 @@
+<form #CareActivityForm="ngForm" novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-6 col-md-12 form-group">
+      <label>Customer <i class="required">&#40;*&#41;</i></label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="careActivity.customer"
+        bindLabel="customerName"
+        [typeahead]="customerInput$"
+        required>
+      </ng-select>
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label>Status <i class="required">&#40;*&#41;</i></label>
+      <ng-select
+        [items]="CARE_ACTIVITY_STATUSES"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="false"
+        placeholder="please select status"
+        [searchable]="false"
+        name="status"
+        [(ngModel)]="careActivity.status"
+        bindLabel="name"
+        bindValue="value"
+        required>
+      </ng-select>
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Name">Sale Care</label>
+      <ng-select
+        [items]="staffs"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingStaff"
+        placeholder="please select staff"
+        [searchable]="false"
+        name="staff"
+        [(ngModel)]="careActivity.staff"
+        bindLabel="fullName">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Date">Date</label>
+      <input type="text" id="Date"
+        autocomplete="new-date"
+        readonly
+        placeholder="please select date"
+        class="form-control"
+        name="date"
+        bsDatepicker
+        [(bsValue)]="careActivity.dateBinding"
+        [ngModel]="careActivity.dateBinding"
+        [bsConfig]="DATEPICKER_CONFIG"
+        (bsValueChange)="onValueChange($event)">
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Reason">Reason</label>
+      <input type="text" id="Reason"
+        autocomplete="new-Reason"
+        class="form-control"
+        name="reason"
+        placeholder="please enter reason"
+        [(ngModel)]="careActivity.reason">
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Type">Type</label>
+      <input type="text" id="Type"
+        autocomplete="new-Type"
+        class="form-control"
+        name="type"
+        placeholder="please enter type"
+        [(ngModel)]="careActivity.type">
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="giftPrice">Gift Price (MMK)</label>
+      <input type="text" id="giftPrice"
+        autocomplete="new-giftPrice"
+        class="form-control"
+        name="giftPrice"
+        min="0"
+        placeholder="please enter gift price"
+        #GiftPrice
+        [ngModel]="careActivity.giftPrice"
+        (ngModelChange)="changeGiftPrice()">
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary"
+      (click)="createCareActivity(CareActivityForm)"
+      [disabled]="isLoading || CareActivityForm.form.invalid">
+      Create
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</form>

@@ -1,0 +1,99 @@
+<form #SaleActivityForm="ngForm" novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-6 col-md-12 form-group">
+      <label>Customer <i class="required">&#40;*&#41;</i></label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="saleActivity.customer"
+        bindLabel="customerName"
+        [typeahead]="customerInput$"
+        required>
+      </ng-select>
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Name">Staff</label>
+      <ng-select
+        [items]="staffs"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingStaff"
+        placeholder="please select staff"
+        [searchable]="false"
+        name="staff"
+        [(ngModel)]="saleActivity.staff"
+        bindLabel="fullName">
+      </ng-select>
+    </div>
+
+    <!-- <div class="col-lg-6 col-md-12 form-group">
+      <label for="Department">Department</label>
+      <input type="text" id="Department"
+        autocomplete="new-department"
+        class="form-control"
+        name="department"
+        placeholder="please enter department"
+        [(ngModel)]="saleActivity.department">
+    </div> -->
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="typeOfContact">Activity Type</label>
+      <ng-select
+        [items]="statusOfProcesses"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingstatusOfProcess"
+        placeholder="please select activity type"
+        [searchable]="false"
+        name="statusOfProcess"
+        [(ngModel)]="saleActivity.statusOfProcess"
+        bindLabel="name">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="SaleDate">Sale Date</label>
+      <input type="text" id="SaleDate"
+        autocomplete="new-SaleDate"
+        readonly
+        placeholder="please select sale date"
+        class="form-control"
+        name="saleDate"
+        bsDatepicker
+        [(bsValue)]="saleActivity.dateBinding"
+        [ngModel]="saleActivity.dateBinding"
+        [bsConfig]="DATEPICKER_CONFIG"
+        (bsValueChange)="onValueChange($event)">
+    </div>
+
+    <div class="col-lg-6 col-md-12 form-group">
+      <label for="Note">Note</label>
+      <textarea name="note"
+        class="form-control"
+        id="Note"
+        rows="5"
+        autocomplete="new-note"
+        placeholder="please enter note"
+        [(ngModel)]="saleActivity.note"></textarea>
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary"
+      (click)="createSaleActivity(SaleActivityForm)"
+      [disabled]="isLoading || SaleActivityForm.form.invalid">
+      Create
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</form>

@@ -1,0 +1,162 @@
+<form #User="ngForm" novalidate>
+  <div class="row mb-4 customer-form-content">
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="userName">User Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="userName"
+          autocomplete="new-userName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': UserName.dirty && UserName.errors }"
+          name="userName"
+          placeholder="please enter user name"
+          [(ngModel)]="user.userName"
+          #UserName="ngModel"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="UserName.errors?.required">
+          Please enter user name
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="FirstName">First Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="FirstName"
+          autocomplete="new-firstName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': FirstName.dirty && FirstName.errors }"
+          name="firstName"
+          placeholder="please enter first name"
+          [(ngModel)]="user.firstName"
+          #FirstName="ngModel"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="FirstName.errors?.required">
+          Please enter first name
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="LastName">Last Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="LastName"
+          autocomplete="new-LastName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': LastName.dirty && LastName.errors }"
+          name="lastName"
+          placeholder="please enter last name"
+          [(ngModel)]="user.lastName"
+          #LastName="ngModel"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="LastName.errors?.required">
+          Please enter last name
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Password">Password <i class="required">&#40;*&#41;</i></label>
+        <input type="password" id="Password"
+          autocomplete="new-Password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': Password.dirty && Password.errors }"
+          name="password"
+          placeholder="please enter user name"
+          [(ngModel)]="user.password"
+          #Password="ngModel"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="Password.errors?.required">
+          Please enter password
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="role">Role <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="ROLES"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="false"
+          placeholder="please select role"
+          [searchable]="false"
+          name="role"
+          [(ngModel)]="user.role"
+          #Role="ngModel"
+          bindLabel="label"
+          bindValue="value"
+          required>
+        </ng-select>
+
+        <div class="invalid-feedback"
+          *ngIf="Role.errors?.required">
+          Please select role
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Department">Department</label>
+        <input type="text" id="Department"
+          autocomplete="new-department"
+          class="form-control"
+          name="department"
+          placeholder="please enter department"
+          [(ngModel)]="user.department">
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="text" id="Email"
+          autocomplete="new-email"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': Email.dirty && Email.errors }"
+          name="email"
+          placeholder="please enter email"
+          [(ngModel)]="user.email"
+          #Email="ngModel"
+          [pattern]="rules.email">
+
+        <div class="invalid-feedback"
+          *ngIf="Email.errors?.pattern">
+          The email address format is incorrect
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" id="phone"
+          autocomplete="new-phone"
+          class="form-control"
+          name="phone"
+          placeholder="please enter phone"
+          [(ngModel)]="user.phone">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary"
+      (click)="checkAndCreateUser(User);"
+      [disabled]="isLoading || User.form.invalid">
+      Create
+      <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+    </button>
+  </div>
+</form>

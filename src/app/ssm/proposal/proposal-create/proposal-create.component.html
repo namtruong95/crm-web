@@ -1,0 +1,26 @@
+<form #ProposalForm="ngForm" novalidate>
+  <div class="row customer-form-content mb-4">
+    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+      <label for="SaleActivity">Customer</label>
+      <ng-select
+        [items]="customers | async"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingCusotmer"
+        placeholder="please select customer"
+        [searchable]="true"
+        name="customer"
+        [(ngModel)]="proposal.customer"
+        bindLabel="customerName"
+        [typeahead]="customerInput$">
+      </ng-select>
+    </div>
+
+    <div class="col-12 form-group policy-filter__btn">
+      <button type="button" class="btn btn-primary" (click)="createProposal(ProposalForm)">
+        Create
+      </button>
+    </div>
+  </div>
+</form>
