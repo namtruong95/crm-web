@@ -30,7 +30,7 @@
         [searchable]="false"
         name="staff"
         [(ngModel)]="saleActivity.staff"
-        bindLabel="fullName">
+        bindLabel="code_full_name">
       </ng-select>
     </div>
 
@@ -69,8 +69,7 @@
         class="form-control"
         name="saleDate"
         bsDatepicker
-        [(bsValue)]="saleActivity.dateBinding"
-        [ngModel]="saleActivity.dateBinding"
+        [(ngModel)]="saleActivity.dateBinding"
         [bsConfig]="DATEPICKER_CONFIG"
         (bsValueChange)="onValueChange($event)">
     </div>

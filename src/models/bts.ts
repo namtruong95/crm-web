@@ -1,71 +1,37 @@
-import { BaseModel } from './base';
 import { Marker } from 'interfaces/maker';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
-export class Bts extends BaseModel {
-  private _siteCode: string;
-  public get siteCode(): string {
-    return this._siteCode;
-  }
-  public set siteCode(v: string) {
-    this._siteCode = v;
-  }
+interface BtsInterface extends BaseModelInterface {
+  siteCode: string;
+  address: string;
+  state: string;
+  townShip: string;
+  longitude: number;
+  latitude: number;
+}
 
-  private _address: string;
-  public get address(): string {
-    return this._address;
-  }
-  public set address(v: string) {
-    this._address = v;
-  }
+export class Bts extends BaseModel implements Deserializable<Bts> {
+  siteCode: string;
+  address: string;
+  state: string;
+  townShip: string;
+  longitude: number;
+  latitude: number;
 
-  private _stateRegion: string;
-  public get stateRegion(): string {
-    return this._stateRegion;
-  }
-  public set stateRegion(v: string) {
-    this._stateRegion = v;
+  constructor() {
+    super();
   }
 
-  private _townShip: string;
-  public get townShip(): string {
-    return this._townShip;
-  }
-  public set townShip(v: string) {
-    this._townShip = v;
-  }
-
-  private _latitude: number;
-  public get latitude(): number {
-    return this._latitude || null;
-  }
-  public set latitude(v: number) {
-    this._latitude = v;
-  }
-
-  private _longitude: number;
-  public get longitude(): number {
-    return this._longitude || null;
-  }
-  public set longitude(v: number) {
-    this._longitude = v;
-  }
-
-  constructor(d?: any) {
-    super(d);
-
-    if (d) {
-      this.siteCode = d.siteCode;
-      this.address = d.address;
-      this.stateRegion = d.state;
-      this.townShip = d.townShip;
-      this.longitude = d.longitude;
-      this.latitude = d.latitude;
-    }
+  deserialize(input: Partial<BtsInterface>): Bts {
+    super.deserialize(input);
+    Object.assign(this, input);
+    return this;
   }
 
   public toJSON() {
     return {
-      state: this.stateRegion || null,
+      state: this.state || null,
       siteCode: this.siteCode || null,
       address: this.address || null,
       townShip: this.townShip || null,

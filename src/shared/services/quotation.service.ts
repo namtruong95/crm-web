@@ -11,14 +11,8 @@ export class QuotationService {
 
   public filterQuotations(params?: any) {
     return this._api.get(`quotation/filters`, params).map((res) => {
-      const data = res.data;
-
-      const quotationList: Quotation[] = [];
-
-      res.data.quotationList.forEach((item) => {
-        quotationList.push(new Quotation(item));
-      });
-      return { ...data, quotationList };
+      res.data.quotationList = res.data.quotationList.map((item) => new Quotation().deserialize(item));
+      return res.data;
     });
   }
 

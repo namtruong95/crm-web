@@ -91,19 +91,19 @@
 
       <div class="col-lg-6 col-md-12">
         <div class="form-group">
-          <label for="stateRegion">State/Region <i class="required">&#40;*&#41;</i></label>
-          <input type="text" id="stateRegion"
-            autocomplete="new-stateRegion"
+          <label for="state">State/Region <i class="required">&#40;*&#41;</i></label>
+          <input type="text" id="state"
+            autocomplete="new-state"
             class="form-control"
-            name="stateRegion"
-            [ngClass]="{ 'is-invalid': StateRegion.dirty && StateRegion.errors }"
-            #StateRegion="ngModel"
+            name="state"
+            [ngClass]="{ 'is-invalid': State.dirty && State.errors }"
+            #State="ngModel"
             required
             placeholder="please enter state/region"
-            [(ngModel)]="bts.stateRegion">
+            [(ngModel)]="bts.state">
 
           <div class="invalid-feedback"
-            *ngIf="StateRegion.errors?.required">
+            *ngIf="State.errors?.required">
             Please enter state/region
           </div>
         </div>

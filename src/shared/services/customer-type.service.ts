@@ -9,16 +9,9 @@ export class CustomerTypeService {
   constructor(private _api: ApiService) {}
 
   public customerTypes(params?: any) {
-    return this._api.get(`customer-types`).map((res) => {
-      const data = res.data;
-
-      const customerTypes: CustomerType[] = [];
-
-      res.data.customerTypes.forEach((item) => {
-        customerTypes.push(new CustomerType(item));
-      });
-
-      return { ...data, customerTypes };
+    return this._api.get(`customer-types`, params).map((res) => {
+      res.data.customerTypes = res.data.customerTypes.map((item) => new CustomerType().deserialize(item));
+      return res.data;
     });
   }
 
@@ -28,7 +21,7 @@ export class CustomerTypeService {
       if (res.data.typeOfCompanys) {
         res.data.typeOfCompanys.forEach((item) => {
           data.push(
-            new CustomerType({
+            new CustomerType().deserialize({
               ...item,
               child: { state: 'Type Of Companies' },
             }),
@@ -39,7 +32,7 @@ export class CustomerTypeService {
       if (res.data.typeOfGroups) {
         res.data.typeOfGroups.forEach((item) => {
           data.push(
-            new CustomerType({
+            new CustomerType().deserialize({
               ...item,
               child: { state: 'Type Of Groups' },
             }),

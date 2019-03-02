@@ -1,13 +1,22 @@
-import { BaseModel } from './base';
+import { Deserializable } from 'shared/interfaces/deserializable';
+import { BaseModel, BaseModelInterface } from './base.model';
+import { Branch } from './branch';
 
-export class User extends BaseModel {
-  private _userName: string;
-  public get userName(): string {
-    return this._userName;
-  }
-  public set userName(v: string) {
-    this._userName = v;
-  }
+interface UserInterface extends BaseModelInterface {
+  userName: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  password: string;
+  role: string;
+  department: string;
+  email: string;
+  phone: string;
+  branchId: number;
+}
+
+export class User extends BaseModel implements Deserializable<User> {
+  userName: string;
 
   private _firstName: string;
   public get firstName(): string {
@@ -27,66 +36,32 @@ export class User extends BaseModel {
 
   private _fullName: string;
   public get fullName(): string {
-    return this._fullName || `${this.firstName} ${this.lastName}`.trim() || this.userName;
+    return this._fullName;
   }
   public set fullName(v: string) {
     this._fullName = v;
   }
 
-  private _password: string;
-  public get password(): string {
-    return this._password;
-  }
-  public set password(v: string) {
-    this._password = v;
+  public get code_full_name(): string {
+    return `${this.userName} - ${this.fullName}`;
   }
 
-  private _role: string;
-  public get role(): string {
-    return this._role;
-  }
-  public set role(v: string) {
-    this._role = v;
+  password: string;
+  role: string;
+  department: string;
+  email: string;
+  phone: string;
+  branchId: number;
+
+  constructor() {
+    super();
   }
 
-  private _department: string;
-  public get department(): string {
-    return this._department;
-  }
-  public set department(v: string) {
-    this._department = v;
-  }
+  deserialize(input: Partial<UserInterface>): User {
+    super.deserialize(input);
+    Object.assign(this, input);
 
-  private _email: string;
-  public get email(): string {
-    return this._email;
-  }
-  public set email(v: string) {
-    this._email = v;
-  }
-
-  private _phone: string;
-  public get phone(): string {
-    return this._phone;
-  }
-  public set phone(v: string) {
-    this._phone = v;
-  }
-
-  constructor(d?: any) {
-    super(d);
-
-    if (d) {
-      this.userName = d.userName;
-      this.firstName = d.firstName;
-      this.lastName = d.lastName;
-      this.fullName = d.fullName;
-      this.password = d.password;
-      this.role = d.role;
-      this.department = d.department;
-      this.email = d.email;
-      this.phone = d.phone;
-    }
+    return this;
   }
 
   public toJSON() {
@@ -98,6 +73,8 @@ export class User extends BaseModel {
       phone: this.phone || null,
       firstName: this.firstName || null,
       lastName: this.lastName || null,
+      fullName: this.fullName || null,
+      branchId: this.branchId || null,
     };
   }
 
@@ -110,6 +87,7 @@ export class User extends BaseModel {
       phoneNumber: this.phone || null,
       password: this.password || null,
       role: this.role || null,
+      fullName: this.fullName || null,
     };
   }
 }

@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UserService } from 'shared/services/user.service';
+import { BranchService } from 'shared/services/branch.service';
 
 const routes: Routes = [
   {
@@ -16,6 +17,6 @@ const routes: Routes = [
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes), FormsModule, NgSelectModule],
   declarations: [UserCreateComponent],
-  providers: [UserService],
+  providers: [UserService, BranchService],
 })
 export class UserCreateModule {}

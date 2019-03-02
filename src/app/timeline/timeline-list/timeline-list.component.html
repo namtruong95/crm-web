@@ -4,13 +4,13 @@
     <thead>
       <tr>
         <th>Action</th>
-        <th class="cursor-pointer" (click)="addOrder('customerName')">
+        <th class="cursor-pointer" (click)="addOrder('customer_name')">
           Customer
-          <i class="fa {{ getClassOrder('customerName') }}"></i>
+          <i class="fa {{ getClassOrder('customer_name') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('staffName')">
+        <th class="cursor-pointer" (click)="addOrder('staff_name')">
           Staff
-          <i class="fa {{ getClassOrder('staffName') }}"></i>
+          <i class="fa {{ getClassOrder('staff_name') }}"></i>
         </th>
         <!-- <th class="cursor-pointer" (click)="addOrder('department')">
           Department
@@ -32,8 +32,8 @@
           <button type="button" class="mr-1 btn btn-info" (click)="editSareActivity(saleActivity)"><i class="fa fa-edit"></i></button>
           <button type="button" class="mr-1 btn btn-danger" (click)="removeSareActivity(saleActivity)"><i class="fa fa-trash"></i></button>
         </td>
-        <td>{{ saleActivity.customerName }}</td>
-        <td>{{ saleActivity.staffName }}</td>
+        <td>{{ saleActivity.customer_name }}</td>
+        <td>{{ saleActivity.staff_name }}</td>
         <!-- <td>{{ saleActivity.department }}</td> -->
         <td>{{ saleActivity.statusOfProcessName }}</td>
         <td>{{ saleActivity.dateDisplay }}</td>

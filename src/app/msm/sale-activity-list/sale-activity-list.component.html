@@ -12,17 +12,17 @@
     <thead>
       <tr>
         <th>Action</th>
-        <th class="cursor-pointer" (click)="addOrder('name')">
+        <th class="cursor-pointer" (click)="addOrder('nameOfSale')">
           Name
-          <i class="fa {{ getClassOrder('name') }}"></i>
+          <i class="fa {{ getClassOrder('nameOfSale') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('time')">
+        <th class="cursor-pointer" (click)="addOrder('start')">
           Start
-          <i class="fa {{ getClassOrder('time') }}"></i>
+          <i class="fa {{ getClassOrder('start') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('date')">
+        <th class="cursor-pointer" (click)="addOrder('end')">
           End
-          <i class="fa {{ getClassOrder('date') }}"></i>
+          <i class="fa {{ getClassOrder('end') }}"></i>
         </th>
         <th class="cursor-pointer" (click)="addOrder('actionOfSaleName')">
           Activity Type

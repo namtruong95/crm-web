@@ -1,20 +1,17 @@
 import { BaseModelInterface, BaseModel } from './base.model';
 import { Deserializable } from 'shared/interfaces/deserializable';
 
-interface TypeOfInvestmentInterface extends BaseModelInterface {
+interface BranchInterface extends BaseModelInterface {
   name: string;
-  type: string;
 }
-
-export class TypeOfInvestment extends BaseModel implements Deserializable<TypeOfInvestment> {
+export class Branch extends BaseModel implements Deserializable<Branch> {
   name: string;
-  type: string;
 
   constructor() {
     super();
   }
 
-  deserialize(input: Partial<TypeOfInvestmentInterface>): TypeOfInvestment {
+  deserialize(input: Partial<BranchInterface>): Branch {
     super.deserialize(input);
     Object.assign(this, input);
     return this;

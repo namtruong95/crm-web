@@ -67,10 +67,6 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
   // datepicker config
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
 
-  // status of process
-  // public isLoadingTypeOfContact = false;
-  // public typeOfContacts: CustomerClassification[] = [];
-
   public _subscriber: Subscription;
 
   constructor(
@@ -90,7 +86,6 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
     this._getCustomerTypes();
     this._getTypeOfSales();
     this._getTypeOfInvestment();
-    // this._typeOfContact();
     this._onEventEmitter();
   }
 
@@ -285,26 +280,6 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
   private _removeFile() {
     this._fileUpload.nativeElement.value = null;
   }
-
-  // private _typeOfContact() {
-  //   this.isLoadingTypeOfContact = true;
-
-  //   const params = {
-  //     type: 'contact',
-  //   };
-  //   this.typeOfContacts = [];
-
-  //   this._customerClassificationSv.getCustomerClassification(params).subscribe(
-  //     (res) => {
-  //       this.isLoadingTypeOfContact = false;
-  //       this.typeOfContacts = res.customerClassifications;
-  //     },
-  //     (errors) => {
-  //       this.isLoadingTypeOfContact = false;
-  //       this._notify.error(errors);
-  //     },
-  //   );
-  // }
 
   public downloadTemplate() {
     Helpers.downloadFileFromUri('/assets/Template_CIM_v2.xlsx', 'Template CIM.xlsx');

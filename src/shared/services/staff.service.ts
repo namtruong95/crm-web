@@ -15,7 +15,7 @@ export class StaffService {
 
       res.map((item) => {
         if (item.email) {
-          data.push(new KeyCloakUser(item));
+          data.push(new KeyCloakUser().deserialize(item));
         }
       });
 

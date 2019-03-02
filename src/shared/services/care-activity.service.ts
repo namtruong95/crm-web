@@ -11,14 +11,10 @@ export class CareActivityService {
 
   public filterActivities(params?: any) {
     return this._api.get(`care-activity`, params).map((res) => {
-      const data = res.data;
-
-      const customerCareActivityList: CustomerCareActivity[] = [];
-
-      res.data.customerCareActivityList.forEach((item) => {
-        customerCareActivityList.push(new CustomerCareActivity(item));
-      });
-      return { ...data, customerCareActivityList };
+      res.data.customerCareActivityList = res.data.customerCareActivityList.map((item) =>
+        new CustomerCareActivity().deserialize(item),
+      );
+      return res.data;
     });
   }
 

@@ -1,32 +1,26 @@
-import { BaseModel } from './base';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
-interface Grouping {
+interface GroupingInterface {
   state: string;
 }
 
-export class CustomerType extends BaseModel {
-  private _name: string;
-  public get name(): string {
-    return this._name;
-  }
-  public set name(v: string) {
-    this._name = v;
+interface CustomerTypeInterface extends BaseModelInterface {
+  name: string;
+  child: GroupingInterface;
+}
+
+export class CustomerType extends BaseModel implements Deserializable<CustomerType> {
+  name: string;
+  child: GroupingInterface;
+
+  constructor() {
+    super();
   }
 
-  private _child: Grouping;
-  public get child(): Grouping {
-    return this._child;
-  }
-  public set child(v: Grouping) {
-    this._child = v;
-  }
-
-  constructor(d?: any) {
-    super(d);
-
-    if (d) {
-      this.name = d.name;
-      this.child = d.child;
-    }
+  deserialize(input: Partial<CustomerTypeInterface>): CustomerType {
+    super.deserialize(input);
+    Object.assign(this, input);
+    return this;
   }
 }

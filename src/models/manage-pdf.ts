@@ -1,28 +1,21 @@
-import { BaseModel } from './base';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
+interface ManagePdfInterface extends BaseModelInterface {
+  fileName: string;
+  fileType: string;
+}
 
-export class ManagePdf extends BaseModel {
-  private _fileName: string;
-  public get fileName(): string {
-    return this._fileName;
-  }
-  public set fileName(v: string) {
-    this._fileName = v;
-  }
+export class ManagePdf extends BaseModel implements Deserializable<ManagePdf> {
+  fileName: string;
+  fileType: string;
 
-  private _fileType: string;
-  public get fileType(): string {
-    return this._fileType;
-  }
-  public set fileType(v: string) {
-    this._fileType = v;
+  constructor() {
+    super();
   }
 
-  constructor(d?: any) {
-    super(d);
-
-    if (d) {
-      this.fileName = d.fileName;
-      this.fileType = d.fileType;
-    }
+  deserialize(input: Partial<ManagePdfInterface>): ManagePdf {
+    super.deserialize(input);
+    Object.assign(this, input);
+    return this;
   }
 }

@@ -7,6 +7,8 @@ import { NotifyService } from 'shared/utils/notify.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { NgForm } from '@angular/forms';
+import { BranchService } from 'shared/services/branch.service';
+import { Branch } from 'models/branch';
 
 @Component({
   selector: 'app-user-create',
@@ -19,21 +21,48 @@ export class UserCreateComponent implements OnInit {
   public rules = RegExp;
   public isLoading = false;
 
-  constructor(private _notify: NotifyService, private _emitter: EventEmitterService, private _userSv: UserService) {}
+  // branchs
+  public branchs: Branch[] = [];
+  public isLoadingBranch = false;
 
-  ngOnInit() {}
+  constructor(
+    private _notify: NotifyService,
+    private _emitter: EventEmitterService,
+    private _userSv: UserService,
+    private _branchSv: BranchService,
+  ) {}
 
-  public checkAndCreateUser(form: NgForm) {
-    this.isLoading = true;
-    this._userSv.kcCreateUser(this.user.kcToJSON()).subscribe(
+  ngOnInit() {
+    this._getBranchList();
+  }
+
+  private _getBranchList() {
+    this.isLoadingBranch = true;
+    this._branchSv.getBranchList().subscribe(
       (res) => {
-        this._createUser(form);
+        this.branchs = res.branches;
+        this.isLoadingBranch = false;
       },
       (errors) => {
-        this.isLoading = false;
+        this.isLoadingBranch = false;
         this._notify.error(errors);
       },
     );
+  }
+
+  public checkAndCreateUser(form: NgForm) {
+    this._createUser(form);
+
+    // this.isLoading = true;
+    // this._userSv.kcCreateUser(this.user.kcToJSON()).subscribe(
+    //   (res) => {
+    //     this._createUser(form);
+    //   },
+    //   (errors) => {
+    //     this.isLoading = false;
+    //     this._notify.error(errors);
+    //   },
+    // );
   }
 
   private _createUser(form: NgForm) {

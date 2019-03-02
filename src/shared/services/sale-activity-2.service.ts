@@ -11,7 +11,7 @@ export class SaleActivity2Service {
   public getSaleActivitiesList(params?: any) {
     return this._api.get(`sale-activities`, params).map((res) => {
       res.data.list = res.data.list.map((item) => {
-        return new SaleActivity2(item);
+        return new SaleActivity2().deserialize(item);
       });
       return res.data;
     });
@@ -20,7 +20,7 @@ export class SaleActivity2Service {
   public filterSaleActivities(params?: any) {
     return this._api.get(`sale-activities`, params).map((res) => {
       return (res.data.list = res.data.list.map((item) => {
-        return new SaleActivity2(item);
+        return new SaleActivity2().deserialize(item);
       }));
     });
   }

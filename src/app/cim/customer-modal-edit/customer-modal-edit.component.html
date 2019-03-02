@@ -151,24 +151,6 @@
         </div>
       </div>
 
-      <!-- <div class="col-lg-6 col-md-12">
-        <div class="form-group">
-          <label for="typeOfContact">Status Of Process</label>
-          <ng-select
-            [items]="typeOfContacts"
-            class="text-left"
-            [closeOnSelect]="true"
-            [clearable]="true"
-            [loading]="isLoadingTypeOfContact"
-            placeholder="please select status of process"
-            [searchable]="false"
-            name="typeOfContacts"
-            [(ngModel)]="customer.typeOfContact"
-            bindLabel="name">
-          </ng-select>
-        </div>
-      </div> -->
-
       <div class="col-lg-6 col-md-12">
         <div class="form-group">
           <label for="Phone">Phone</label>
@@ -235,7 +217,7 @@
             class="form-control"
             name="date"
             bsDatepicker
-            [(bsValue)]="customer.customerDateBinding"
+            [(ngModel)]="customer.customerDateBinding"
             [bsConfig]="DATEPICKER_CONFIG"
             (bsValueChange)="onValueChange($event)">
         </div>
@@ -253,7 +235,7 @@
           [searchable]="false"
           name="user"
           [(ngModel)]="customer.assignedStaff"
-          bindLabel="fullName">
+          bindLabel="code_full_name">
         </ng-select>
       </div>
     </div>

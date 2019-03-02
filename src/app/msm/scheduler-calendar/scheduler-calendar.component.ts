@@ -80,7 +80,7 @@ export class SchedulerCalendarComponent implements OnInit, OnDestroy {
         const config = {
           class: 'modal-lg',
           initialState: {
-            scheduler: new SaleActivity(calEvent),
+            scheduler: new SaleActivity().deserialize(calEvent),
           },
         };
 

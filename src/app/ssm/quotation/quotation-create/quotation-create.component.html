@@ -165,7 +165,7 @@
             [searchable]="false"
             name="staff"
             [(ngModel)]="quotation.staff"
-            bindLabel="fullName">
+            bindLabel="code_full_name">
           </ng-select>
       </div>
 
@@ -187,7 +187,7 @@
           class="form-control-plaintext"
           name="distance"
           readonly
-          [(ngModel)]="quotation.distance_km">
+          [ngModel]="quotation.distance_km">
       </div>
 
       <div class="col-lg-6 col-md-12 form-group">
@@ -198,7 +198,7 @@
           name="totalPrice"
           readonly
           placeholder="please enter total rrice"
-          [(ngModel)]="quotation.totalStr">
+          [ngModel]="quotation.totalStr">
       </div>
 
       <div class="col-lg-6 col-md-12 form-group">
@@ -208,7 +208,7 @@
           class="form-control-plaintext"
           name="realPrice"
           readonly
-          [(ngModel)]="quotation.totalTaxStr">
+          [ngModel]="quotation.totalTaxStr">
       </div>
     </div>
 

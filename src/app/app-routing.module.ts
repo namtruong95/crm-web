@@ -7,12 +7,16 @@ import { LayoutHeaderComponent } from './layout-header/layout-header.component';
 import { LayoutNavComponent } from './layout-nav/layout-nav.component';
 import { Roles } from './guard/roles';
 import { CommonModule } from '@angular/common';
+import { AppResolve } from './app.reslove';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     canActivate: [AuthGuard],
+    resolve: {
+      app: AppResolve,
+    },
     children: [
       {
         path: 'cim',
@@ -124,6 +128,6 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes), CommonModule],
   exports: [RouterModule],
   declarations: [LayoutComponent, LayoutHeaderComponent, LayoutNavComponent],
-  providers: [AuthGuard],
+  providers: [AuthGuard, AppResolve],
 })
 export class AppRoutingModule {}

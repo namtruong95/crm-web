@@ -11,14 +11,8 @@ export class ProposalService {
 
   public filterProposal(params?: any) {
     return this._api.get(`proposal/filters`, params).map((res) => {
-      const data = res.data;
-
-      const proposalList: Quotation[] = [];
-
-      res.data.proposalList.forEach((item) => {
-        proposalList.push(new Quotation(item));
-      });
-      return { ...data, proposalList };
+      res.data.proposalList = res.data.proposalList.map((item) => new Quotation().deserialize(item));
+      return res.data;
     });
   }
 

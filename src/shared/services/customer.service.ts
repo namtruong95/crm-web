@@ -12,21 +12,15 @@ export class CustomerService {
 
   public customersList(params?: any) {
     return this._api.get(`customers`, params).map((res) => {
-      const data = res.data;
-
-      const customerList: Customer[] = [];
-
-      res.data.customerList.forEach((item) => {
-        customerList.push(new Customer(item));
-      });
-      return { ...data, customerList };
+      res.data.customerList = res.data.customerList.map((item) => new Customer().deserialize(item));
+      return res.data;
     });
   }
 
   public showCustomer(id: number, opts?: any) {
     return this._api.get(`customers/${id}`, opts).map((res) => {
       if (res.data && res.data.customer) {
-        return new Customer(res.data.customer);
+        return new Customer().deserialize(res.data.customer);
       }
 
       return;
@@ -35,28 +29,14 @@ export class CustomerService {
 
   public filterCustomers(params?: any) {
     return this._api.get(`customers/filters`, params).map((res) => {
-      const data = res.data;
-
-      const customerList: Customer[] = [];
-
-      res.data.customerList.forEach((item) => {
-        customerList.push(new Customer(item));
-      });
-
-      return { ...data, customerList };
+      res.data.customerList = res.data.customerList.map((item) => new Customer().deserialize(item));
+      return res.data;
     });
   }
 
   public searchCustomers(params?: any) {
     return this._api.get(`customers/filters`, params).map((res) => {
-      const data = res.data;
-
-      const customerList: Customer[] = [];
-
-      res.data.customerList.forEach((item) => {
-        customerList.push(new Customer(item));
-      });
-      return customerList;
+      return res.data.customerList.map((item) => new Customer().deserialize(item));
     });
   }
 

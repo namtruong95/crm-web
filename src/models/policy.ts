@@ -1,22 +1,23 @@
-import { BaseModel } from './base';
 import { CustomerClassification } from './customer-classification';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
-export class Policy extends BaseModel {
-  private _policyId: number;
-  public get policyId(): number {
-    return this._policyId;
-  }
-  public set policyId(v: number) {
-    this._policyId = v;
-  }
+interface PolicyInterface extends BaseModelInterface {
+  policyId: number;
+  policyName: string;
+  serviceTerm: CustomerClassification;
+  bandWidth: number;
+  typeOfService: CustomerClassification;
+  minDistance: number;
+  maxDistance: number;
+  otc: string;
+  mrcMin: string;
+  mrcMax: string;
+}
 
-  private _policyName: string;
-  public get policyName(): string {
-    return this._policyName;
-  }
-  public set policyName(v: string) {
-    this._policyName = v;
-  }
+export class Policy extends BaseModel implements Deserializable<Policy> {
+  policyId: number;
+  policyName: string;
 
   private _serviceTerm: CustomerClassification;
   public get serviceTerm(): CustomerClassification {
@@ -88,23 +89,28 @@ export class Policy extends BaseModel {
     this._mrcMax = v;
   }
 
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
+
     this.typeOfService = new CustomerClassification();
     this.serviceTerm = new CustomerClassification();
+  }
 
-    if (d) {
-      this.policyId = d.policyId;
-      this.policyName = d.policyName;
-      this.serviceTerm = new CustomerClassification(d.serviceTerm);
-      this.bandWidth = d.bandWidth;
-      this.typeOfService = new CustomerClassification(d.typeOfService);
-      this.minDistance = d.minDistance;
-      this.maxDistance = d.maxDistance;
-      this.otc = d.otc;
-      this.mrcMin = d.mrcMin;
-      this.mrcMax = d.mrcMax;
-    }
+  deserialize(input: Partial<PolicyInterface>): Policy {
+    super.deserialize(input);
+    Object.assign(this, input);
+
+    this.typeOfService =
+      input.typeOfService instanceof CustomerClassification
+        ? input.typeOfService
+        : new CustomerClassification().deserialize(input.typeOfService);
+
+    this.serviceTerm =
+      input.serviceTerm instanceof CustomerClassification
+        ? input.serviceTerm
+        : new CustomerClassification().deserialize(input.serviceTerm);
+
+    return this;
   }
 
   public toJSON() {
