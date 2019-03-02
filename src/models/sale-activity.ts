@@ -25,23 +25,29 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
   public get date_str(): string {
     return moment(this.date).format('YYYY-MM-DD');
   }
+  public set date_str(v) {}
 
   time_start: string;
   public get start(): string {
     return `${this.date_str} ${this.time_start}`;
   }
+  public set start(v) {}
   public get end(): string {
     return `${this.date_str} ${this.time_end}`;
   }
+  public set end(v) {}
+
   public get endAfterStart(): boolean {
     return moment(this.end).isAfter(moment(this.start));
   }
+  public set endAfterStart(v) {}
 
   time_end: string;
 
   public get title(): string {
     return `${this.time_start}~${this.time_end} ${this.nameOfSale}`;
   }
+  public set title(v) {}
 
   private _actionOfSale: CustomerClassification;
   public get actionOfSale(): CustomerClassification {
@@ -53,6 +59,7 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
   public get actionOfSaleName(): string {
     return this.actionOfSale ? this.actionOfSale.name : null;
   }
+  public set actionOfSaleName(v) {}
 
   private _staff: User;
   public get staff(): User {
@@ -72,6 +79,7 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
   public get customerName(): string {
     return this.customer ? this.customer.customerName : null;
   }
+  public set customerName(v) {}
 
   constructor() {
     super();
