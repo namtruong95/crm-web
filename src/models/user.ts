@@ -1,5 +1,6 @@
 import { Deserializable } from 'shared/interfaces/deserializable';
 import { BaseModel, BaseModelInterface } from './base.model';
+import { Branch } from './branch';
 
 interface UserInterface extends BaseModelInterface {
   userName: string;
@@ -11,6 +12,7 @@ interface UserInterface extends BaseModelInterface {
   department: string;
   email: string;
   phone: string;
+  branchId: number;
 }
 
 export class User extends BaseModel implements Deserializable<User> {
@@ -34,10 +36,14 @@ export class User extends BaseModel implements Deserializable<User> {
 
   private _fullName: string;
   public get fullName(): string {
-    return this._fullName || this.userName || `${this.firstName} ${this.lastName}`.trim();
+    return this._fullName;
   }
   public set fullName(v: string) {
     this._fullName = v;
+  }
+
+  public get code_full_name(): string {
+    return `${this.userName} - ${this.fullName}`;
   }
 
   password: string;
@@ -45,6 +51,7 @@ export class User extends BaseModel implements Deserializable<User> {
   department: string;
   email: string;
   phone: string;
+  branchId: number;
 
   constructor() {
     super();
@@ -53,6 +60,7 @@ export class User extends BaseModel implements Deserializable<User> {
   deserialize(input: Partial<UserInterface>): User {
     super.deserialize(input);
     Object.assign(this, input);
+
     return this;
   }
 
@@ -65,6 +73,8 @@ export class User extends BaseModel implements Deserializable<User> {
       phone: this.phone || null,
       firstName: this.firstName || null,
       lastName: this.lastName || null,
+      fullName: this.fullName || null,
+      branchId: this.branchId || null,
     };
   }
 
@@ -77,6 +87,7 @@ export class User extends BaseModel implements Deserializable<User> {
       phoneNumber: this.phone || null,
       password: this.password || null,
       role: this.role || null,
+      fullName: this.fullName || null,
     };
   }
 }

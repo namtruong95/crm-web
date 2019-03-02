@@ -29,4 +29,8 @@ export class UserService {
   public kcCreateUser(data: any) {
     return this._kcApi.post(`users`, data);
   }
+
+  public checkUserExists(id: string, opts?: any) {
+    return this._api.get(`users/check-user/${id}`, opts);
+  }
 }

@@ -11,14 +11,41 @@
           placeholder="please enter user name"
           [(ngModel)]="user.userName"
           #UserName="ngModel"
-          required>
+          required
+          [pattern]="rules.userName">
 
         <div class="invalid-feedback"
           *ngIf="UserName.errors?.required">
           Please enter user name
         </div>
+
+        <div class="invalid-feedback"
+          *ngIf="UserName.errors?.pattern">
+          Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen
+        </div>
       </div>
     </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="fullName">Full Name <i class="required">&#40;*&#41;</i></label>
+        <input type="text" id="fullName"
+          autocomplete="new-fullName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': FullName.dirty && FullName.errors }"
+          name="fullName"
+          placeholder="please enter full name"
+          [(ngModel)]="user.fullName"
+          #FullName="ngModel"
+          required>
+
+        <div class="invalid-feedback"
+          *ngIf="FullName.errors?.required">
+          Please enter full name
+        </div>
+      </div>
+    </div>
+
 
     <div class="col-lg-6 col-md-12">
       <div class="form-group">
@@ -56,6 +83,32 @@
         <div class="invalid-feedback"
           *ngIf="LastName.errors?.required">
           Please enter last name
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="role">Branch <i class="required">&#40;*&#41;</i></label>
+        <ng-select
+          [items]="branchs"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingBranch"
+          placeholder="please select branch"
+          [searchable]="false"
+          name="branchs"
+          [(ngModel)]="user.branchId"
+          #Role="ngModel"
+          bindLabel="name"
+          bindValue="id"
+          required>
+        </ng-select>
+
+        <div class="invalid-feedback"
+          *ngIf="Role.errors?.required">
+          Please select branch
         </div>
       </div>
     </div>

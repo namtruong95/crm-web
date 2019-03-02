@@ -12,6 +12,10 @@
           Role
           <i class="fa {{ getClassOrder('role') }}"></i>
         </th>
+        <th class="cursor-pointer" (click)="addOrder('fullName')">
+          Full Name
+          <i class="fa {{ getClassOrder('fullName') }}"></i>
+        </th>
         <th class="cursor-pointer" (click)="addOrder('department')">
           Department
           <i class="fa {{ getClassOrder('department') }}"></i>
@@ -34,6 +38,7 @@
         </td> -->
         <td>{{ user.userName }}</td>
         <td>{{ user.role }}</td>
+        <td>{{ user.fullName }}</td>
         <td>{{ user.department }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.phone }}</td>
