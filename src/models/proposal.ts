@@ -1,36 +1,29 @@
-import { BaseModel } from './base';
 import { Customer } from './customer';
 import { Quotation } from './quotation';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
-export class Proposal extends BaseModel {
-  private _customer: Customer;
-  public get customer(): Customer {
-    return this._customer;
-  }
-  public set customer(v: Customer) {
-    this._customer = v;
-  }
+interface ProposalInterface extends BaseModelInterface {
+  customer: Customer;
+  quotations: Quotation[];
+}
+export class Proposal extends BaseModel implements Deserializable<Proposal> {
+  customer: Customer;
+  quotations: Quotation[];
 
-  private _quotations: Quotation[];
-  public get quotations(): Quotation[] {
-    return this._quotations;
-  }
-  public set quotations(v: Quotation[]) {
-    this._quotations = v;
-  }
-
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
     this.customer = new Customer();
     this.quotations = [];
+  }
 
-    if (d) {
-      this.customer = new Customer(d.customer);
-      if (d.quotations && d.quotations.length > 0) {
-        d.quotations.forEach((item) => {
-          this.quotations.push(new Quotation(item));
-        });
-      }
+  deserialize(input: Partial<ProposalInterface>): Proposal {
+    super.deserialize(input);
+    Object.assign(this, input);
+
+    if (input.quotations && input.quotations.length > 0) {
+      this.quotations = input.quotations.map((item) => new Quotation().deserialize(item));
     }
+    return this;
   }
 }

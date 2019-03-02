@@ -11,14 +11,8 @@ export class PolicyService {
 
   public filterPolicies(params?: any) {
     return this._api.get(`policy/filters`, params).map((res) => {
-      const data = res.data;
-
-      const policyList: Policy[] = [];
-      res.data.policyList.forEach((item) => {
-        policyList.push(new Policy(item));
-      });
-
-      return { ...data, policyList };
+      res.data.policyList = res.data.policyList.map((item) => new Policy().deserialize(item));
+      return res.data;
     });
   }
 
@@ -37,7 +31,7 @@ export class PolicyService {
   public findPolicy(params?: any) {
     return this._api.get(`policy/findByPolicy`, params).map((res) => {
       if (res.data && res.data.policy) {
-        return new Policy(res.data.policy);
+        return new Policy().deserialize(res.data.policy);
       } else {
         return null;
       }

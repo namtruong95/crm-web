@@ -1,9 +1,10 @@
-import { BaseModel } from './base';
 import { Customer } from './customer';
 import { User } from './user';
 import { CustomerClassification } from './customer-classification';
 
 import * as moment from 'moment';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
 export enum StatusOfProcess {
   SENT_MAIL = 'Sent Mail',
@@ -14,7 +15,20 @@ export enum StatusOfProcess {
   SIGNED_CONTRACT = 'Signed contract',
 }
 
-export class SaleActivity2 extends BaseModel {
+interface SaleActivity2Interface extends BaseModelInterface {
+  customer: Customer;
+  staff: User;
+  department: string;
+  statusOfProcess: CustomerClassification;
+  note: string;
+  dateBinding: Date;
+  saleDate: any;
+  customerId: number;
+  customerName: string;
+  staffId: number;
+  staffName: string;
+}
+export class SaleActivity2 extends BaseModel implements Deserializable<SaleActivity2> {
   private _customer: Customer;
   public get customer(): Customer {
     return this._customer;
@@ -22,17 +36,11 @@ export class SaleActivity2 extends BaseModel {
   public set customer(v: Customer) {
     this._customer = v;
   }
-  public get customerName(): string {
+  public get customer_name(): string {
     return this.customer ? this.customer.customerName : '';
   }
 
-  private _department: string;
-  public get department(): string {
-    return this._department;
-  }
-  public set department(v: string) {
-    this._department = v;
-  }
+  department: string;
 
   private _staff: User;
   public get staff(): User {
@@ -41,7 +49,7 @@ export class SaleActivity2 extends BaseModel {
   public set staff(v: User) {
     this._staff = v;
   }
-  public get staffName(): string {
+  public get staff_name(): string {
     return this.staff ? this.staff.fullName : '';
   }
 
@@ -97,27 +105,16 @@ export class SaleActivity2 extends BaseModel {
     }
   }
 
-  private _note: string;
-  public get note(): string {
-    return this._note;
-  }
-  public set note(v: string) {
-    this._note = v;
-  }
+  note: string;
 
-  private _saleDate: any;
-  public get saleDate(): any {
-    return this._saleDate;
-  }
-  public set saleDate(v: any) {
-    this._saleDate = v;
-  }
-  public get dateStr(): string {
+  saleDate: any;
+  public get date_str(): string {
     return moment(this.saleDate).toISOString();
   }
   public get dateDisplay(): string {
     return moment(this.saleDate).format('YYYY-MM-DD');
   }
+
   private _dateBinding: Date;
   public get dateBinding(): Date {
     return this._dateBinding;
@@ -126,29 +123,33 @@ export class SaleActivity2 extends BaseModel {
     this._dateBinding = v;
   }
 
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
     this.dateBinding = new Date();
+  }
 
-    if (d) {
-      this.customer = new Customer({
-        id: d.customerId,
-        customerName: d.customerName,
-      });
+  deserialize(input: Partial<SaleActivity2Interface>): SaleActivity2 {
+    super.deserialize(input);
+    Object.assign(this, input);
 
-      this.staff = new User({
-        id: d.staffId,
-        fullName: d.staffName,
-      });
+    this.dateBinding = input.saleDate instanceof Date ? input.saleDate : new Date(input.saleDate);
 
-      this.department = d.department;
-      if (d.statusOfProcess) {
-        this.statusOfProcess = new CustomerClassification(d.statusOfProcess);
-      }
-      this.note = d.note;
-      this.dateBinding = new Date(d.saleDate);
-      this.saleDate = d.saleDate;
-    }
+    this.customer = new Customer().deserialize({
+      id: input.customerId,
+      customerName: input.customerName,
+    });
+
+    this.staff = new User().deserialize({
+      id: input.staffId,
+      fullName: input.staffName,
+    });
+
+    this.statusOfProcess =
+      input.statusOfProcess instanceof CustomerClassification
+        ? input.statusOfProcess
+        : new CustomerClassification().deserialize(input.statusOfProcess);
+
+    return this;
   }
 
   public toJSON() {
@@ -160,7 +161,7 @@ export class SaleActivity2 extends BaseModel {
       staffName: this.staff ? this.staff.fullName : null,
       statusOfProcessId: this.statusOfProcess ? this.statusOfProcess.id : null,
       note: this.note || null,
-      saleDate: this.dateStr,
+      saleDate: this.date_str,
     };
   }
 }

@@ -13,12 +13,12 @@ import { RegExp } from 'constants/reg-exp';
 import { MapsAPILoader } from '@agm/core';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
-
-import {} from 'googlemaps';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
-
+// @ts-ignore-start
+import {} from 'googlemaps';
+// @ts-ignore-end
 @Component({
   selector: 'app-customer-modal-edit',
   templateUrl: './customer-modal-edit.component.html',
@@ -49,10 +49,6 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
   public typeOfInvestments: CustomerClassification[] = [];
   public isLoadingTypeOfInvestment = false;
 
-  // type of contact
-  // public isLoadingTypeOfContact = false;
-  // public typeOfContacts: CustomerClassification[] = [];
-
   // users
   public users: User[] = [];
   public isLoadingUser = false;
@@ -81,13 +77,12 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._getCustomerTypes();
     this._getTypeOfSales();
     this._getTypeOfInvestment();
-    // this._typeOfContact();
     this._getUsers();
     this._getCatalog();
+    this._onEventEmitter();
     setTimeout(() => {
       this._initAutoCompleteGmap();
     }, 0);
-    this._onEventEmitter();
   }
 
   ngOnDestroy() {
@@ -223,26 +218,6 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
       },
     );
   }
-
-  // private _typeOfContact() {
-  //   this.isLoadingTypeOfContact = true;
-
-  //   const params = {
-  //     type: 'contact',
-  //   };
-  //   this.typeOfInvestments = [];
-
-  //   this._customerClassificationSv.getCustomerClassification(params).subscribe(
-  //     (res) => {
-  //       this.isLoadingTypeOfContact = false;
-  //       this.typeOfContacts = res.customerClassifications;
-  //     },
-  //     (errors) => {
-  //       this.isLoadingTypeOfContact = false;
-  //       this._notify.error(errors);
-  //     },
-  //   );
-  // }
 
   public onValueChange(event) {
     this.customer.customerDate = event;

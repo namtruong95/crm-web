@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
-import {} from 'googlemaps';
 import { NotifyService } from 'shared/utils/notify.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
@@ -10,7 +9,9 @@ import { BtsService } from 'shared/services/bts.service';
 import * as moment from 'moment';
 import { saveAs } from 'file-saver';
 import { RoleService } from 'app/role.service';
-
+// @ts-ignore-start
+import {} from 'googlemaps';
+// @ts-ignore-end
 @Component({
   selector: 'app-bts-filter',
   templateUrl: './bts-filter.component.html',

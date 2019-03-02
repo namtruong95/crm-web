@@ -11,14 +11,10 @@ export class SaleActivityService {
 
   public getSaleActivities(params?: any) {
     return this._api.get(`sale-activity`, params).map((res) => {
-      const data = res.data;
-
-      const customerSaleActivityList: SaleActivity[] = [];
-
-      res.data.customerSaleActivityList.forEach((item) => {
-        customerSaleActivityList.push(new SaleActivity(item));
-      });
-      return { ...data, customerSaleActivityList };
+      res.data.customerSaleActivityList = res.data.customerSaleActivityList.map((item) =>
+        new SaleActivity().deserialize(item),
+      );
+      return res.data;
     });
   }
 

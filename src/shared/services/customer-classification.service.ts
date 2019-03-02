@@ -10,14 +10,10 @@ export class CustomerClassificationService {
 
   public getCustomerClassification(params: any) {
     return this._api.get(`customer-classifications`, params).map((res) => {
-      const data = res.data;
-      const customerClassifications: CustomerClassification[] = [];
-
-      res.data.customerClassifications.forEach((item) => {
-        customerClassifications.push(new CustomerClassification(item));
-      });
-
-      return { ...data, customerClassifications };
+      res.data.customerClassifications = res.data.customerClassifications.map((item) =>
+        new CustomerClassification().deserialize(item),
+      );
+      return res.data;
     });
   }
 }

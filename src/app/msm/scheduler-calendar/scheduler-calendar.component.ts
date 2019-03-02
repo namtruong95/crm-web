@@ -77,10 +77,18 @@ export class SchedulerCalendarComponent implements OnInit, OnDestroy {
       },
       dayClick: (date, jsEvent, view) => {},
       eventClick: (calEvent, jsEvent, view) => {
+        const event = calEvent;
+        delete event.date_str;
+        delete event.endAfterStart;
+        delete event.actionOfSaleName;
+        delete event.customerName;
+        delete event.title;
+        console.log(event);
+
         const config = {
           class: 'modal-lg',
           initialState: {
-            scheduler: new SaleActivity(calEvent),
+            scheduler: new SaleActivity().deserialize(event),
           },
         };
 

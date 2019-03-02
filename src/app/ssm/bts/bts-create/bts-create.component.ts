@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
-import {} from 'googlemaps';
 import { Bts } from 'models/bts';
 import { BtsService } from 'shared/services/bts.service';
 import { NotifyService } from 'shared/utils/notify.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { NgForm } from '@angular/forms';
+
+// @ts-ignore-start
+import {} from 'googlemaps';
+// @ts-ignore-end
 
 @Component({
   selector: 'app-bts-create',

@@ -1,10 +1,33 @@
-import { BaseModel } from './base';
 import { Customer } from './customer';
 import { CustomerClassification } from './customer-classification';
 import { Bts } from './bts';
 import { Marker } from 'interfaces/maker';
 import { User } from './user';
-export class Quotation extends BaseModel {
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
+
+interface QuotationInterface extends BaseModelInterface {
+  customer: Customer;
+  typeOfService: CustomerClassification;
+  bandWidth: number;
+  distance: number;
+  otc: string;
+  mrc: string;
+  totalPrice: number;
+  reduceOtc: number;
+  reduceMrc: number;
+  realPrice: number;
+  timeForHire: number;
+  timeForProvide: number;
+  serviceTerm: CustomerClassification;
+  bts: Bts;
+  staff: User;
+  saleStaff: string;
+  staffMail: string;
+  staffId: number;
+}
+
+export class Quotation extends BaseModel implements Deserializable<Quotation> {
   private _customer: Customer;
   public get customer(): Customer {
     return this._customer;
@@ -40,7 +63,7 @@ export class Quotation extends BaseModel {
 
   private _distance = 0;
   public get distance(): number {
-    return this._distance || 0;
+    return +this._distance || 0;
   }
   public set distance(v: number) {
     this._distance = v;
@@ -188,35 +211,43 @@ export class Quotation extends BaseModel {
     return markers;
   }
 
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
     this.customer = new Customer();
     this.serviceTerm = new CustomerClassification();
     this.typeOfService = new CustomerClassification();
     this.bts = new Bts();
     this.staff = new User();
+  }
 
-    if (d) {
-      this.customer = new Customer(d.customer);
-      this.typeOfService = new CustomerClassification(d.typeOfService);
-      this.bandWidth = d.bandWidth;
-      this.distance = d.distance;
-      this.otc = (+d.otc).format();
-      this.mrc = (+d.mrc).format();
-      this.totalPrice = d.totalPrice;
-      this.reduceOtc = d.reduceOtc;
-      this.reduceMrc = d.reduceMrc;
-      this.realPrice = d.realPrice;
-      this.timeForHire = d.timeForHire;
-      this.timeForProvide = d.timeForProvide;
-      this.serviceTerm = new CustomerClassification(d.serviceTerm);
-      this.bts = new Bts(d.bts);
-      this.staff = new User({
-        fullName: d.saleStaff,
-        email: d.staffMail,
-        id: d.staffId,
-      });
-    }
+  deserialize(input: Partial<QuotationInterface>): Quotation {
+    super.deserialize(input);
+    Object.assign(this, input);
+
+    this.otc = (+input.otc).format();
+    this.mrc = (+input.mrc).format();
+
+    this.staff = new User().deserialize({
+      fullName: input.saleStaff,
+      email: input.staffMail,
+      id: input.staffId,
+    });
+
+    this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
+
+    this.typeOfService =
+      input.typeOfService instanceof CustomerClassification
+        ? input.typeOfService
+        : new CustomerClassification().deserialize(input.typeOfService);
+
+    this.serviceTerm =
+      input.serviceTerm instanceof CustomerClassification
+        ? input.serviceTerm
+        : new CustomerClassification().deserialize(input.serviceTerm);
+
+    this.bts = input.bts instanceof Bts ? input.bts : new Bts().deserialize(input.bts);
+
+    return this;
   }
 
   public toJSON() {

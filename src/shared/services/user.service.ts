@@ -11,26 +11,14 @@ export class UserService {
 
   public getUsers(opts?: any) {
     return this._api.get(`users`, opts).map((res) => {
-      const data = res.data;
-
-      const listUsers: User[] = [];
-
-      res.data.listUsers.forEach((item) => {
-        listUsers.push(new User(item));
-      });
-      return { ...data, listUsers };
+      res.data.listUsers = res.data.listUsers.map((item) => new User().deserialize(item));
+      return res.data;
     });
   }
 
   public getAllUsers(opts?: any) {
-    return this._api.get(`users/get-all`).map((res) => {
-      const listUsers: User[] = [];
-
-      res.data.listUsers.forEach((item) => {
-        listUsers.push(new User(item));
-      });
-
-      return listUsers;
+    return this._api.get(`users/get-all`, opts).map((res) => {
+      return res.data.listUsers.map((item) => new User().deserialize(item));
     });
   }
 

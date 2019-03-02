@@ -14,12 +14,14 @@ import { CustomerService } from 'shared/services/customer.service';
 import { RegExp } from 'constants/reg-exp';
 
 import { MapsAPILoader } from '@agm/core';
-
-import {} from 'googlemaps';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
 import { NgForm } from '@angular/forms';
+
+// @ts-ignore-start
+import {} from 'googlemaps';
+// @ts-ignore-end
 
 @Component({
   selector: 'app-customer-create',
@@ -50,10 +52,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   // type of investment
   public typeOfInvestments: CustomerClassification[] = [];
   public isLoadingTypeOfInvestment = false;
-
-  // type of contact
-  // public isLoadingTypeOfContact = false;
-  // public typeOfContacts: CustomerClassification[] = [];
 
   // users
   public users: User[] = [];
@@ -87,7 +85,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this._getTypeOfInvestment();
     this._initAutoCompleteGmap();
     this._onEventEmitter();
-    // this._typeOfContact();
     this._getUsers();
     this._getCatalog();
   }
@@ -226,26 +223,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       },
     );
   }
-
-  // private _typeOfContact() {
-  //   this.isLoadingTypeOfContact = true;
-
-  //   const params = {
-  //     type: 'contact',
-  //   };
-  //   this.typeOfContacts = [];
-
-  //   this._customerClassificationSv.getCustomerClassification(params).subscribe(
-  //     (res) => {
-  //       this.isLoadingTypeOfContact = false;
-  //       this.typeOfContacts = res.customerClassifications;
-  //     },
-  //     (errors) => {
-  //       this.isLoadingTypeOfContact = false;
-  //       this._notify.error(errors);
-  //     },
-  //   );
-  // }
 
   public onValueChange(event) {
     this.customer.customerDate = event;

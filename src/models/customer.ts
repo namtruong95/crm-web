@@ -1,19 +1,38 @@
-import { BaseModel } from './base';
 import { CustomerType } from './customer-type';
 import { TypeOfInvestment } from './type-of-investment';
 import { CustomerClassification } from './customer-classification';
 import * as moment from 'moment';
 import { Marker } from 'interfaces/maker';
 import { User } from './user';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
-export class Customer extends BaseModel {
-  private _customerName: string;
-  public get customerName(): string {
-    return this._customerName;
-  }
-  public set customerName(v: string) {
-    this._customerName = v;
-  }
+interface CustomerInterface extends BaseModelInterface {
+  customerName: string;
+  address: string;
+  catalog: CustomerClassification;
+  contactName: string;
+  customerDate: string;
+  customerDateBinding: Date;
+  customerDateFormat: string;
+  customerStatus: string;
+  customerType: CustomerType;
+  customerTypeId: number;
+  email: string;
+  latitude: number;
+  longitude: number;
+  phone: string;
+  position: string;
+  service: string;
+  typeOfInvestment: TypeOfInvestment;
+  typeOfInvestmentId: number;
+  typeOfSale: CustomerClassification;
+  typeOfSaleId: number;
+  assignedStaff: User;
+}
+
+export class Customer extends BaseModel implements Deserializable<Customer> {
+  customerName: string;
 
   private _address: string;
   public get address(): string {
@@ -22,8 +41,7 @@ export class Customer extends BaseModel {
   public set address(v: string) {
     this._address = (v || '').split(';')[0];
   }
-
-  public get has_address(): boolean {
+  get has_address(): boolean {
     return !!this.address && !!this.latitude && !!this.longitude;
   }
 
@@ -38,21 +56,9 @@ export class Customer extends BaseModel {
     return this.catalog ? this.catalog.name : null;
   }
 
-  private _contactName: string;
-  public get contactName(): string {
-    return this._contactName;
-  }
-  public set contactName(v: string) {
-    this._contactName = v;
-  }
+  contactName: string;
 
-  private _customerDate: string;
-  public get customerDate(): string {
-    return this._customerDate;
-  }
-  public set customerDate(v: string) {
-    this._customerDate = v;
-  }
+  customerDate: string;
   public get customerDateToJSON(): string {
     return moment(this.customerDate).format('YYYY-MM-DD');
   }
@@ -62,24 +68,12 @@ export class Customer extends BaseModel {
     return this._customerDateBinding;
   }
   public set customerDateBinding(v: Date) {
-    this._customerDateBinding = v;
+    this._customerDateBinding = new Date(v);
   }
 
-  private _customerDateFormat: string;
-  public get customerDateFormat(): string {
-    return this._customerDateFormat;
-  }
-  public set customerDateFormat(v: string) {
-    this._customerDateFormat = v;
-  }
+  customerDateFormat: string;
 
-  private _customerStatus: string;
-  public get customerStatus(): string {
-    return this._customerStatus;
-  }
-  public set customerStatus(v: string) {
-    this._customerStatus = v;
-  }
+  customerStatus: string;
   public get customerStatusString(): string {
     return !!this.customerStatus ? 'Contacted' : 'Not Contacted';
   }
@@ -92,61 +86,13 @@ export class Customer extends BaseModel {
     this._customerType = v;
   }
 
-  private _customerTypeId: number;
-  public get customerTypeId(): number {
-    return this._customerTypeId;
-  }
-  public set customerTypeId(v: number) {
-    this._customerTypeId = v;
-  }
-
-  private _email: string;
-  public get email(): string {
-    return this._email;
-  }
-  public set email(v: string) {
-    this._email = v;
-  }
-
-  private _latitude: number;
-  public get latitude(): number {
-    return this._latitude || null;
-  }
-  public set latitude(v: number) {
-    this._latitude = v;
-  }
-
-  private _longitude: number;
-  public get longitude(): number {
-    return this._longitude || null;
-  }
-  public set longitude(v: number) {
-    this._longitude = v;
-  }
-
-  private _phone: string;
-  public get phone(): string {
-    return this._phone;
-  }
-  public set phone(v: string) {
-    this._phone = v;
-  }
-
-  private _position: string;
-  public get position(): string {
-    return this._position;
-  }
-  public set position(v: string) {
-    this._position = v;
-  }
-
-  private _service: string;
-  public get service(): string {
-    return this._service;
-  }
-  public set service(v: string) {
-    this._service = v;
-  }
+  customerTypeId: number;
+  email: string;
+  latitude: number;
+  longitude: number;
+  phone: string;
+  position: string;
+  service: string;
 
   private _typeOfInvestment: TypeOfInvestment;
   public get typeOfInvestment(): TypeOfInvestment {
@@ -159,13 +105,7 @@ export class Customer extends BaseModel {
     return this.typeOfInvestment ? this.typeOfInvestment.name : '';
   }
 
-  private _typeOfInvestmentId: number;
-  public get typeOfInvestmentId(): number {
-    return this._typeOfInvestmentId;
-  }
-  public set typeOfInvestmentId(v: number) {
-    this._typeOfInvestmentId = v;
-  }
+  typeOfInvestmentId: number;
 
   private _typeOfSale: CustomerClassification;
   public get typeOfSale(): CustomerClassification {
@@ -178,24 +118,7 @@ export class Customer extends BaseModel {
     return this.typeOfSale ? this.typeOfSale.name : '';
   }
 
-  private _typeOfSaleId: number;
-  public get typeOfSaleId(): number {
-    return this._typeOfSaleId;
-  }
-  public set typeOfSaleId(v: number) {
-    this._typeOfSaleId = v;
-  }
-
-  // private _typeOfContact: CustomerClassification;
-  // public get typeOfContact(): CustomerClassification {
-  //   return this._typeOfContact;
-  // }
-  // public set typeOfContact(v: CustomerClassification) {
-  //   this._typeOfContact = v;
-  // }
-  // public get typeOfContactName(): string {
-  //   return this.typeOfContact ? this.typeOfContact.name : null;
-  // }
+  typeOfSaleId: number;
 
   private _assignedStaff: User;
   public get assignedStaff(): User {
@@ -208,39 +131,48 @@ export class Customer extends BaseModel {
     return this.assignedStaff ? this.assignedStaff.fullName : null;
   }
 
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
     this.customerType = new CustomerType();
     this.typeOfInvestment = new TypeOfInvestment();
     this.typeOfSale = new CustomerClassification();
     this.customerDateBinding = new Date();
     this.catalog = new CustomerClassification();
     this.assignedStaff = new User();
+    this.address = '';
+  }
 
-    if (d) {
-      this.customerName = d.customerName;
-      this.address = d.address || '';
-      this.catalog = new CustomerClassification(d.catalog);
-      this.contactName = d.contactName;
-      this.customerDate = d.customerDate;
-      this.customerDateBinding = new Date(d.customerDate);
-      this.customerDateFormat = d.customerDateFormat;
-      this.customerStatus = d.customerStatus;
-      this.customerType = new CustomerType(d.customerType);
-      this.customerTypeId = d.customerTypeId;
-      this.email = d.email;
-      this.latitude = d.latitude;
-      this.longitude = d.longitude;
-      this.phone = d.phone;
-      this.position = d.position;
-      this.service = d.service;
-      this.typeOfInvestment = new TypeOfInvestment(d.typeOfInvestment);
-      this.typeOfInvestmentId = d.typeOfInvestmentId;
-      this.typeOfSale = new CustomerClassification(d.typeOfSale);
-      this.typeOfSaleId = d.typeOfSaleId;
-      // this.typeOfContact = d.typeOfContact;
-      this.assignedStaff = new User(d.assignedStaff);
-    }
+  deserialize(input: Partial<CustomerInterface>): Customer {
+    super.deserialize(input);
+
+    Object.assign(this, input);
+
+    this.customerDateBinding = new Date(input.customerDate);
+
+    this.typeOfInvestment =
+      input.typeOfInvestment instanceof TypeOfInvestment
+        ? input.typeOfInvestment
+        : new TypeOfInvestment().deserialize(input.typeOfInvestment);
+
+    this.typeOfSale =
+      input.typeOfSale instanceof CustomerClassification
+        ? input.typeOfSale
+        : new CustomerClassification().deserialize(input.typeOfSale);
+
+    this.catalog =
+      input.catalog instanceof CustomerClassification
+        ? input.catalog
+        : new CustomerClassification().deserialize(input.catalog);
+
+    this.customerType =
+      input.customerType instanceof CustomerType
+        ? input.customerType
+        : new CustomerType().deserialize(input.customerType);
+
+    this.assignedStaff =
+      input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
+
+    return this;
   }
 
   public setEmpty() {
@@ -268,7 +200,6 @@ export class Customer extends BaseModel {
       position: this.position ? this.position : null,
       service: this.service ? this.service : null,
       typeOfSaleId: this.typeOfSale ? this.typeOfSale.id : null,
-      // typeOfContactId: this.typeOfContact ? this.typeOfContact.id : null,
       contactName: this.contactName || null,
       assignedStaffId: this.assignedStaff ? this.assignedStaff.id : null,
     };

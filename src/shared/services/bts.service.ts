@@ -11,14 +11,8 @@ export class BtsService {
 
   public filterBTS(params?: any) {
     return this._api.get(`bts/filters`, params).map((res) => {
-      const data = res.data;
-
-      const btsList: Bts[] = [];
-
-      res.data.btsList.forEach((item) => {
-        btsList.push(new Bts(item));
-      });
-      return { ...data, btsList };
+      res.data.btsList = res.data.btsList.map((item) => new Bts().deserialize(item));
+      return res.data;
     });
   }
 
@@ -36,14 +30,8 @@ export class BtsService {
 
   public getAllBts(params?: any) {
     return this._api.get(`bts/getAll`, params).map((res) => {
-      const data = res.data;
-
-      const btsList: Bts[] = [];
-
-      res.data.btsList.forEach((item) => {
-        btsList.push(new Bts(item));
-      });
-      return { ...data, btsList };
+      res.data.btsList = res.data.btsList.map((item) => new Bts().deserialize(item));
+      return res.data;
     });
   }
 

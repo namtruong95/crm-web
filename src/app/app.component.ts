@@ -14,7 +14,7 @@ export class AppComponent {
     this._keyCloakSv.getToken().then((token) => {
       const decode = JwtHelper.decodeToken(token);
 
-      this._rootScope.user = new KeyCloakUser({
+      this._rootScope.user = new KeyCloakUser().deserialize({
         id: decode.sub,
         email: decode.email,
         username: decode.preferred_username,

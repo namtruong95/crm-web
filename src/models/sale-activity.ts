@@ -1,36 +1,32 @@
-import { BaseModel } from './base';
-import { moment } from 'ngx-bootstrap/chronos/test/chain';
 import { Customer } from './customer';
 import { CustomerClassification } from './customer-classification';
 import { User } from './user';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
+import * as moment from 'moment';
 
-export class SaleActivity extends BaseModel {
-  private _nameOfSale: string;
-  public get nameOfSale(): string {
-    return this._nameOfSale;
-  }
-  public set nameOfSale(v: string) {
-    this._nameOfSale = v;
-  }
+interface SaleActivityInterface extends BaseModelInterface {
+  nameOfSale: string;
+  date: any;
+  time_start: string;
+  time_end: string;
+  actionOfSale: CustomerClassification;
+  customer: Customer;
+  staff: User;
+  dateStart: string;
+  dateEnd: string;
+  staffMail: string;
+  staffId: number;
+}
+export class SaleActivity extends BaseModel implements Deserializable<SaleActivity> {
+  nameOfSale: string;
 
-  private _date: any;
-  public get date(): any {
-    return this._date;
-  }
-  public set date(v: any) {
-    this._date = v;
-  }
+  date: any;
   public get date_str(): string {
     return moment(this.date).format('YYYY-MM-DD');
   }
 
-  private _time_start: string;
-  public get time_start(): string {
-    return this._time_start;
-  }
-  public set time_start(v: string) {
-    this._time_start = v;
-  }
+  time_start: string;
   public get start(): string {
     return `${this.date_str} ${this.time_start}`;
   }
@@ -41,17 +37,12 @@ export class SaleActivity extends BaseModel {
     return moment(this.end).isAfter(moment(this.start));
   }
 
-  private _time_end: string;
-  public get time_end(): string {
-    return this._time_end;
-  }
-  public set time_end(v: string) {
-    this._time_end = v;
-  }
+  time_end: string;
 
   public get title(): string {
     return `${this.time_start}~${this.time_end} ${this.nameOfSale}`;
   }
+
   private _actionOfSale: CustomerClassification;
   public get actionOfSale(): CustomerClassification {
     return this._actionOfSale;
@@ -82,33 +73,42 @@ export class SaleActivity extends BaseModel {
     return this.customer ? this.customer.customerName : null;
   }
 
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
     this.customer = new Customer();
     this.time_start = moment().format('HH:mm');
     this.date = moment().toDate();
     this.time_end = moment().format('HH:mm');
     this.actionOfSale = new CustomerClassification();
     this.staff = new User();
+  }
 
-    if (d) {
-      this.nameOfSale = d.nameOfSale;
-      this.date = d.date || moment(d.dateStart).toDate();
-      this.time_start = d.time_start || moment(d.dateStart).format('HH:mm');
-      this.time_end = d.time_end || moment(d.dateEnd).format('HH:mm');
-      this.actionOfSale = new CustomerClassification(d.actionOfSale);
-      this.customer = new Customer(d.customer);
+  deserialize(input: Partial<SaleActivityInterface>): SaleActivity {
+    super.deserialize(input);
+    Object.assign(this, input);
 
-      if (d.staff instanceof User) {
-        this.staff = new User(d.staff);
-      } else {
-        this.staff = new User({
-          fullName: d.staff,
-          email: d.staffMail,
-          id: d.staffId,
-        });
-      }
+    this.date = input.date || moment(input.dateStart).toDate();
+    this.time_start = input.time_start || moment(input.dateStart).format('HH:mm');
+    this.time_end = input.time_end || moment(input.dateEnd).format('HH:mm');
+
+    if (input.staff instanceof User) {
+      this.staff = input.staff;
+    } else {
+      this.staff = new User().deserialize({
+        fullName: input.staff,
+        email: input.staffMail,
+        id: input.staffId,
+      });
     }
+
+    this.actionOfSale =
+      input.actionOfSale instanceof CustomerClassification
+        ? input.actionOfSale
+        : new CustomerClassification().deserialize(input.actionOfSale);
+
+    this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
+
+    return this;
   }
 
   public toJSON() {

@@ -1,10 +1,27 @@
-import { BaseModel } from './base';
 import { Customer } from './customer';
 import * as moment from 'moment';
 import { CARE_ACTIVITY_STATUSES_TEXT } from 'constants/care-activity';
 import { User } from './user';
+import { BaseModelInterface, BaseModel } from './base.model';
+import { Deserializable } from 'shared/interfaces/deserializable';
 
-export class CustomerCareActivity extends BaseModel {
+interface CustomerCareActivityInterface extends BaseModelInterface {
+  customer: Customer;
+  staff: User;
+  date: any;
+  dateBinding: Date;
+  reason: string;
+  type: string;
+  status: string;
+  giftPrice: string;
+  dateActivity: string;
+  dateActivityFormat: string;
+  staffId: number;
+  staffMail: string;
+  saleCare: string;
+}
+
+export class CustomerCareActivity extends BaseModel implements Deserializable<CustomerCareActivity> {
   private _customer: Customer;
   public get customer(): Customer {
     return this._customer;
@@ -12,16 +29,17 @@ export class CustomerCareActivity extends BaseModel {
   public set customer(v: Customer) {
     this._customer = v;
   }
-  public get customerName(): string {
+
+  get customerName(): string {
     return this.customer ? this.customer.customerName : null;
   }
-  public get customerAddress(): string {
+  get customerAddress(): string {
     return this.customer ? this.customer.address : null;
   }
-  public get customerContactName(): string {
+  get customerContactName(): string {
     return this.customer ? this.customer.contactName : null;
   }
-  public get customerPosition(): string {
+  get customerPosition(): string {
     return this.customer ? this.customer.position : null;
   }
 
@@ -32,23 +50,19 @@ export class CustomerCareActivity extends BaseModel {
   public set staff(v: User) {
     this._staff = v;
   }
+
   public get staffName(): string {
     return this.staff ? this.staff.fullName : null;
   }
 
-  private _date: any;
-  public get date(): any {
-    return this._date;
-  }
-  public set date(v: any) {
-    this._date = v;
-  }
-  public get dateStr(): string {
+  date: any;
+  get date_str(): string {
     return moment(this.date).toISOString();
   }
-  public get dateDisplay(): string {
+  get dateDisplay(): string {
     return moment(this.date).format('YYYY-MM-DD');
   }
+
   private _dateBinding: Date;
   public get dateBinding(): Date {
     return this._dateBinding;
@@ -57,29 +71,10 @@ export class CustomerCareActivity extends BaseModel {
     this._dateBinding = v;
   }
 
-  private _reason: string;
-  public get reason(): string {
-    return this._reason;
-  }
-  public set reason(v: string) {
-    this._reason = v;
-  }
+  reason: string;
+  type: string;
 
-  private _type: string;
-  public get type(): string {
-    return this._type;
-  }
-  public set type(v: string) {
-    this._type = v;
-  }
-
-  private _status: string;
-  public get status(): string {
-    return this._status;
-  }
-  public set status(v: string) {
-    this._status = v;
-  }
+  status: string;
   public get statusStr(): string {
     return this.status ? CARE_ACTIVITY_STATUSES_TEXT[this.status] : null;
   }
@@ -92,44 +87,43 @@ export class CustomerCareActivity extends BaseModel {
     this._giftPrice = v;
   }
 
-  private _dateActivityFormat: string;
-  public get dateActivityFormat(): string {
-    return this._dateActivityFormat;
-  }
-  public set dateActivityFormat(v: string) {
-    this._dateActivityFormat = v;
-  }
+  dateActivityFormat: string;
 
-  constructor(d?: any) {
-    super(d);
+  constructor() {
+    super();
+
     this.date = new Date();
     this.dateBinding = new Date();
     this.staff = new User();
+  }
 
-    if (d) {
-      this.customer = new Customer(d.customer);
-      this.date = d.dateActivity;
-      this.dateBinding = new Date(d.dateActivity);
-      this.reason = d.reason;
-      this.type = d.type;
-      this.status = d.status;
-      this.giftPrice = (+d.giftPrice).format();
-      this.staff = new User({
-        id: d.staffId,
-        email: d.staffMail,
-        fullName: d.saleCare,
-      });
-      this.dateActivityFormat = d.dateActivityFormat;
+  deserialize(input: Partial<CustomerCareActivityInterface>): CustomerCareActivity {
+    Object.assign(this, input);
+
+    if (input.dateActivity) {
+      this.date = input.dateActivity;
+      this.dateBinding = new Date(input.dateActivity);
     }
+
+    this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
+
+    this.staff = new User().deserialize({
+      id: input.staffId,
+      email: input.staffMail,
+      fullName: input.saleCare,
+    });
+
+    this.giftPrice = (+input.giftPrice).format();
+    return this;
   }
 
   public toJSON() {
     return {
       customerId: this.customer ? this.customer.id : null,
-      dateActivity: this.dateStr,
+      dateActivity: this.date_str,
       type: this.type || null,
       reason: this.reason || null,
-      giftPrice: this.giftPrice.toNumber() || null,
+      giftPrice: this.giftPrice.toNumber() || 0,
       status: this.status || null,
       saleCare: this.staff ? this.staff.fullName : null,
       staffId: this.staff ? this.staff.id : null,

@@ -10,14 +10,8 @@ export class ManageFileService {
 
   public getFiles(opts?: any) {
     return this._api.get(`manage-file`, opts).map((res) => {
-      const data = res.data;
-
-      const list: ManagePdf[] = [];
-
-      res.data.list.forEach((item) => {
-        list.push(new ManagePdf(item));
-      });
-      return { ...data, list };
+      res.data.list = res.data.list.map((item) => new ManagePdf().deserialize(item));
+      return res.data;
     });
   }
 
