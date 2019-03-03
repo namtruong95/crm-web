@@ -99,7 +99,7 @@
           [clearable]="true"
           [loading]="isLoadingUser"
           placeholder="please select user"
-          [searchable]="false"
+          [searchable]="true"
           name="user"
           [(ngModel)]="customer.assignedStaff"
           bindLabel="code_full_name">
@@ -150,7 +150,7 @@
             [searchable]="false"
             name="branches"
             [(ngModel)]="customer.branchId"
-            (ngModelChange)="getTownshipList()"
+            (ngModelChange)="getDistrictList()"
             #Region="ngModel"
             bindLabel="name"
             bindValue="id"
@@ -160,6 +160,33 @@
           <div class="invalid-feedback"
             *ngIf="Region.errors?.required">
             Please select region
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="District">District <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="districts"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingDistrict"
+            placeholder="please select district"
+            [searchable]="false"
+            name="districts"
+            [(ngModel)]="customer.districtId"
+            (ngModelChange)="getTownshipList()"
+            #District="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="District.errors?.required">
+            Please select district
           </div>
         </div>
       </div>

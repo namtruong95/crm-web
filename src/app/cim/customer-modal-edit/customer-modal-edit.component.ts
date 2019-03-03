@@ -21,6 +21,7 @@ import {} from 'googlemaps';
 import { Branch } from 'models/branch';
 import { Township } from 'models/township';
 import { BranchService } from 'shared/services/branch.service';
+import { District } from 'models/district';
 // @ts-ignore-end
 @Component({
   selector: 'app-customer-modal-edit',
@@ -60,6 +61,10 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
   public branches: Branch[] = [];
   public isLoadingBranch = false;
 
+  // districts
+  public districts: District[] = [];
+  public isLoadingDistrict = false;
+
   // townships
   public townships: Township[] = [];
   public isLoadingTownship = false;
@@ -88,6 +93,7 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.customer.setEmpty();
     this._getCustomerTypes();
     this._getTypeOfSales();
     this._getTypeOfInvestment();
@@ -98,6 +104,12 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
       this._initAutoCompleteGmap();
     }, 0);
     this._getBranchList();
+    if (this.customer.branchId) {
+      this.getDistrictList();
+    }
+    if (this.customer.districtId) {
+      this.getTownshipList();
+    }
   }
 
   ngOnDestroy() {
@@ -207,9 +219,28 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     );
   }
 
+  public getDistrictList() {
+    this.isLoadingDistrict = true;
+    const opts = {
+      branchId: this.customer.branchId,
+    };
+
+    this._branchSv.getDistrictList(opts).subscribe(
+      (res) => {
+        this.districts = res.districts;
+        this.isLoadingDistrict = false;
+      },
+      (errors) => {
+        this.isLoadingDistrict = false;
+        this._notify.error(errors);
+      },
+    );
+  }
+
   public getTownshipList() {
     this.isLoadingTownship = true;
     const opts = {
+      districtId: this.customer.districtId,
       branchId: this.customer.branchId,
     };
     this._branchSv.getTownshipList(opts).subscribe(

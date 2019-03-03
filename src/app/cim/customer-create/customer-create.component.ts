@@ -24,6 +24,7 @@ import {} from 'googlemaps';
 import { Branch } from 'models/branch';
 import { BranchService } from 'shared/services/branch.service';
 import { Township } from 'models/township';
+import { District } from 'models/district';
 // @ts-ignore-end
 
 @Component({
@@ -63,6 +64,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   // branches
   public branches: Branch[] = [];
   public isLoadingBranch = false;
+
+  // districts
+  public districts: District[] = [];
+  public isLoadingDistrict = false;
 
   // townships
   public townships: Township[] = [];
@@ -212,9 +217,28 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     );
   }
 
+  public getDistrictList() {
+    this.isLoadingDistrict = true;
+    const opts = {
+      branchId: this.customer.branchId,
+    };
+
+    this._branchSv.getDistrictList(opts).subscribe(
+      (res) => {
+        this.districts = res.districts;
+        this.isLoadingDistrict = false;
+      },
+      (errors) => {
+        this.isLoadingDistrict = false;
+        this._notify.error(errors);
+      },
+    );
+  }
+
   public getTownshipList() {
     this.isLoadingTownship = true;
     const opts = {
+      districtId: this.customer.districtId,
       branchId: this.customer.branchId,
     };
     this._branchSv.getTownshipList(opts).subscribe(

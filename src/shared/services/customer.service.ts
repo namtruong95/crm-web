@@ -14,7 +14,7 @@ export class CustomerService {
     private _api: ApiService,
     private _download: DownloadService,
     private _rootScope: RootScopeService,
-    private role: RoleService,
+    private _role: RoleService,
   ) {}
 
   public customersList(params?: any) {
@@ -36,14 +36,12 @@ export class CustomerService {
 
   public filterCustomers(opts?: any) {
     const _opts: any = {
-      role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+      role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
       branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
+      assignedStaffId:
+        this._role.is_hq_sale_staff || this._role.is_branch_sale_staff ? this._rootScope.currentUser.id : 0,
       ...opts,
     };
-
-    if (this.role.is_sale_director || this.role.is_hq_sale_staff || this.role.is_branch_sale_staff) {
-      _opts.userId = this._rootScope.currentUser.id;
-    }
 
     return this._api.get(`customers/filters`, _opts).map((res) => {
       res.data.customerList = res.data.customerList.map((item) => new Customer().deserialize(item));

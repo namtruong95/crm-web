@@ -68,8 +68,21 @@ export class TimelineCreateComponent implements OnInit {
         return;
       }
 
-      this._searchCustomers();
+      this._initSearchCustomers();
     });
+  }
+
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
   }
 
   private _showCustomer(id: number) {

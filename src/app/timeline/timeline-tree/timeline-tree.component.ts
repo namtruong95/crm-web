@@ -83,7 +83,7 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
     // this._getStaffs();
   }
 
@@ -94,9 +94,22 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
