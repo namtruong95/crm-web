@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Customer } from 'models/customer';
-import { of } from 'rxjs/internal/observable/of';
 import { DownloadService } from './download.service';
+import { RootScopeService } from 'app/services/root-scope.service';
+import { Roles } from 'app/guard/roles';
+import { RoleService } from 'app/role.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomerService {
-  constructor(private _api: ApiService, private _download: DownloadService) {}
+  constructor(
+    private _api: ApiService,
+    private _download: DownloadService,
+    private _rootScope: RootScopeService,
+    private role: RoleService,
+  ) {}
 
   public customersList(params?: any) {
     return this._api.get(`customers`, params).map((res) => {
@@ -27,16 +34,20 @@ export class CustomerService {
     });
   }
 
-  public filterCustomers(params?: any) {
-    return this._api.get(`customers/filters`, params).map((res) => {
+  public filterCustomers(opts?: any) {
+    const _opts: any = {
+      role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+      branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
+      ...opts,
+    };
+
+    if (this.role.is_sale_director || this.role.is_hq_sale_staff || this.role.is_branch_sale_staff) {
+      _opts.userId = this._rootScope.currentUser.id;
+    }
+
+    return this._api.get(`customers/filters`, _opts).map((res) => {
       res.data.customerList = res.data.customerList.map((item) => new Customer().deserialize(item));
       return res.data;
-    });
-  }
-
-  public searchCustomers(params?: any) {
-    return this._api.get(`customers/filters`, params).map((res) => {
-      return res.data.customerList.map((item) => new Customer().deserialize(item));
     });
   }
 

@@ -10,8 +10,6 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { CustomerService } from 'shared/services/customer.service';
-import { EventEmitterService } from 'shared/utils/event-emitter.service';
-import { NotifyService } from 'shared/utils/notify.service';
 import { Proposal } from 'models/proposal';
 import { NgForm } from '@angular/forms';
 
@@ -27,11 +25,7 @@ export class ProposalCreateComponent implements OnInit {
   public customerInput$ = new Subject<string>();
   public isLoadingCusotmer = false;
 
-  constructor(
-    private _customerSv: CustomerService,
-    private _emitter: EventEmitterService,
-    private _notify: NotifyService,
-  ) {}
+  constructor(private _customerSv: CustomerService) {}
 
   ngOnInit() {
     this.proposal.customer = null;
@@ -47,13 +41,14 @@ export class ProposalCreateComponent implements OnInit {
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
               txtSearch: term,
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

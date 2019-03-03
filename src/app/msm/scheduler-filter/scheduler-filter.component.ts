@@ -86,13 +86,14 @@ export class SchedulerFilterComponent implements OnInit {
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
               txtSearch: term,
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

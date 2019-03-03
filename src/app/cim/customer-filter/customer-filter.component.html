@@ -67,6 +67,26 @@
       </div>
     </div>
 
+    <div class="col-lg-6 col-md-12" *ngIf="roleAccess">
+      <div class="form-group">
+        <label for="Region">Region</label>
+        <ng-select
+          [items]="branches"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingBranch"
+          placeholder="please select region"
+          [searchable]="false"
+          name="branches"
+          [(ngModel)]="filterTerm.branchId"
+          #Region="ngModel"
+          bindLabel="name"
+          bindValue="id">
+        </ng-select>
+      </div>
+    </div>
+
     <div class="col-12">
       <div class="form-group">
         <button type="button" class="btn btn-primary"
