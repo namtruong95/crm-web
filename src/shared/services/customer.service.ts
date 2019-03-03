@@ -61,7 +61,15 @@ export class CustomerService {
     return this._api.delete(`customers/${id}`);
   }
 
-  public exportCustomer(params?: any) {
-    return this._download.get(`customers/export`, params);
+  public exportCustomer(opts?: any) {
+    const _opts: any = {
+      role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+      branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
+      assignedStaffId:
+        this._role.is_hq_sale_staff || this._role.is_branch_sale_staff ? this._rootScope.currentUser.id : 0,
+      ...opts,
+    };
+
+    return this._download.get(`customers/export`, _opts);
   }
 }
