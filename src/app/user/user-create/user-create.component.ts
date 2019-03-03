@@ -21,8 +21,8 @@ export class UserCreateComponent implements OnInit {
   public rules = RegExp;
   public isLoading = false;
 
-  // branchs
-  public branchs: Branch[] = [];
+  // branches
+  public branches: Branch[] = [];
   public isLoadingBranch = false;
 
   constructor(
@@ -40,7 +40,7 @@ export class UserCreateComponent implements OnInit {
     this.isLoadingBranch = true;
     this._branchSv.getBranchList().subscribe(
       (res) => {
-        this.branchs = res.branches;
+        this.branches = res.branches;
         this.isLoadingBranch = false;
       },
       (errors) => {

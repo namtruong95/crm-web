@@ -29,6 +29,8 @@ interface CustomerInterface extends BaseModelInterface {
   typeOfSale: CustomerClassification;
   typeOfSaleId: number;
   assignedStaff: User;
+  branchId: number;
+  townshipId: number;
 }
 
 export class Customer extends BaseModel implements Deserializable<Customer> {
@@ -128,8 +130,14 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
     this._assignedStaff = v;
   }
   public get userName(): string {
+    return this.assignedStaff ? this.assignedStaff.userName : null;
+  }
+  public get fullName(): string {
     return this.assignedStaff ? this.assignedStaff.fullName : null;
   }
+
+  branchId: number;
+  townshipId: number;
 
   constructor() {
     super();
@@ -202,6 +210,8 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
       typeOfSaleId: this.typeOfSale ? this.typeOfSale.id : null,
       contactName: this.contactName || null,
       assignedStaffId: this.assignedStaff ? this.assignedStaff.id : null,
+      branchId: this.branchId || null,
+      townshipId: this.townshipId || null,
     };
   }
 

@@ -29,6 +29,8 @@ export class AppResolve implements Resolve<any> {
 
       const res = await this._userSv.checkUserExists(decode.preferred_username).toPromise();
       this._rootScope.currentUser = new User().deserialize(res.data.user);
+
+      return;
     } catch (errors) {
       this._keyCloakSv.logout().then(() => {
         this._keyCloakSv.clearToken();

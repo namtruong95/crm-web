@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Branch } from 'models/branch';
+import { Township } from 'models/township';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,14 @@ export class BranchService {
   public getBranchList(opts?: any) {
     return this._api.get(`branch`).map((res) => {
       res.data.branches = res.data.branches.map((item) => new Branch().deserialize(item));
+      return res.data;
+    });
+  }
+
+  public getTownshipList(opts?: any) {
+    return this._api.get('township', opts).map((res) => {
+      res.data.townships = res.data.townships.map((item) => new Township().deserialize(item));
+
       return res.data;
     });
   }
