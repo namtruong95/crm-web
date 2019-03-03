@@ -16,6 +16,8 @@ import * as moment from 'moment';
 import { CimService } from '../cim.service';
 import { Helpers } from 'shared/utils/helpers';
 import { RoleService } from 'app/role.service';
+import { BranchService } from 'shared/services/branch.service';
+import { Branch } from 'models/branch';
 
 @Component({
   selector: 'app-customer-filter',
@@ -44,9 +46,9 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
     customerType: null,
     typeOfInvestment: null,
     customerStatus: null,
-    // typeOfContact: null,
     sort: 'desc',
     column: 'id',
+    branchId: null,
   };
 
   // customer types
@@ -64,11 +66,18 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
   public typeOfInvestments: CustomerClassification[] = [];
   public isLoadingTypeOfInvestment = false;
 
+  // branches
+  public branches: Branch[] = [];
+  public isLoadingBranch = false;
+
   // datepicker config
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
 
   public _subscriber: Subscription;
 
+  get roleAccess(): boolean {
+    return this.role.is_admin || this.role.is_branch_director;
+  }
   constructor(
     private _customerTypeSv: CustomerTypeService,
     private _customerClassificationSv: CustomerClassificationService,
@@ -78,6 +87,7 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
     private _customerSv: CustomerService,
     public cimSv: CimService,
     public role: RoleService,
+    private _branchSv: BranchService,
   ) {
     document.title = 'Mytel | filter customer';
   }
@@ -87,6 +97,7 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
     this._getTypeOfSales();
     this._getTypeOfInvestment();
     this._onEventEmitter();
+    this._getBranchList();
   }
 
   ngOnDestroy() {
@@ -141,6 +152,22 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
   }
 
   public groupByFn = (item) => item.child.state;
+
+  private _getBranchList() {
+    if (this.roleAccess) {
+      this.isLoadingBranch = true;
+      this._branchSv.getBranchList().subscribe(
+        (res) => {
+          this.branches = res.branches;
+          this.isLoadingBranch = false;
+        },
+        (errors) => {
+          this.isLoadingBranch = false;
+          this._notify.error(errors);
+        },
+      );
+    }
+  }
 
   private _getCustomerTypes() {
     this.isLoadingCustomerType = true;
@@ -213,6 +240,9 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
     }
     if (this.filterTerm.typeOfContact) {
       params.typeOfContactId = this.filterTerm.typeOfContact.id;
+    }
+    if (this.filterTerm.branchId) {
+      params.branchId = this.filterTerm.branchId;
     }
     this._emitter.publishData({
       type: EMITTER_TYPE.FILTER_CUSTOMER,

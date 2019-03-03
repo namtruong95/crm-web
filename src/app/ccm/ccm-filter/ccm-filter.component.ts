@@ -49,7 +49,7 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
     this._onEventEmitter();
   }
 
@@ -61,22 +61,36 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
     this.subscriber = this._emitter.caseNumber$.subscribe((res) => {});
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
               txtSearch: term,
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

@@ -90,6 +90,22 @@
         </div>
       </div>
 
+      <div class="col-lg-6 col-md-12 form-group">
+        <label for="Name">Assigned For Sale</label>
+        <ng-select
+          [items]="users"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingUser"
+          placeholder="please select user"
+          [searchable]="true"
+          name="user"
+          [(ngModel)]="customer.assignedStaff"
+          bindLabel="code_full_name">
+        </ng-select>
+      </div>
+
       <div class="col-lg-6 col-md-12">
         <div class="form-group">
           <label for="CustomerStatus">Customer Status</label>
@@ -118,6 +134,130 @@
             #AddressEdit
             placeholder="please enter address"
             [(ngModel)]="customer.address">
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="Region">Region <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="branches"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingBranch"
+            placeholder="please select region"
+            [searchable]="false"
+            name="branches"
+            [(ngModel)]="customer.branchId"
+            (ngModelChange)="getDistrictList()"
+            #Region="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="Region.errors?.required">
+            Please select region
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="District">District <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="districts"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingDistrict"
+            placeholder="please select district"
+            [searchable]="false"
+            name="districts"
+            [(ngModel)]="customer.districtId"
+            (ngModelChange)="getTownshipList()"
+            #District="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="District.errors?.required">
+            Please select district
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="role">Township <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="townships"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingTownship"
+            placeholder="please select township"
+            [searchable]="false"
+            name="townships"
+            [(ngModel)]="customer.townshipId"
+            #Role="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="Role.errors?.required">
+            Please select township
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="latitude">Latitude <i class="required">&#40;*&#41;</i></label>
+          <input type="number" id="latitude"
+            autocomplete="new-latitude"
+            class="form-control"
+            name="latitude"
+            [ngClass]="{ 'is-invalid': Latitude.dirty && Latitude.errors }"
+            #Latitude="ngModel"
+            required
+            placeholder="please enter latitude"
+            [(ngModel)]="customer.latitude"
+            (ngModelChange)="changeLatLng()"
+            (blur)="findAddressWithLatLng()">
+
+          <div class="invalid-feedback"
+            *ngIf="Latitude.errors?.required">
+            Please enter latitude
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="longitude">Longitude <i class="required">&#40;*&#41;</i></label>
+          <input type="number" id="longitude"
+            autocomplete="new-longitude"
+            class="form-control"
+            name="longitude"
+            [ngClass]="{ 'is-invalid': Longitude.dirty && Longitude.errors }"
+            #Longitude="ngModel"
+            required
+            placeholder="please enter longitude"
+            [(ngModel)]="customer.longitude"
+            (ngModelChange)="changeLatLng()"
+            (blur)="findAddressWithLatLng()">
+
+          <div class="invalid-feedback"
+            *ngIf="Longitude.errors?.required">
+            Please enter longitude
+          </div>
         </div>
       </div>
 
@@ -221,22 +361,6 @@
             [bsConfig]="DATEPICKER_CONFIG"
             (bsValueChange)="onValueChange($event)">
         </div>
-      </div>
-
-      <div class="col-lg-6 col-md-12 form-group">
-        <label for="Name">Assigned For Sale</label>
-        <ng-select
-          [items]="users"
-          class="text-left"
-          [closeOnSelect]="true"
-          [clearable]="true"
-          [loading]="isLoadingUser"
-          placeholder="please select user"
-          [searchable]="false"
-          name="user"
-          [(ngModel)]="customer.assignedStaff"
-          bindLabel="code_full_name">
-        </ng-select>
       </div>
     </div>
 

@@ -21,6 +21,10 @@ import { NgForm } from '@angular/forms';
 
 // @ts-ignore-start
 import {} from 'googlemaps';
+import { Branch } from 'models/branch';
+import { BranchService } from 'shared/services/branch.service';
+import { Township } from 'models/township';
+import { District } from 'models/district';
 // @ts-ignore-end
 
 @Component({
@@ -57,6 +61,18 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   public users: User[] = [];
   public isLoadingUser = false;
 
+  // branches
+  public branches: Branch[] = [];
+  public isLoadingBranch = false;
+
+  // districts
+  public districts: District[] = [];
+  public isLoadingDistrict = false;
+
+  // townships
+  public townships: Township[] = [];
+  public isLoadingTownship = false;
+
   // datepicker config
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
 
@@ -64,6 +80,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   public rules = RegExp;
 
   private _subscriber: Subscription;
+  private _geocoder;
+  private _isChangeLatLng = false;
 
   constructor(
     private _customerTypeSv: CustomerTypeService,
@@ -74,6 +92,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     private _mapsAPILoader: MapsAPILoader,
     private _ngZone: NgZone,
     private _userSv: UserService,
+    private _branchSv: BranchService,
   ) {
     document.title = 'Mytel | create new customer';
   }
@@ -87,6 +106,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this._onEventEmitter();
     this._getUsers();
     this._getCatalog();
+    this._getBranchList();
   }
 
   ngOnDestroy() {
@@ -98,6 +118,55 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       if (data && data.type === EMITTER_TYPE.GMAP_CLICK) {
         this.customer.latitude = data.data.lat;
         this.customer.longitude = data.data.lng;
+
+        // get address with lat/long
+        this._isChangeLatLng = true;
+        this.findAddressWithLatLng();
+      }
+    });
+  }
+
+  public changeLatLng() {
+    this._isChangeLatLng = true;
+  }
+
+  public findAddressWithLatLng() {
+    if (!this.customer.latitude || !this.customer.longitude || !this._isChangeLatLng) {
+      return;
+    }
+
+    if (
+      !RegExp.latitude.test(this.customer.latitude.toString()) ||
+      !RegExp.longitude.test(this.customer.longitude.toString())
+    ) {
+      this._notify.warning('latitude or longitude format is incorrect!');
+      return;
+    }
+
+    // call api
+    const data = {
+      lat: this.customer.latitude,
+      lng: this.customer.longitude,
+    };
+    if (!this._geocoder) {
+      this._geocoder = new google.maps.Geocoder();
+    }
+
+    this._geocoder.geocode({ location: data }, (results, status) => {
+      this._isChangeLatLng = false;
+
+      if (status === 'OK') {
+        if (results[0]) {
+          this._emitter.publishData({
+            type: EMITTER_TYPE.GMAP_CHANGE,
+            data: results[0],
+            mode: 'create',
+          });
+
+          this.customer.address = results[0].formatted_address;
+        } else {
+          this._notify.warning('No results found!');
+        }
       }
     });
   }
@@ -133,6 +202,57 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   }
 
   public groupByFn = (item) => item.child.state;
+
+  private _getBranchList() {
+    this.isLoadingBranch = true;
+    this._branchSv.getBranchList().subscribe(
+      (res) => {
+        this.branches = res.branches;
+        this.isLoadingBranch = false;
+      },
+      (errors) => {
+        this.isLoadingBranch = false;
+        this._notify.error(errors);
+      },
+    );
+  }
+
+  public getDistrictList() {
+    this.isLoadingDistrict = true;
+    const opts = {
+      branchId: this.customer.branchId,
+    };
+
+    this._branchSv.getDistrictList(opts).subscribe(
+      (res) => {
+        this.districts = res.districts;
+        this.isLoadingDistrict = false;
+      },
+      (errors) => {
+        this.isLoadingDistrict = false;
+        this._notify.error(errors);
+      },
+    );
+  }
+
+  public getTownshipList() {
+    this.isLoadingTownship = true;
+    const opts = {
+      districtId: this.customer.districtId,
+      branchId: this.customer.branchId,
+    };
+    this._branchSv.getTownshipList(opts).subscribe(
+      (res) => {
+        this.townships = res.townships;
+
+        this.isLoadingTownship = false;
+      },
+      (errors) => {
+        this.isLoadingTownship = false;
+        this._notify.error(errors);
+      },
+    );
+  }
 
   private _getUsers() {
     this.isLoadingUser = true;

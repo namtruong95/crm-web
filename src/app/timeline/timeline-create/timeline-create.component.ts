@@ -68,8 +68,21 @@ export class TimelineCreateComponent implements OnInit {
         return;
       }
 
-      this._searchCustomers();
+      this._initSearchCustomers();
     });
+  }
+
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
   }
 
   private _showCustomer(id: number) {
@@ -90,13 +103,14 @@ export class TimelineCreateComponent implements OnInit {
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
               txtSearch: term,
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),
