@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotifyService } from 'shared/utils/notify.service';
-import { SaleActivity2 } from 'models/sale-activity-2';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivity } from 'models/sale-activity';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 
 @Component({
   selector: 'app-timeline-modal-delete',
@@ -11,12 +11,12 @@ import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
 })
 export class TimelineModalDeleteComponent implements OnInit {
   public isLoading = false;
-  public saleActivity: SaleActivity2;
+  public saleActivity: SaleActivity;
 
   constructor(
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
-    private _saleActivity2Sv: SaleActivity2Service,
+    private _saleActivitySv: SaleActivityService,
     private _notify: NotifyService,
   ) {}
 
@@ -25,7 +25,7 @@ export class TimelineModalDeleteComponent implements OnInit {
   public removeSaleActivity() {
     this.isLoading = true;
 
-    this._saleActivity2Sv.removeSaleActivity(this.saleActivity.id).subscribe(
+    this._saleActivitySv.removeSaleActivity(this.saleActivity.id).subscribe(
       (res) => {
         this._notify.success('delete sale activity successs');
         this.close('reload');

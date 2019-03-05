@@ -4,8 +4,6 @@ import { MsmComponent } from './msm.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SchedulerCalendarModule } from './scheduler-calendar/scheduler-calendar.module';
 import { SaleActivityListModule } from './sale-activity-list/sale-activity-list.module';
-import { AuthGuard } from 'app/guard/auth.guard';
-import { Roles } from 'app/guard/roles';
 
 const routes: Routes = [
   {
@@ -18,10 +16,6 @@ const routes: Routes = [
       },
       {
         path: 'create',
-        canActivate: [AuthGuard],
-        data: {
-          roles: [Roles.BRANCH_DIRECTOR, Roles.SALE_DIRECTOR, Roles.BRANCH_SALE_STAFF, Roles.HQ_SALE_STAFF],
-        },
         loadChildren: './scheduler-create/scheduler-create.module#SchedulerCreateModule',
       },
       {

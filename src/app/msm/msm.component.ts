@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RoleService } from '../role.service';
 
 @Component({
   selector: 'app-msm',
@@ -7,7 +6,7 @@ import { RoleService } from '../role.service';
   styleUrls: ['./msm.component.scss'],
 })
 export class MsmComponent implements OnInit {
-  constructor(public role: RoleService) {}
+  constructor() {}
 
   ngOnInit() {}
 }

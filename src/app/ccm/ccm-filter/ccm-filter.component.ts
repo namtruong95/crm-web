@@ -88,7 +88,7 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
             .map((res) => res.customerList)
             .pipe(

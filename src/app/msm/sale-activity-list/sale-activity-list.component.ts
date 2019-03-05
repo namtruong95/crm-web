@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { QueryBuilder } from 'shared/utils/query-builder';
-import { SaleActivity } from 'models/sale-activity';
+import { CustomerSaleActivity } from 'models/customer-sale-activity';
 
 import * as orderBy from 'lodash/orderBy';
-import { SaleActivityService } from 'shared/services/sale-activity.service';
+import { CustomerSaleActivityService } from 'shared/services/customer-sale-activity.service';
 import { NotifyService } from 'shared/utils/notify.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
@@ -29,7 +29,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
 
   private _orderArr: OrderCustomer[] = [];
 
-  public saleActivities: SaleActivity[] = [];
+  public saleActivities: CustomerSaleActivity[] = [];
 
   public get orderColumnName(): string[] {
     return this._orderArr.map((item) => {
@@ -47,7 +47,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
   private date: string;
 
   constructor(
-    private _saleActivitySv: SaleActivityService,
+    private _customerSaleActivitySv: CustomerSaleActivityService,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _modalService: BsModalService,
@@ -88,7 +88,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
       ...this._filterQuery,
     };
 
-    this._saleActivitySv.getSaleActivities(params).subscribe(
+    this._customerSaleActivitySv.getSaleActivities(params).subscribe(
       (res) => {
         this.saleActivities = res.customerSaleActivityList;
         this.query.setQuery(res);
@@ -141,7 +141,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
     this._getSaleActivities();
   }
 
-  public editSaleActivity(sAc: SaleActivity) {
+  public editSaleActivity(sAc: CustomerSaleActivity) {
     const config = {
       class: 'modal-lg',
       initialState: {
@@ -152,7 +152,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
     this._openModal(SchedulerModalEditComponent, config);
   }
 
-  public removeSaleActivity(sAc: SaleActivity) {
+  public removeSaleActivity(sAc: CustomerSaleActivity) {
     const config = {
       class: 'modal-md',
       initialState: {
@@ -175,7 +175,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
     this._modalService.show(comp, config);
   }
 
-  public sendMail(sAc: SaleActivity) {
+  public sendMail(sAc: CustomerSaleActivity) {
     if (!sAc.customer) {
       this._notify.warning("customer doesn't exists");
       return;
@@ -216,7 +216,7 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
       params.dateend = this._filterQuery.dateend;
     }
 
-    this._saleActivitySv.exportSaleActivity(params).subscribe(
+    this._customerSaleActivitySv.exportSaleActivity(params).subscribe(
       (res) => {
         saveAs(res, `sale-activity-${moment().unix()}.xlsx`);
       },

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { QueryBuilder } from 'shared/utils/query-builder';
-import { SaleActivity2 } from 'models/sale-activity-2';
+import { SaleActivity } from 'models/sale-activity';
 import { Subscription } from 'rxjs/Subscription';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 import { NotifyService } from 'shared/utils/notify.service';
 
 import * as clone from 'lodash/clone';
@@ -26,7 +26,7 @@ interface OrderCareActivity {
 })
 export class TimelineListComponent implements OnInit {
   public query: QueryBuilder = new QueryBuilder();
-  public saleActivities: SaleActivity2[] = [];
+  public saleActivities: SaleActivity[] = [];
 
   private _subscriber: Subscription;
   private _orderArr: OrderCareActivity[] = [];
@@ -45,7 +45,7 @@ export class TimelineListComponent implements OnInit {
 
   constructor(
     private _emitter: EventEmitterService,
-    private _saleActivity2Sv: SaleActivity2Service,
+    private _saleActivitySv: SaleActivityService,
     private _notify: NotifyService,
     private _modalService: BsModalService,
   ) {}
@@ -75,7 +75,7 @@ export class TimelineListComponent implements OnInit {
       ...this.query.queryJSON(),
       ...this._filterQuery,
     };
-    this._saleActivity2Sv.getSaleActivitiesList(parmas).subscribe(
+    this._saleActivitySv.getSaleActivitiesList(parmas).subscribe(
       (res) => {
         this.saleActivities = res.list;
         this.query.setQuery(res);
@@ -86,7 +86,7 @@ export class TimelineListComponent implements OnInit {
     );
   }
 
-  public editSareActivity(saleActivity: SaleActivity2) {
+  public editSareActivity(saleActivity: SaleActivity) {
     const config = {
       class: 'modal-lg',
       initialState: {
@@ -97,7 +97,7 @@ export class TimelineListComponent implements OnInit {
     this._openModal(TimelineModalEditComponent, config);
   }
 
-  public removeSareActivity(saleActivity: SaleActivity2) {
+  public removeSareActivity(saleActivity: SaleActivity) {
     const config = {
       class: 'modal-md',
       initialState: {

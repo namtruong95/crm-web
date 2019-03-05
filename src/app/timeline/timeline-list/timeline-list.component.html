@@ -8,14 +8,14 @@
           Customer
           <i class="fa {{ getClassOrder('customer_name') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('staff_name')">
+        <th class="cursor-pointer" (click)="addOrder('staff_user_name')">
           Staff
-          <i class="fa {{ getClassOrder('staff_name') }}"></i>
+          <i class="fa {{ getClassOrder('staff_user_name') }}"></i>
         </th>
-        <!-- <th class="cursor-pointer" (click)="addOrder('department')">
-          Department
-          <i class="fa {{ getClassOrder('department') }}"></i>
-        </th> -->
+        <th class="cursor-pointer" (click)="addOrder('staff_full_name')">
+          Full Name
+          <i class="fa {{ getClassOrder('staff_full_name') }}"></i>
+        </th>
         <th class="cursor-pointer" (click)="addOrder('statusOfProcessName')">
           Activity Type
           <i class="fa {{ getClassOrder('statusOfProcessName') }}"></i>
@@ -33,8 +33,8 @@
           <button type="button" class="mr-1 btn btn-danger" (click)="removeSareActivity(saleActivity)"><i class="fa fa-trash"></i></button>
         </td>
         <td>{{ saleActivity.customer_name }}</td>
-        <td>{{ saleActivity.staff_name }}</td>
-        <!-- <td>{{ saleActivity.department }}</td> -->
+        <td>{{ saleActivity.staff_user_name }}</td>
+        <td>{{ saleActivity.staff_full_name }}</td>
         <td>{{ saleActivity.statusOfProcessName }}</td>
         <td>{{ saleActivity.dateDisplay }}</td>
       </tr>

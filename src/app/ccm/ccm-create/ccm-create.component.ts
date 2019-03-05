@@ -101,7 +101,7 @@ export class CcmCreateComponent implements OnInit {
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
             .map((res) => res.customerList)
             .pipe(
