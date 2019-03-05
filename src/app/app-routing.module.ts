@@ -118,6 +118,10 @@ const routes: Routes = [
     ],
   },
   {
+    path: '404',
+    loadChildren: './page-404/page-404.module#Page404Module',
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',

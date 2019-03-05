@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import * as $ from 'jquery';
 
 interface Script {
