@@ -25,6 +25,7 @@ export class AppResolve implements Resolve<any> {
       const decode = JwtHelper.decodeToken(token);
 
       if (decode.realm_access.roles.includes(Roles.MYTEL_ADMIN)) {
+        Helpers.setLoading(false);
         return;
       }
 

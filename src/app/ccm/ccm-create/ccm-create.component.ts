@@ -54,7 +54,7 @@ export class CcmCreateComponent implements OnInit {
   ngOnInit() {
     this.careActivity.customer = null;
     this.careActivity.status = null;
-    this.careActivity.staff = null;
+    this.careActivity.assignedStaff = null;
     this._initSearchCustomers();
     this._getStaffs();
   }
@@ -62,7 +62,7 @@ export class CcmCreateComponent implements OnInit {
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
@@ -138,7 +138,7 @@ export class CcmCreateComponent implements OnInit {
           this.careActivity = new CustomerCareActivity();
           this.careActivity.customer = null;
           this.careActivity.status = null;
-          this.careActivity.staff = null;
+          this.careActivity.assignedStaff = null;
         }, 0);
       },
     );
