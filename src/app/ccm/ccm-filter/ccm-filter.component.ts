@@ -20,6 +20,9 @@ import { CareActivityService } from 'shared/services/care-activity.service';
 import { saveAs } from 'file-saver';
 import { Subscription } from 'rxjs/Subscription';
 import { CcmService } from '../ccm.service';
+import { Branch } from 'models/branch';
+import { RoleService } from 'app/role.service';
+import { BranchService } from 'shared/services/branch.service';
 
 @Component({
   selector: 'app-ccm-filter',
@@ -31,7 +34,13 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
     customer: null,
     status: null,
     dateActivity: null,
+    branchId: null,
   };
+
+  // branches
+  public branches: Branch[] = [];
+  public isLoadingBranch = false;
+
   public CARE_ACTIVITY_STATUSES = CARE_ACTIVITY_STATUSES;
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
 
@@ -40,17 +49,24 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
   public isLoadingCusotmer = false;
   private subscriber: Subscription;
 
+  get roleAccess(): boolean {
+    return this.role.is_admin || this.role.is_sale_director;
+  }
+
   constructor(
     private _customerSv: CustomerService,
     private _emitter: EventEmitterService,
     private _notify: NotifyService,
     private _careActivitySv: CareActivityService,
     public ccmSv: CcmService,
+    public role: RoleService,
+    private _branchSv: BranchService,
   ) {}
 
   ngOnInit() {
     this._initSearchCustomers();
     this._onEventEmitter();
+    this._getBranchList();
   }
 
   ngOnDestroy() {
@@ -59,6 +75,22 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
 
   private _onEventEmitter() {
     this.subscriber = this._emitter.caseNumber$.subscribe((res) => {});
+  }
+
+  private _getBranchList() {
+    if (this.roleAccess) {
+      this.isLoadingBranch = true;
+      this._branchSv.getBranchList().subscribe(
+        (res) => {
+          this.branches = res.branches;
+          this.isLoadingBranch = false;
+        },
+        (errors) => {
+          this.isLoadingBranch = false;
+          this._notify.error(errors);
+        },
+      );
+    }
   }
 
   private _initSearchCustomers() {
@@ -115,6 +147,9 @@ export class CcmFilterComponent implements OnInit, OnDestroy {
     }
     if (this.filterTerm.dateActivity) {
       params.dateActivity = moment(this.filterTerm.dateActivity).format('YYYY/MM/DD');
+    }
+    if (this.filterTerm.branchId) {
+      params.branchId = this.filterTerm.branchId;
     }
     this._emitter.publishData({
       type: EMITTER_TYPE.FILTER_CARE_ACTIVITY,

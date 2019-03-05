@@ -34,7 +34,7 @@ export class CustomerService {
     });
   }
 
-  public filterCustomers(opts?: any) {
+  public filterCustomers(opts: any = {}) {
     const _opts: any = {
       role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
     };
@@ -65,7 +65,7 @@ export class CustomerService {
     return this._api.delete(`customers/${id}`);
   }
 
-  public exportCustomer(opts?: any) {
+  public exportCustomer(opts: any = {}) {
     const _opts: any = {
       role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
     };

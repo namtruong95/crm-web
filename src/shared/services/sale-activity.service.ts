@@ -11,7 +11,7 @@ import { Roles } from 'app/guard/roles';
 export class SaleActivityService {
   constructor(private _api: ApiService, private _rootScope: RootScopeService, private _role: RoleService) {}
 
-  public getSaleActivitiesList(opts?: any) {
+  public getSaleActivitiesList(opts: any = {}) {
     const _opts: any = {
       role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
     };

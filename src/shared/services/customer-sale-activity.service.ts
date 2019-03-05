@@ -17,7 +17,7 @@ export class CustomerSaleActivityService {
     private _role: RoleService,
   ) {}
 
-  public getSaleActivities(opts?: any) {
+  public getSaleActivities(opts: any = {}) {
     const _opts: any = {
       role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
     };
@@ -50,7 +50,19 @@ export class CustomerSaleActivityService {
     return this._api.delete(`sale-activity/${id}`);
   }
 
-  public exportSaleActivity(params?: any) {
-    return this._download.get(`sale-activity/export`, params);
+  public exportSaleActivity(opts: any = {}) {
+    const _opts: any = {
+      role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+    };
+
+    if (this._role.is_branch_director) {
+      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+    }
+
+    if (this._role.is_hq_sale_staff || this._role.is_branch_sale_staff) {
+      _opts.assignedStaffId = this._rootScope.currentUser.id ? this._rootScope.currentUser.id : 0;
+    }
+
+    return this._download.get(`sale-activity/export`, { ..._opts, ...opts });
   }
 }

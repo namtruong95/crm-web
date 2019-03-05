@@ -60,7 +60,7 @@ export class CcmModalEditComponent implements OnInit {
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
@@ -124,13 +124,13 @@ export class CcmModalEditComponent implements OnInit {
     this.isLoading = true;
     this._careActivitySv.updateCareActivity(this.careActivity.id, this.careActivity.toJSON()).subscribe(
       (res) => {
-        this.isLoading = true;
+        this.isLoading = false;
         this._notify.success('update care activity success');
         this.close('reload');
       },
       (errors) => {
         this._notify.error(errors);
-        this.isLoading = true;
+        this.isLoading = false;
       },
     );
   }
