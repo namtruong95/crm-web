@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SaleActivity2 } from 'models/sale-activity-2';
+import { SaleActivity } from 'models/sale-activity';
 import { Observable } from 'rxjs/Observable';
 import { Customer } from 'models/customer';
 import { of } from 'rxjs/internal/observable/of';
@@ -17,7 +17,7 @@ import { NotifyService } from 'shared/utils/notify.service';
 import { CustomerClassification } from 'models/customer-classification';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,7 +31,7 @@ import { NgForm } from '@angular/forms';
 export class TimelineCreateComponent implements OnInit {
   public isLoading = false;
 
-  public saleActivity: SaleActivity2 = new SaleActivity2();
+  public saleActivity: SaleActivity = new SaleActivity();
 
   public customers: Observable<Customer[]> = of([]);
   public customerInput$ = new Subject<string>();
@@ -51,7 +51,7 @@ export class TimelineCreateComponent implements OnInit {
     private _userSv: UserService,
     private _notify: NotifyService,
     private _customerClassificationSv: CustomerClassificationService,
-    private _saleActivity2Sv: SaleActivity2Service,
+    private _saleActivitySv: SaleActivityService,
     private _emitter: EventEmitterService,
     private _route: ActivatedRoute,
     private _router: Router,
@@ -108,7 +108,7 @@ export class TimelineCreateComponent implements OnInit {
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
             .map((res) => res.customerList)
             .pipe(
@@ -162,7 +162,7 @@ export class TimelineCreateComponent implements OnInit {
   public createSaleActivity(form: NgForm) {
     this.isLoading = true;
 
-    this._saleActivity2Sv.createSaleActivity(this.saleActivity.toJSON()).subscribe(
+    this._saleActivitySv.createSaleActivity(this.saleActivity.toJSON()).subscribe(
       (res) => {
         this._notify.success(res.meta.message);
         this._emitter.publishData({
@@ -177,7 +177,7 @@ export class TimelineCreateComponent implements OnInit {
       },
       () => {
         setTimeout(() => {
-          this.saleActivity = new SaleActivity2();
+          this.saleActivity = new SaleActivity();
         }, 0);
       },
     );

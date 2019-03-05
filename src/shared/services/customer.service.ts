@@ -39,7 +39,9 @@ export class CustomerService {
       role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
       branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
       assignedStaffId:
-        this._role.is_hq_sale_staff || this._role.is_branch_sale_staff ? this._rootScope.currentUser.id : 0,
+        (this._role.is_hq_sale_staff || this._role.is_branch_sale_staff) && this._rootScope.currentUser.id
+          ? this._rootScope.currentUser.id
+          : 0,
       ...opts,
     };
 

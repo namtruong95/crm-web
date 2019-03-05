@@ -2,12 +2,7 @@
   <a class="nav-item nav-link" [routerLink]="['/msm', 'filters']" routerLinkActive="active">Scheduler Information</a>
   <a class="nav-item nav-link"
     [routerLink]="['/msm', 'create']"
-    routerLinkActive="active"
-    *ngIf="role.is_branch_director
-      || role.is_sale_director
-      || role.is_branch_sale_staff
-      || role.is_hq_sale_staff"
-    >Scheduler Create</a>
+    routerLinkActive="active">Scheduler Create</a>
 </nav>
 
 <router-outlet></router-outlet>

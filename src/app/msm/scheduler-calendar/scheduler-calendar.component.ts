@@ -6,8 +6,8 @@ import { ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { SchedulerModalEditComponent } from '../scheduler-modal-edit/scheduler-modal-edit.component';
 import { NotifyService } from 'shared/utils/notify.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
-import { SaleActivityService } from 'shared/services/sale-activity.service';
-import { SaleActivity } from 'models/sale-activity';
+import { CustomerSaleActivityService } from 'shared/services/customer-sale-activity.service';
+import { CustomerSaleActivity } from 'models/customer-sale-activity';
 import { Subscription } from 'rxjs/Subscription';
 import { EMITTER_TYPE } from 'constants/emitter';
 
@@ -19,14 +19,14 @@ import { EMITTER_TYPE } from 'constants/emitter';
 export class SchedulerCalendarComponent implements OnInit, OnDestroy {
   private _calendarOptions: any;
   private _filterQuery: any = {};
-  public saleActivities: SaleActivity[] = [];
+  public saleActivities: CustomerSaleActivity[] = [];
   public _subscriber: Subscription;
 
   constructor(
     private _modalService: BsModalService,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
-    private _saleActivitySv: SaleActivityService,
+    private _customerSaleActivitySv: CustomerSaleActivityService,
   ) {}
 
   ngOnInit() {
@@ -80,7 +80,7 @@ export class SchedulerCalendarComponent implements OnInit, OnDestroy {
         const config = {
           class: 'modal-lg',
           initialState: {
-            scheduler: new SaleActivity().deserialize(calEvent),
+            scheduler: new CustomerSaleActivity().deserialize(calEvent),
           },
         };
 
@@ -100,7 +100,7 @@ export class SchedulerCalendarComponent implements OnInit, OnDestroy {
       ...this._filterQuery,
     };
 
-    this._saleActivitySv.getSaleActivities(params).subscribe(
+    this._customerSaleActivitySv.getSaleActivities(params).subscribe(
       (res) => {
         this.saleActivities = res.customerSaleActivityList;
         callback(this.saleActivities);

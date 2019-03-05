@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SaleActivity2 } from 'models/sale-activity-2';
+import { SaleActivity } from 'models/sale-activity';
 import { Observable } from 'rxjs/Observable';
 import { Customer } from 'models/customer';
 import { of } from 'rxjs/internal/observable/of';
@@ -14,12 +14,15 @@ import { Subject } from 'rxjs/Subject';
 import { User } from 'models/user';
 import { NotifyService } from 'shared/utils/notify.service';
 import { UserService } from 'shared/services/user.service';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 import * as moment from 'moment';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { Router } from '@angular/router';
+import { Branch } from 'models/branch';
+import { RoleService } from 'app/role.service';
+import { BranchService } from 'shared/services/branch.service';
 
 @Component({
   selector: 'app-timeline-tree',
@@ -37,11 +40,16 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
   public isLoading = false;
 
+  // branches
+  public branches: Branch[] = [];
+  public isLoadingBranch = false;
+
   public filterTerm: any = {
     customer: null,
     // staff: null,
     dateFrom: null,
     dateTo: null,
+    branchId: null,
   };
 
   public get isEndAfterFrom(): boolean {
@@ -68,23 +76,34 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
       opts.dateTo = moment(this.filterTerm.dateTo).format('YYYY-MM-DD');
     }
 
+    if (this.filterTerm.branchId) {
+      opts.branchId = this.filterTerm.branchId;
+    }
+
     return opts;
   }
 
-  public saleActivities: SaleActivity2[] = [];
+  public saleActivities: SaleActivity[] = [];
+
+  get roleAccess(): boolean {
+    return this.role.is_admin || this.role.is_sale_director;
+  }
 
   constructor(
     private _customerSv: CustomerService,
     private _userSv: UserService,
     private _notify: NotifyService,
-    private _saleActivity2Sv: SaleActivity2Service,
+    private _saleActivitySv: SaleActivityService,
     private _emitter: EventEmitterService,
     private _router: Router,
+    public role: RoleService,
+    private _branchSv: BranchService,
   ) {}
 
   ngOnInit() {
     this._initSearchCustomers();
     // this._getStaffs();
+    this._getBranchList();
   }
 
   ngOnDestroy() {
@@ -92,6 +111,22 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
       type: EMITTER_TYPE.FILTER_SALE_ACTIVITY_2,
       params: {},
     });
+  }
+
+  private _getBranchList() {
+    if (this.roleAccess) {
+      this.isLoadingBranch = true;
+      this._branchSv.getBranchList().subscribe(
+        (res) => {
+          this.branches = res.branches;
+          this.isLoadingBranch = false;
+        },
+        (errors) => {
+          this.isLoadingBranch = false;
+          this._notify.error(errors);
+        },
+      );
+    }
   }
 
   private _initSearchCustomers() {
@@ -121,7 +156,7 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
             .map((res) => res.customerList)
             .pipe(
@@ -167,18 +202,18 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
     const opts: any = {
       ...this.filterTermToJSON,
       page: 0,
-      size: 300,
+      size: 1000,
       sort: 'desc',
       column: 'saleDate',
     };
     this.isLoading = true;
 
-    this._saleActivity2Sv.filterSaleActivities(opts).subscribe(
+    this._saleActivitySv.getSaleActivitiesList(opts).subscribe(
       (res) => {
-        if (res.length === 0) {
+        if (res.list.length === 0) {
           this._notify.info('data not found');
         }
-        this.saleActivities = res;
+        this.saleActivities = res.list;
         this.isLoading = false;
 
         setTimeout(() => {

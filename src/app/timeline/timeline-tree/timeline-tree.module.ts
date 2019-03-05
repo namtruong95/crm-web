@@ -8,6 +8,7 @@ import { CustomerService } from 'shared/services/customer.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BranchService } from 'shared/services/branch.service';
 
 const routes: Routes = [
   {
@@ -26,6 +27,6 @@ const routes: Routes = [
     FormsModule,
   ],
   declarations: [TimelineTreeComponent],
-  providers: [UserService, CustomerService],
+  providers: [UserService, CustomerService, BranchService],
 })
 export class TimelineTreeModule {}
