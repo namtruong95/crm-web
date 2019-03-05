@@ -60,7 +60,7 @@ export class SchedulerModalEditComponent implements OnInit {
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
