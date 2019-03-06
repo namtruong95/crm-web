@@ -5,8 +5,8 @@ const zip = require('gulp-zip');
 
 gulp.task('compress', () => {
   gulp
-    .src('mytel/**')
-    .pipe(zip('mytel.zip'))
+    .src('crm_web/**')
+    .pipe(zip('crm_web.zip'))
     .pipe(gulp.dest('./'));
 });
 
