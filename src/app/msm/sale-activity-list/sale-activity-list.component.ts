@@ -13,6 +13,7 @@ import { SchedulerModalEditComponent } from '../scheduler-modal-edit/scheduler-m
 import { SchedulerModalDeleteComponent } from '../scheduler-modal-delete/scheduler-modal-delete.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
+import { RoleService } from 'app/role.service';
 
 interface OrderCustomer {
   columnName: string;
@@ -46,11 +47,16 @@ export class SaleActivityListComponent implements OnInit, OnDestroy {
   public _subscriber: Subscription;
   private date: string;
 
+  get roleAccess(): boolean {
+    return this._role.is_admin || this._role.is_sale_director || this._role.is_branch_director;
+  }
+
   constructor(
     private _customerSaleActivitySv: CustomerSaleActivityService,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _modalService: BsModalService,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {

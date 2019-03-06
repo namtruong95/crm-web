@@ -16,6 +16,14 @@
           Name
           <i class="fa {{ getClassOrder('nameOfSale') }}"></i>
         </th>
+        <th class="cursor-pointer" (click)="addOrder('staffUserName')" *ngIf="roleAccess">
+          Staff
+          <i class="fa {{ getClassOrder('staffUserName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staffFullName')" *ngIf="roleAccess">
+          Full Name
+          <i class="fa {{ getClassOrder('staffFullName') }}"></i>
+        </th>
         <th class="cursor-pointer" (click)="addOrder('start')">
           Start
           <i class="fa {{ getClassOrder('start') }}"></i>
@@ -38,6 +46,8 @@
           <button type="button" class="mr-1 btn btn-danger" (click)="removeSaleActivity(sAc)"><i class="fa fa-trash"></i></button>
         </td>
         <td>{{ sAc.nameOfSale }}</td>
+        <td *ngIf="roleAccess">{{ sAc.staffUserName }}</td>
+        <td *ngIf="roleAccess">{{ sAc.staffFullName }}</td>
         <td>{{ sAc.start }}</td>
         <td>{{ sAc.end }}</td>
         <td>{{ sAc.actionOfSaleName }}</td>
