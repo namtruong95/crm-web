@@ -1,10 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/deliver/deliver.zip
-/deliver/nginx-1.15.2/html/mytel/*
-/mytel
-/mytel.zip
+/crm_web
+/crm_web.zip
 /tmp
 /out-tsc
 src.zip

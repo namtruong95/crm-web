@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'crm-web',
+      name: 'crm_web',
       script: 'app.js',
       instances: 1,
       autorestart: true,
