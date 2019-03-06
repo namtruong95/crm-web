@@ -15,7 +15,6 @@ interface CustomerSaleActivityInterface extends BaseModelInterface {
   assignedStaff: User;
   dateStart: string;
   dateEnd: string;
-  staffMail: string;
   assignedStaffId: number;
 }
 export class CustomerSaleActivity extends BaseModel implements Deserializable<CustomerSaleActivity> {
@@ -62,6 +61,12 @@ export class CustomerSaleActivity extends BaseModel implements Deserializable<Cu
   public set actionOfSaleName(v) {}
 
   assignedStaff: User;
+  get staffUserName(): string {
+    return this.assignedStaff ? this.assignedStaff.userName : '';
+  }
+  get staffFullName(): string {
+    return this.assignedStaff ? this.assignedStaff.fullName : '';
+  }
 
   customer: Customer;
 

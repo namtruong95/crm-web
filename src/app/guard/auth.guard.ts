@@ -22,16 +22,17 @@ export class AuthGuard extends KeycloakAuthGuard {
         return resolve(true);
       } else {
         if (!this.roles || this.roles.length === 0) {
-          resolve(false);
+          this.router.navigate(['/404']);
+          return resolve(false);
         }
-        let granted = false;
+
         for (const requiredRole of requiredRoles) {
-          if (this.roles.indexOf(requiredRole) > -1) {
-            granted = true;
-            break;
+          if (this.roles.indexOf(requiredRole) >= 0) {
+            return resolve(true);
           }
         }
-        resolve(granted);
+        this.router.navigate(['/404']);
+        return resolve(false);
       }
     });
   }
