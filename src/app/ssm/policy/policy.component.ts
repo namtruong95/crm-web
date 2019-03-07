@@ -14,7 +14,7 @@ export class PolicyComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private route: ActivatedRoute) {
     this.subscriber = this.router.events.subscribe((res: NavigationEnd) => {
       if (res instanceof NavigationEnd) {
-        this.isHiddenList = res.url === `/ssm/policy/pdf`;
+        this.isHiddenList = res.url.indexOf('/ssm/policy/folders') >= 0;
       }
     });
   }
