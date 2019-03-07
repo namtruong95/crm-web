@@ -1,0 +1,28 @@
+.folder-table.table {
+  tbody {
+    tr:hover {
+      cursor: pointer;
+    }
+  }
+
+  thead th,
+  tbody td {
+    max-width: 0;
+
+    &:last-child {
+      width: 120px;
+    }
+  }
+
+  tbody .folder-name {
+    position: relative;
+    padding-left: 60px;
+
+    i {
+      position: absolute;
+      left: 10px;
+      top: 15px;
+      color: #c3bc4a;
+    }
+  }
+}
