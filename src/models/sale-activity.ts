@@ -16,53 +16,32 @@ export enum StatusOfProcess {
 }
 
 interface SaleActivityInterface extends BaseModelInterface {
-  customer: Customer;
-  staff: User;
-  department: string;
   statusOfProcess: CustomerClassification;
   note: string;
   dateBinding: Date;
   saleDate: any;
   customerId: number;
-  customerName: string;
-  staffId: number;
-  staffName: string;
+  customer: Customer;
+  assignedStaffId: number;
+  assignedStaff: User;
 }
 export class SaleActivity extends BaseModel implements Deserializable<SaleActivity> {
-  private _customer: Customer;
-  public get customer(): Customer {
-    return this._customer;
-  }
-  public set customer(v: Customer) {
-    this._customer = v;
-  }
+  customerId: number;
+  customer: Customer;
   public get customer_name(): string {
     return this.customer ? this.customer.customerName : '';
   }
 
-  department: string;
-
-  private _staff: User;
-  public get staff(): User {
-    return this._staff;
-  }
-  public set staff(v: User) {
-    this._staff = v;
-  }
+  assignedStaffId: number;
+  assignedStaff: User;
   public get staff_user_name(): string {
-    return this.staff ? this.staff.userName : '';
+    return this.assignedStaff ? this.assignedStaff.userName : '';
   }
   public get staff_full_name(): string {
-    return this.staff ? this.staff.fullName : '';
+    return this.assignedStaff ? this.assignedStaff.fullName : '';
   }
 
-  private _statusOfProcess: CustomerClassification;
-  public get statusOfProcess(): CustomerClassification {
-    return this._statusOfProcess;
-  }
-  public set statusOfProcess(v: CustomerClassification) {
-    this._statusOfProcess = v;
-  }
+  statusOfProcess: CustomerClassification;
   public get statusOfProcessName(): string {
     return this.statusOfProcess ? this.statusOfProcess.name : '';
   }
@@ -86,7 +65,6 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
         return `fa fa-check-square`;
     }
   }
-
   public get statusOfProcessColor(): string {
     if (!this.statusOfProcess || !this.statusOfProcess.name) {
       return;
@@ -118,13 +96,7 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
     return moment(this.saleDate).format('YYYY-MM-DD');
   }
 
-  private _dateBinding: Date;
-  public get dateBinding(): Date {
-    return this._dateBinding;
-  }
-  public set dateBinding(v: Date) {
-    this._dateBinding = v;
-  }
+  dateBinding: Date;
 
   constructor() {
     super();
@@ -137,15 +109,10 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
 
     this.dateBinding = input.saleDate instanceof Date ? input.saleDate : new Date(input.saleDate);
 
-    this.customer = new Customer().deserialize({
-      id: input.customerId,
-      customerName: input.customerName,
-    });
+    this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
 
-    this.staff = new User().deserialize({
-      id: input.staffId,
-      fullName: input.staffName,
-    });
+    this.assignedStaff =
+      input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
 
     this.statusOfProcess =
       input.statusOfProcess instanceof CustomerClassification
@@ -158,10 +125,7 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
   public toJSON() {
     return {
       customerId: this.customer ? this.customer.id : null,
-      customerName: this.customer ? this.customer.customerName : null,
-      department: this.department || null,
-      staffId: this.staff ? this.staff.id : null,
-      staffName: this.staff ? this.staff.fullName : null,
+      assignedStaffId: this.assignedStaff ? this.assignedStaff.id : null,
       statusOfProcessId: this.statusOfProcess ? this.statusOfProcess.id : null,
       note: this.note || null,
       saleDate: this.date_str,
