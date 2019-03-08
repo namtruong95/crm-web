@@ -28,19 +28,19 @@ export class UserService {
   }
 
   public getAllUsers(opts: any = {}) {
-    if (this._role.is_hq_sale_staff || this._role.is_branch_sale_staff) {
-      return Observable.of([this._rootScope.currentUser]).delay(500);
+    if (this._role.is_admin || this._role.is_branch_director || this._role.is_sale_director) {
+      const _opts = {
+        role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+        branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
+        ...opts,
+      };
+
+      return this._api.get(`users/get-all`, _opts).map((res) => {
+        return res.data.listUsers.map((item) => new User().deserialize(item));
+      });
     }
 
-    const _opts = {
-      role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
-      branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
-      ...opts,
-    };
-
-    return this._api.get(`users/get-all`, _opts).map((res) => {
-      return res.data.listUsers.map((item) => new User().deserialize(item));
-    });
+    return Observable.of([this._rootScope.currentUser]).delay(500);
   }
 
   public getAllUsersInBranch(opts: any = {}) {
