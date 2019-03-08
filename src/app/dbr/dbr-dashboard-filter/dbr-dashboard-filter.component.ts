@@ -96,7 +96,7 @@ export class DbrDashboardFilterComponent implements OnInit {
     const params: any = {};
 
     if (this.filterTerm.saleSatff) {
-      params.staffId = this.filterTerm.saleSatff.id;
+      params.assignedStaffId = this.filterTerm.saleSatff.id;
     }
     if (this.filterTerm.dateFrom) {
       params.dateFrom = moment(this.filterTerm.dateFrom).format('MM/DD/YYYY');
