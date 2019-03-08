@@ -61,3 +61,11 @@ ul ul a {
     color: #ffc107;
   }
 }
+
+ul ul ul a {
+  padding-left: 70px !important;
+
+  &.active {
+    color: #ffc107;
+  }
+}

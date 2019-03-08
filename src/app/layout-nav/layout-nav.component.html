@@ -59,6 +59,25 @@
         <li>
           <a [routerLink]="['/dbr/dashboard']" routerLinkActive="active">Dashboard</a>
         </li>
+
+        <li>
+          <a href="#RP" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Report</a>
+
+          <ul class="collapse list-unstyled" id="RP">
+            <li>
+              <a [routerLink]="['/dbr/reports/sale-activities']" routerLinkActive="active">Sale Activity</a>
+            </li>
+            <li>
+              <a [routerLink]="['/dbr/reports/schedulers']" routerLinkActive="active">Scheduler Information</a>
+            </li>
+            <li>
+              <a [routerLink]="['/dbr/reports/quotations']" routerLinkActive="active">Quotation</a>
+            </li>
+            <li>
+              <a [routerLink]="['/dbr/reports/customer-care']" routerLinkActive="active">Customer Care</a>
+            </li>
+          </ul>
+        </li>
       </ul>
     </li>
 
