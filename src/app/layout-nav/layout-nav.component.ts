@@ -19,17 +19,34 @@ export class LayoutNavComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    $(`#${this._router.url.slice(1, 4)}LI`)
+    const prefix = this._router.url.slice(1, 4);
+
+    $(`#${prefix}LI`)
       .find('a')
       .first()
       .attr('aria-expanded', 'true');
-    $(`#${this._router.url.slice(1, 4)}LI`)
+    $(`#${prefix}LI`)
       .find('a')
       .first()
       .removeClass('collapsed');
-    $(`#${this._router.url.slice(1, 4)}LI`)
+    $(`#${prefix}LI`)
       .find('ul')
       .first()
       .addClass('show');
+
+    if (this._router.url.includes('/dbr/reports')) {
+      $(`#dbrReportsLI`)
+        .find('a')
+        .first()
+        .attr('aria-expanded', 'true');
+      $(`#dbrReportsLI`)
+        .find('a')
+        .first()
+        .removeClass('collapsed');
+      $(`#dbrReportsLI`)
+        .find('ul')
+        .first()
+        .addClass('show');
+    }
   }
 }

@@ -64,7 +64,7 @@ export class TimelineCreateComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params.customerId && !isNaN(+params.customerId)) {
         this._showCustomer(+params.customerId);
-        this._router.navigate(['/timeline/create'], { replaceUrl: true });
+        this._router.navigate(['/cim/timeline/create'], { replaceUrl: true });
         return;
       }
 

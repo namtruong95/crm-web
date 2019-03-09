@@ -1,1 +1,83 @@
-FIlter
+<form novalidate class="pt-2">
+  <div class="row">
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="FromDate">From Date</label>
+      <div class="input-group">
+        <input type="text" name="dateStart" id="FromDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateStart }"
+          readonly
+          bsDatepicker
+          placeholder="please select start date"
+          [(bsValue)]="filterTerm.dateStart"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateStart">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateStart = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="ToDate">To Date</label>
+      <div class="input-group">
+        <input type="text" name="dateEnd" id="ToDate"
+          class="form-control"
+          [ngClass]="{ 'border-right-0': filterTerm.dateEnd }"
+          readonly
+          bsDatepicker
+          placeholder="please select end date"
+          [(bsValue)]="filterTerm.dateEnd"
+          [bsConfig]="DATEPICKER_CONFIG">
+
+        <div class="input-group-append" *ngIf="filterTerm.dateEnd">
+          <span class="input-group-text bg--white"><i class="fa fa-times cursor-pointer" (click)="filterTerm.dateEnd = null"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6" *ngIf="roleAccess">
+      <div class="form-group">
+        <label for="Region">Branch</label>
+        <ng-select
+          [items]="branches"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingBranch"
+          placeholder="please select region"
+          [searchable]="false"
+          name="branches"
+          [(ngModel)]="filterTerm.branchId"
+          #Region="ngModel"
+          bindLabel="name"
+          bindValue="id">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="Name">Staff</label>
+      <ng-select
+        [items]="staffs"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingStaff"
+        placeholder="please select staff"
+        [searchable]="true"
+        name="assignedStaff"
+        [(ngModel)]="filterTerm.assignedStaff"
+        bindLabel="code_full_name">
+      </ng-select>
+    </div>
+
+    <div class="col-12 form-group report-filter__btn">
+      <button type="button" class="btn btn-primary"
+        (click)="exportReport()">
+        <i class="fa fa-download mr-2"></i>
+        Export
+      </button>
+    </div>
+  </div>
+</form>

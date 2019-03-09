@@ -3,13 +3,14 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-report-quotation',
   templateUrl: './report-quotation.component.html',
-  styleUrls: ['./report-quotation.component.scss']
+  styleUrls: ['./report-quotation.component.scss'],
 })
 export class ReportQuotationComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  public exportReportQuotation(event: any) {
+    console.log(event);
   }
-
 }

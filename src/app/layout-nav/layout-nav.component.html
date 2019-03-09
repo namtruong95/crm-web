@@ -5,10 +5,10 @@
         <img width="40" src="/assets/img/icon_CIM.png" /> CIM</a>
       <ul class="collapse list-unstyled" id="CIM">
         <li>
-          <a [routerLink]="['/cim']" routerLinkActive="active">Customer Information</a>
+          <a [routerLink]="['/cim/customer']" routerLinkActive="active">Customer Information</a>
         </li>
         <li>
-          <a [routerLink]="['/timeline']" routerLinkActive="active">Sale Activities</a>
+          <a [routerLink]="['/cim/timeline']" routerLinkActive="active">Sale Activities</a>
         </li>
       </ul>
     </li>
@@ -60,7 +60,7 @@
           <a [routerLink]="['/dbr/dashboard']" routerLinkActive="active">Dashboard</a>
         </li>
 
-        <li>
+        <li id="dbrReportsLI">
           <a href="#RP" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Report</a>
 
           <ul class="collapse list-unstyled" id="RP">

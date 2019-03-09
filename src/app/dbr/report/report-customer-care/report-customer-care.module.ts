@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReportCustomerCareComponent } from './report-customer-care.component';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ReportFilterModule } from '../report-filter/report-filter.module';
 
 const routes: Routes = [
   {
@@ -11,7 +12,7 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), FormsModule],
+  imports: [CommonModule, RouterModule.forChild(routes), FormsModule, ReportFilterModule],
   declarations: [ReportCustomerCareComponent],
 })
 export class ReportCustomerCareModule {}

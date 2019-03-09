@@ -234,7 +234,7 @@ export class TimelineTreeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._router.navigate(['/timeline/create'], {
+    this._router.navigate(['/cim/timeline/create'], {
       queryParams: {
         customerId: this.filterTerm.customer.id,
       },
