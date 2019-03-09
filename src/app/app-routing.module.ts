@@ -97,7 +97,7 @@ const routes: Routes = [
         loadChildren: './user/user.module#UserModule',
       },
       {
-        path: 'timeline',
+        path: 'cim/timeline',
         data: {
           roles: [
             Roles.BRANCH_DIRECTOR,

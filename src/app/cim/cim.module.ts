@@ -9,7 +9,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CimService } from './cim.service';
 const routes: Routes = [
   {
-    path: '',
+    path: 'customer',
     component: CimComponent,
     children: [
       {

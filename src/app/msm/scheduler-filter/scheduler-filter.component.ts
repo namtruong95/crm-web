@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
 import * as moment from 'moment';
-import { CustomerSaleActivity } from 'models/customer-sale-activity';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/internal/observable/of';
 import { Customer } from 'models/customer';
