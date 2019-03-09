@@ -19,7 +19,7 @@
             #FolderName="ngModel"
             required
             placeholder="please enter name"
-            [ngModel]="folder.name">
+            [(ngModel)]="folder.name">
 
           <div class="invalid-feedback"
             *ngIf="FolderName.errors?.required">
