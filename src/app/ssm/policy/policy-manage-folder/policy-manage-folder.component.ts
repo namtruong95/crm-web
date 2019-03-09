@@ -6,6 +6,7 @@ import { FolderService } from 'shared/services/folder.service';
 import { Router } from '@angular/router';
 import { PolicyModalDeleteFolderComponent } from '../policy-modal-delete-folder/policy-modal-delete-folder.component';
 import { NotifyService } from 'shared/utils/notify.service';
+import * as cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: 'app-policy-manage-folder',
@@ -33,7 +34,7 @@ export class PolicyManageFolderComponent implements OnInit {
   private _getListFolders() {
     this._folderSv.getListFolder().subscribe(
       (res) => {
-        this.folders = res.data;
+        this.folders = res;
       },
       (errors) => {
         this._notify.error(errors);
@@ -53,7 +54,7 @@ export class PolicyManageFolderComponent implements OnInit {
   editFolder(folder: Folder) {
     const config: ModalOptions = {
       initialState: {
-        folder,
+        folder: cloneDeep(folder),
       },
     };
     this._openModal(PolicyModalCeFolderComponent, config);

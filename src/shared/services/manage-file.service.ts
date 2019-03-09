@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { ManagePdf } from 'models/manage-pdf';
+import { DownloadService } from './download.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ManageFileService {
-  constructor(private _api: ApiService) {}
+  constructor(private _api: ApiService, private _download: DownloadService) {}
 
   public getFiles(opts?: any) {
     return this._api.get(`manage-file`, opts).map((res) => {
@@ -15,8 +16,12 @@ export class ManageFileService {
     });
   }
 
-  public downloadFile(id: number, opts?: any) {
+  public getFile(id: number, opts?: any) {
     return this._api.get(`manage-file/${id}`, opts);
+  }
+
+  public downloadFile(id: number, opts?: any) {
+    return this._download.get(`manage-file/download-file/${id}`, opts);
   }
 
   public deleteFile(id: number) {

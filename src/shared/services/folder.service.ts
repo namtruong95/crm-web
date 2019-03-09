@@ -1,49 +1,28 @@
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/delay';
 import { Folder } from 'models/folder';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FolderService {
-  constructor() {}
+  constructor(private _api: ApiService) {}
 
   public getListFolder(opts: any = {}) {
-    return Observable.of({
-      data: [
-        {
-          id: 1,
-          name: 'root',
-        },
-        {
-          id: 2,
-          name: 'root 2',
-        },
-        {
-          id: 3,
-          name: 'root 3',
-        },
-        {
-          id: 4,
-          name: 'root 4',
-        },
-      ].map((item) => new Folder().deserialize(item)),
-    }).delay(500);
+    return this._api.get(`folder`, opts).map((res) => {
+      return res.data.folder.map((item) => new Folder().deserialize(item));
+    });
   }
 
   public createFolder(data: any) {
-    return Observable.of(true).delay(1000);
+    return this._api.post(`folder`, data);
   }
 
   public updateFolder(id: number, data: any) {
-    return Observable.of(true).delay(1000);
+    return this._api.put(`folder/${id}`, data);
   }
 
   public deleteFolder(id: number) {
-    return Observable.of(true).delay(1000);
+    return this._api.delete(`folder/${id}`);
   }
 }

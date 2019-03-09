@@ -5,6 +5,9 @@ import { UploaderService } from 'shared/services/uploader.service';
 import { RoleService } from 'app/role.service';
 import { ManageFileService } from 'shared/services/manage-file.service';
 import { ManagePdf } from 'models/manage-pdf';
+import { ActivatedRoute } from '@angular/router';
+import { saveAs } from 'file-saver';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-policy-manage-pdf',
@@ -31,6 +34,7 @@ export class PolicyManagePdfComponent implements OnInit {
     private _uploader: UploaderService,
     public role: RoleService,
     private _manageFileSv: ManageFileService,
+    private _route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -40,6 +44,7 @@ export class PolicyManagePdfComponent implements OnInit {
   private _getFiles() {
     const opts = {
       ...this.query.queryJSON(),
+      folderId: this._route.snapshot.paramMap.get('id'),
     };
     this._manageFileSv.getFiles(opts).subscribe(
       (res) => {
@@ -79,9 +84,16 @@ export class PolicyManagePdfComponent implements OnInit {
       });
     });
 
-    this.isUploading = true;
+    this._uploadFile(data);
+  }
 
-    this._uploader.store(`manage-file`, data).subscribe(
+  private _uploadFile(data: any[]) {
+    this.isUploading = true;
+    const params = {
+      folderId: this._route.snapshot.paramMap.get('id'),
+    };
+
+    this._uploader.store(`manage-file`, data, params).subscribe(
       (res) => {
         this.isUploading = false;
         this._notify.success(`upload ${data.length} files success`);
@@ -103,11 +115,7 @@ export class PolicyManagePdfComponent implements OnInit {
   public downloadFile(file: ManagePdf) {
     this._manageFileSv.downloadFile(file.id).subscribe(
       (res) => {
-        const pdf = 'data:application/octet-stream;base64,' + res.data.data.data;
-        const dlnk = document.createElement('a');
-        dlnk.href = pdf;
-        dlnk.download = res.data.data.fileName;
-        dlnk.click();
+        saveAs(res, file.fileName);
       },
       (errors) => {
         this._notify.error(errors);
