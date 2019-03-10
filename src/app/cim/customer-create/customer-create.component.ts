@@ -218,6 +218,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   }
 
   public getDistrictList() {
+    if (!this.customer.branchId) {
+      this.districts = [];
+      this.customer.districtId = null;
+      return;
+    }
+
     this.isLoadingDistrict = true;
     const opts = {
       branchId: this.customer.branchId,
@@ -226,6 +232,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this._branchSv.getDistrictList(opts).subscribe(
       (res) => {
         this.districts = res.districts;
+        this.customer.districtId = null;
         this.isLoadingDistrict = false;
       },
       (errors) => {
@@ -236,6 +243,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   }
 
   public getTownshipList() {
+    if (!this.customer.districtId) {
+      this.townships = [];
+      this.customer.townshipId = null;
+      return;
+    }
+
     this.isLoadingTownship = true;
     const opts = {
       districtId: this.customer.districtId,
@@ -244,7 +257,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this._branchSv.getTownshipList(opts).subscribe(
       (res) => {
         this.townships = res.townships;
-
+        this.customer.townshipId = null;
         this.isLoadingTownship = false;
       },
       (errors) => {

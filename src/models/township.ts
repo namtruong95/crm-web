@@ -16,6 +16,9 @@ export class Township extends BaseModel implements Deserializable<Township> {
   }
 
   deserialize(input: Partial<TownshipInterface>): Township {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

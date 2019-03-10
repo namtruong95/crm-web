@@ -14,6 +14,10 @@ export class District extends BaseModel implements Deserializable<District> {
   }
 
   deserialize(input: Partial<DistrictInterface>): District {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
     Object.assign(this, input);
     return this;

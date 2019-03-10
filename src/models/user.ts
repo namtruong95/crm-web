@@ -64,6 +64,10 @@ export class User extends BaseModel implements Deserializable<User> {
   }
 
   deserialize(input: Partial<UserInterface>): User {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
     Object.assign(this, input);
 

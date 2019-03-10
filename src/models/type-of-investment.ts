@@ -15,6 +15,9 @@ export class TypeOfInvestment extends BaseModel implements Deserializable<TypeOf
   }
 
   deserialize(input: Partial<TypeOfInvestmentInterface>): TypeOfInvestment {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

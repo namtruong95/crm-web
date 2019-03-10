@@ -18,6 +18,9 @@ export class Proposal extends BaseModel implements Deserializable<Proposal> {
   }
 
   deserialize(input: Partial<ProposalInterface>): Proposal {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
 

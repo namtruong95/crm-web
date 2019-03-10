@@ -21,6 +21,9 @@ export class CustomerClassification extends BaseModel implements Deserializable<
   }
 
   deserialize(input: Partial<CustomerClassificationInterface>): CustomerClassification {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

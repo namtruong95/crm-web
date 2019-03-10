@@ -73,8 +73,12 @@
   <div class="row">
     <div class="col-12">
       <button type="button" class="btn btn-primary mr-2"
-        [disabled]="!canCreatePdf"
-        (click)="exportProposal()">Create PDF</button>
+        [disabled]="!canCreatePdf || isLoading"
+        (click)="exportProposal()">
+        <i class="far fa-file-pdf mr-2"></i>
+        Create PDF
+        <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+      </button>
     </div>
   </div>
 </form>

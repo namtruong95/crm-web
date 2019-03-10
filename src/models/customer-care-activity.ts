@@ -83,6 +83,10 @@ export class CustomerCareActivity extends BaseModel implements Deserializable<Cu
   }
 
   deserialize(input: Partial<CustomerCareActivityInterface>): CustomerCareActivity {
+    if (!input) {
+      return;
+    }
+    super.deserialize(input);
     Object.assign(this, input);
 
     if (input.dateActivity) {

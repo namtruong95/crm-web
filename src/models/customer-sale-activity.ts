@@ -86,6 +86,9 @@ export class CustomerSaleActivity extends BaseModel implements Deserializable<Cu
   }
 
   deserialize(input: Partial<CustomerSaleActivityInterface>): CustomerSaleActivity {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
 

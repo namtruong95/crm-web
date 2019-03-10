@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Bts } from 'models/bts';
 
 import * as orderBy from 'lodash/orderBy';
-import * as clone from 'lodash/clone';
+import * as cloneDeep from 'lodash/cloneDeep';
 import { BtsService } from 'shared/services/bts.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
@@ -119,7 +119,7 @@ export class BtsListComponent implements OnInit, OnDestroy {
     const config = {
       class: 'modal-lg',
       initialState: {
-        bts: clone(bts),
+        bts: cloneDeep(bts),
       },
     };
 
