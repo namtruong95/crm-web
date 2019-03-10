@@ -11,6 +11,9 @@ import { saveAs } from 'file-saver';
 import { RoleService } from 'app/role.service';
 // @ts-ignore-start
 import {} from 'googlemaps';
+import { Branch } from 'models/branch';
+import { BranchService } from 'shared/services/branch.service';
+import { Helpers } from 'shared/utils/helpers';
 // @ts-ignore-end
 @Component({
   selector: 'app-bts-filter',
@@ -28,6 +31,7 @@ export class BtsFilterComponent implements OnInit {
     address: '',
     latitude: null,
     longitude: null,
+    branchId: null,
   };
 
   private _mimeTypes = [
@@ -43,6 +47,14 @@ export class BtsFilterComponent implements OnInit {
 
   public isLoading = false;
 
+  // branches
+  public branches: Branch[] = [];
+  public isLoadingBranch = false;
+
+  get roleAccess(): boolean {
+    return this.role.is_admin || this.role.is_sale_director;
+  }
+
   constructor(
     private _mapsAPILoader: MapsAPILoader,
     private _ngZone: NgZone,
@@ -51,10 +63,28 @@ export class BtsFilterComponent implements OnInit {
     private _uploader: UploaderService,
     private _btsSv: BtsService,
     public role: RoleService,
+    private _branchSv: BranchService,
   ) {}
 
   ngOnInit() {
     this._initAutoCompleteGmap();
+    this._getBranchList();
+  }
+
+  private _getBranchList() {
+    if (this.roleAccess) {
+      this.isLoadingBranch = true;
+      this._branchSv.getBranchList().subscribe(
+        (res) => {
+          this.branches = res.branches;
+          this.isLoadingBranch = false;
+        },
+        (errors) => {
+          this.isLoadingBranch = false;
+          this._notify.error(errors);
+        },
+      );
+    }
   }
 
   private _initAutoCompleteGmap() {
@@ -82,7 +112,7 @@ export class BtsFilterComponent implements OnInit {
 
   public filterBts() {
     const params = pickBy(this.filterTerm, (value, key) => {
-      return ['siteCode', 'address', 'latitude', 'longitude'].indexOf(key) >= 0 && value;
+      return ['siteCode', 'address', 'latitude', 'longitude', 'branchId'].indexOf(key) >= 0 && value;
     });
 
     this._emitter.publishData({
@@ -165,6 +195,9 @@ export class BtsFilterComponent implements OnInit {
     if (this.filterTerm.longitude) {
       params.longitude = this.filterTerm.longitude;
     }
+    if (this.filterTerm.branchId) {
+      params.branchId = this.filterTerm.branchId;
+    }
 
     this._btsSv.exportBts(params).subscribe(
       (res) => {
@@ -174,5 +207,9 @@ export class BtsFilterComponent implements OnInit {
         this._notify.error(errors);
       },
     );
+  }
+
+  public downloadTemplate() {
+    Helpers.downloadFileFromUri('/assets/Template_BTS_v1.0.0.xlsx', 'Template BTS.xlsx');
   }
 }

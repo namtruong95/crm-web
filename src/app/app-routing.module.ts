@@ -97,7 +97,7 @@ const routes: Routes = [
         loadChildren: './user/user.module#UserModule',
       },
       {
-        path: 'timeline',
+        path: 'cim/timeline',
         data: {
           roles: [
             Roles.BRANCH_DIRECTOR,
@@ -116,6 +116,10 @@ const routes: Routes = [
         pathMatch: 'full',
       },
     ],
+  },
+  {
+    path: '404',
+    loadChildren: './page-404/page-404.module#Page404Module',
   },
   {
     path: '**',

@@ -12,6 +12,14 @@
           Address
           <i class="fa {{ getClassOrder('address') }}"></i>
         </th>
+        <th class="cursor-pointer" (click)="addOrder('userName')">
+          Assigned Staff
+          <i class="fa {{ getClassOrder('userName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('fullName')">
+          Full Name
+          <i class="fa {{ getClassOrder('fullName') }}"></i>
+        </th>
         <th class="cursor-pointer" (click)="addOrder('catalogName')">
           Catalog
           <i class="fa {{ getClassOrder('catalogName') }}"></i>
@@ -52,10 +60,6 @@
           Date
           <i class="fa {{ getClassOrder('customerDateFormat') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('assignedForSale')">
-          Assigned Staff
-          <i class="fa {{ getClassOrder('assignedForSale') }}"></i>
-        </th>
       </tr>
     </thead>
     <tbody>
@@ -67,6 +71,8 @@
         </td>
         <td>{{ customer.customerName }}</td>
         <td>{{ customer.address }}</td>
+        <td>{{ customer.userName }}</td>
+        <td>{{ customer.fullName }}</td>
         <td>{{ customer.catalogName }}</td>
         <td>{{ customer.customerStatusString }}</td>
         <td>{{ customer.contactName }}</td>
@@ -77,7 +83,6 @@
         <td>{{ customer.position }}</td>
         <td>{{ customer.service }}</td>
         <td>{{ customer.customerDateFormat }}</td>
-        <td>{{ customer.userName }}</td>
       </tr>
       <tr [ngClass]="{ 'hidden': customerList.length > 0 }">
         <td colspan="13" class="text-center">

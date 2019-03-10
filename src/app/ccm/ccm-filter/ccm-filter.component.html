@@ -17,6 +17,26 @@
       </ng-select>
     </div>
 
+    <div class="col-lg-3 col-md-6" *ngIf="roleAccess">
+      <div class="form-group">
+        <label for="Region">Branch</label>
+        <ng-select
+          [items]="branches"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingBranch"
+          placeholder="please select region"
+          [searchable]="false"
+          name="branches"
+          [(ngModel)]="filterTerm.branchId"
+          #Region="ngModel"
+          bindLabel="name"
+          bindValue="id">
+        </ng-select>
+      </div>
+    </div>
+
     <div class="col-lg-3 col-md-6 form-group">
       <label>Status</label>
       <ng-select
@@ -68,7 +88,9 @@
     <div class="col-12">
       <button type="button" class="btn btn-primary mr-2"
         [disabled]="!ccmSv.date"
-        (click)="downloadCCM()">Export</button>
+        (click)="downloadCCM()">
+        <i class="fa fa-download mr-2"></i>
+        Export</button>
     </div>
   </div>
 </form>

@@ -7,7 +7,7 @@ import { CustomerService } from 'shared/services/customer.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 
 const routes: Routes = [
   {
@@ -18,6 +18,6 @@ const routes: Routes = [
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes), NgSelectModule, FormsModule, BsDatepickerModule.forRoot()],
   declarations: [TimelineCreateComponent],
-  providers: [CustomerService, SaleActivity2Service],
+  providers: [CustomerService, SaleActivityService],
 })
 export class TimelineCreateModule {}

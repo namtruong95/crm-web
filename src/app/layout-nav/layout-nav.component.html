@@ -5,10 +5,10 @@
         <img width="40" src="/assets/img/icon_CIM.png" /> CIM</a>
       <ul class="collapse list-unstyled" id="CIM">
         <li>
-          <a [routerLink]="['/cim']" routerLinkActive="active">Customer Information</a>
+          <a [routerLink]="['/cim/customer']" routerLinkActive="active">Customer Information</a>
         </li>
         <li>
-          <a [routerLink]="['/timeline']" routerLinkActive="active">Sale Activities</a>
+          <a [routerLink]="['/cim/timeline']" routerLinkActive="active">Sale Activities</a>
         </li>
       </ul>
     </li>
@@ -59,6 +59,25 @@
         <li>
           <a [routerLink]="['/dbr/dashboard']" routerLinkActive="active">Dashboard</a>
         </li>
+
+        <!-- <li id="dbrReportsLI">
+          <a href="#RP" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Report</a>
+
+          <ul class="collapse list-unstyled" id="RP">
+            <li>
+              <a [routerLink]="['/dbr/reports/sale-activities']" routerLinkActive="active">Sale Activity</a>
+            </li>
+            <li>
+              <a [routerLink]="['/dbr/reports/schedulers']" routerLinkActive="active">Scheduler Information</a>
+            </li>
+            <li>
+              <a [routerLink]="['/dbr/reports/quotations']" routerLinkActive="active">Quotation</a>
+            </li>
+            <li>
+              <a [routerLink]="['/dbr/reports/customer-care']" routerLinkActive="active">Customer Care</a>
+            </li>
+          </ul>
+        </li> -->
       </ul>
     </li>
 

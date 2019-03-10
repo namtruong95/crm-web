@@ -221,6 +221,9 @@ export class Quotation extends BaseModel implements Deserializable<Quotation> {
   }
 
   deserialize(input: Partial<QuotationInterface>): Quotation {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
 import * as moment from 'moment';
-import { SaleActivity } from 'models/sale-activity';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/internal/observable/of';
 import { Customer } from 'models/customer';
@@ -16,6 +15,9 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { NotifyService } from 'shared/utils/notify.service';
+import { Branch } from 'models/branch';
+import { RoleService } from 'app/role.service';
+import { BranchService } from 'shared/services/branch.service';
 
 @Component({
   selector: 'app-scheduler-filter',
@@ -27,6 +29,7 @@ export class SchedulerFilterComponent implements OnInit {
     customer: null,
     dateStart: null,
     dateEnd: null,
+    branchId: null,
   };
   public get isEndAfterFrom(): boolean {
     return (
@@ -43,14 +46,41 @@ export class SchedulerFilterComponent implements OnInit {
 
   public isLoadingCusotmer = false;
 
+  // branches
+  public branches: Branch[] = [];
+  public isLoadingBranch = false;
+
+  get roleAccess(): boolean {
+    return this._role.is_admin || this._role.is_sale_director;
+  }
+
   constructor(
     private _customerSv: CustomerService,
     private _emitter: EventEmitterService,
     private _notify: NotifyService,
+    private _role: RoleService,
+    private _branchSv: BranchService,
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
+    this._getBranchList();
+  }
+
+  private _getBranchList() {
+    if (this.roleAccess) {
+      this.isLoadingBranch = true;
+      this._branchSv.getBranchList().subscribe(
+        (res) => {
+          this.branches = res.branches;
+          this.isLoadingBranch = false;
+        },
+        (errors) => {
+          this.isLoadingBranch = false;
+          this._notify.error(errors);
+        },
+      );
+    }
   }
 
   public filterScheduler() {
@@ -67,32 +97,49 @@ export class SchedulerFilterComponent implements OnInit {
     if (this.filterTerm.dateEnd) {
       params.dateend = moment(this.filterTerm.dateEnd).format('YYYY-MM-DD');
     }
-
     if (this.filterTerm.customer) {
       params.customerId = this.filterTerm.customer.id;
     }
+    if (this.filterTerm.branchId) {
+      params.branchId = this.filterTerm.branchId;
+    }
+
     this._emitter.publishData({
       type: EMITTER_TYPE.FILTER_SALE_ACTIVITY,
       params,
     });
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

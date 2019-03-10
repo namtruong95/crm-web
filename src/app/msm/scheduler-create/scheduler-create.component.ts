@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
-import { SaleActivity } from 'models/sale-activity';
+import { CustomerSaleActivity } from 'models/customer-sale-activity';
 import { Customer } from 'models/customer';
 import { CustomerService } from 'shared/services/customer.service';
 import { NotifyService } from 'shared/utils/notify.service';
@@ -9,7 +9,7 @@ import { concat } from 'rxjs/internal/observable/concat';
 import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs/Observable';
 import { distinctUntilChanged, debounceTime, switchMap, tap, catchError } from 'rxjs/operators';
-import { SaleActivityService } from 'shared/services/sale-activity.service';
+import { CustomerSaleActivityService } from 'shared/services/customer-sale-activity.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { ActionOfSale } from 'constants/action-of-sale';
@@ -27,7 +27,7 @@ import { NgForm } from '@angular/forms';
 export class SchedulerCreateComponent implements OnInit {
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
 
-  public scheduler: SaleActivity = new SaleActivity();
+  public scheduler: CustomerSaleActivity = new CustomerSaleActivity();
 
   public staffs: User[] = [];
   public isLoadingStaff = false;
@@ -46,18 +46,18 @@ export class SchedulerCreateComponent implements OnInit {
   constructor(
     private _customerSv: CustomerService,
     private _notify: NotifyService,
-    private _saleActivitySv: SaleActivityService,
+    private _customerSaleActivitySv: CustomerSaleActivityService,
     private _emitter: EventEmitterService,
     private _customerClassificationSv: CustomerClassificationService,
     private _userSv: UserService,
   ) {}
 
   ngOnInit() {
-    this.scheduler.staff = null;
+    this.scheduler.assignedStaff = null;
     this.scheduler.customer = null;
     this.scheduler.actionOfSale = null;
 
-    this._searchCustomers();
+    this._initSearchCustomers();
     this._typeOfContact();
     this._getStaffs();
   }
@@ -65,7 +65,7 @@ export class SchedulerCreateComponent implements OnInit {
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
@@ -105,7 +105,7 @@ export class SchedulerCreateComponent implements OnInit {
 
     this.isLoading = true;
 
-    this._saleActivitySv.createSaleActivities(this.scheduler.toJSON()).subscribe(
+    this._customerSaleActivitySv.createSaleActivities(this.scheduler.toJSON()).subscribe(
       (res) => {
         form.form.markAsPristine({ onlySelf: false });
         this.isLoading = false;
@@ -120,8 +120,8 @@ export class SchedulerCreateComponent implements OnInit {
       },
       () => {
         setTimeout(() => {
-          this.scheduler = new SaleActivity();
-          this.scheduler.staff = null;
+          this.scheduler = new CustomerSaleActivity();
+          this.scheduler.assignedStaff = null;
           this.scheduler.customer = null;
           this.scheduler.actionOfSale = null;
         }, 0);
@@ -129,22 +129,36 @@ export class SchedulerCreateComponent implements OnInit {
     );
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

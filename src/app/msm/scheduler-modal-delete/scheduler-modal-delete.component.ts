@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SaleActivityService } from 'shared/services/sale-activity.service';
+import { CustomerSaleActivityService } from 'shared/services/customer-sale-activity.service';
 import { NotifyService } from 'shared/utils/notify.service';
-import { SaleActivity } from 'models/sale-activity';
+import { CustomerSaleActivity } from 'models/customer-sale-activity';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 
@@ -13,12 +13,12 @@ import { EMITTER_TYPE } from 'constants/emitter';
 })
 export class SchedulerModalDeleteComponent implements OnInit {
   public isLoading = false;
-  public scheduler: SaleActivity;
+  public scheduler: CustomerSaleActivity;
 
   constructor(
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
-    private _saleActivitySv: SaleActivityService,
+    private _customerSaleActivitySv: CustomerSaleActivityService,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
   ) {}
@@ -28,7 +28,7 @@ export class SchedulerModalDeleteComponent implements OnInit {
   public removeScheduler() {
     this.isLoading = true;
 
-    this._saleActivitySv.removeSaleActivities(this.scheduler.id).subscribe(
+    this._customerSaleActivitySv.removeSaleActivities(this.scheduler.id).subscribe(
       (res) => {
         this._notify.success('delete sale activity successs');
         this.close('reload');

@@ -24,6 +24,8 @@ import * as moment from 'moment';
   styleUrls: ['./proposal-filter.component.scss'],
 })
 export class ProposalFilterComponent implements OnInit {
+  public isLoading = false;
+
   public filterTerm: any = {
     customer: null,
     typeOfService: null,
@@ -57,7 +59,7 @@ export class ProposalFilterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
     this._getTypeOfServices();
     this._getServicesterm();
   }
@@ -102,22 +104,36 @@ export class ProposalFilterComponent implements OnInit {
     );
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
               txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),
@@ -180,11 +196,15 @@ export class ProposalFilterComponent implements OnInit {
       params.serviceTermId = this.filterTerm.serviceTerm.id;
     }
 
+    this.isLoading = true;
+
     this._proposalSv.exportProposal(params).subscribe(
       (res) => {
+        this.isLoading = false;
         saveAs(res, `proposal-${moment().unix()}.pdf`);
       },
       (errors) => {
+        this.isLoading = false;
         this._notify.error(errors);
       },
     );

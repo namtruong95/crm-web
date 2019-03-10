@@ -5,13 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CustomerService } from 'shared/services/customer.service';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 
 @NgModule({
   imports: [CommonModule, NgSelectModule, FormsModule, BsDatepickerModule.forRoot()],
   declarations: [TimelineModalEditComponent],
   entryComponents: [TimelineModalEditComponent],
   exports: [TimelineModalEditComponent],
-  providers: [CustomerService, SaleActivity2Service],
+  providers: [CustomerService, SaleActivityService],
 })
 export class TimelineModalEditModule {}

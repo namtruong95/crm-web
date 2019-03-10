@@ -4,7 +4,7 @@ import { TimelineListComponent } from './timeline-list.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormsModule } from '@angular/forms';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 import { TimelineModalDeleteModule } from '../timeline-modal-delete/timeline-modal-delete.module';
 import { TimelineModalEditModule } from '../timeline-modal-edit/timeline-modal-edit.module';
 
@@ -19,6 +19,6 @@ import { TimelineModalEditModule } from '../timeline-modal-edit/timeline-modal-e
   ],
   declarations: [TimelineListComponent],
   exports: [TimelineListComponent],
-  providers: [SaleActivity2Service],
+  providers: [SaleActivityService],
 })
 export class TimelineListModule {}

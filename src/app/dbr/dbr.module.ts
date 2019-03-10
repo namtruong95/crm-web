@@ -10,7 +10,11 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadChildren: './dbr-dashboard/dbr-dashboard.module#DbrDashboardModule',
+        loadChildren: './dashboard/dbr-dashboard/dbr-dashboard.module#DbrDashboardModule',
+      },
+      {
+        path: 'reports',
+        loadChildren: './report/dbr-report/dbr-report.module#DbrReportModule',
       },
       {
         path: '',

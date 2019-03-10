@@ -1,120 +1,127 @@
 import { Customer } from './customer';
-import { CustomerClassification } from './customer-classification';
 import { User } from './user';
+import { CustomerClassification } from './customer-classification';
+
+import * as moment from 'moment';
 import { BaseModelInterface, BaseModel } from './base.model';
 import { Deserializable } from 'shared/interfaces/deserializable';
-import * as moment from 'moment';
+
+export enum StatusOfProcess {
+  SENT_MAIL = 'Sent Mail',
+  CALL = 'Call',
+  MEETING_WITH_CUSTOMER = 'Meeting with customer',
+  MADE_AND_SEND_QUOTATION = 'Made and sent quotation',
+  NEGOTIATION = 'Negotiation',
+  SIGNED_CONTRACT = 'Signed contract',
+}
 
 interface SaleActivityInterface extends BaseModelInterface {
-  nameOfSale: string;
-  date: any;
-  time_start: string;
-  time_end: string;
-  actionOfSale: CustomerClassification;
+  statusOfProcess: CustomerClassification;
+  note: string;
+  dateBinding: Date;
+  saleDate: any;
+  customerId: number;
   customer: Customer;
-  staff: User;
-  dateStart: string;
-  dateEnd: string;
-  staffMail: string;
-  staffId: number;
+  assignedStaffId: number;
+  assignedStaff: User;
 }
 export class SaleActivity extends BaseModel implements Deserializable<SaleActivity> {
-  nameOfSale: string;
+  customerId: number;
+  customer: Customer;
+  public get customer_name(): string {
+    return this.customer ? this.customer.customerName : '';
+  }
 
-  date: any;
+  assignedStaffId: number;
+  assignedStaff: User;
+  public get staff_user_name(): string {
+    return this.assignedStaff ? this.assignedStaff.userName : '';
+  }
+  public get staff_full_name(): string {
+    return this.assignedStaff ? this.assignedStaff.fullName : '';
+  }
+
+  statusOfProcess: CustomerClassification;
+  public get statusOfProcessName(): string {
+    return this.statusOfProcess ? this.statusOfProcess.name : '';
+  }
+  public get statusOfProcessIcon(): string {
+    if (!this.statusOfProcess || !this.statusOfProcess.name) {
+      return;
+    }
+
+    switch (this.statusOfProcess.name) {
+      case StatusOfProcess.CALL:
+        return `fa fa-phone-square`;
+      case StatusOfProcess.MADE_AND_SEND_QUOTATION:
+        return `fa fa-th-list`;
+      case StatusOfProcess.MEETING_WITH_CUSTOMER:
+        return `fa fa-comments`;
+      case StatusOfProcess.NEGOTIATION:
+        return `fa fa-thumbs-up`;
+      case StatusOfProcess.SENT_MAIL:
+        return `fa fa-envelope`;
+      case StatusOfProcess.SIGNED_CONTRACT:
+        return `fa fa-check-square`;
+    }
+  }
+  public get statusOfProcessColor(): string {
+    if (!this.statusOfProcess || !this.statusOfProcess.name) {
+      return;
+    }
+
+    switch (this.statusOfProcess.name) {
+      case StatusOfProcess.CALL:
+        return `primary`;
+      case StatusOfProcess.MADE_AND_SEND_QUOTATION:
+        return `success`;
+      case StatusOfProcess.MEETING_WITH_CUSTOMER:
+        return `warning`;
+      case StatusOfProcess.NEGOTIATION:
+        return `danger`;
+      case StatusOfProcess.SENT_MAIL:
+        return `info`;
+      case StatusOfProcess.SIGNED_CONTRACT:
+        return `info`;
+    }
+  }
+
+  note: string;
+
+  saleDate: any;
   public get date_str(): string {
-    return moment(this.date).format('YYYY-MM-DD');
+    return moment(this.saleDate).toISOString();
   }
-  public set date_str(v) {}
-
-  time_start: string;
-  public get start(): string {
-    return `${this.date_str} ${this.time_start}`;
-  }
-  public set start(v) {}
-  public get end(): string {
-    return `${this.date_str} ${this.time_end}`;
-  }
-  public set end(v) {}
-
-  public get endAfterStart(): boolean {
-    return moment(this.end).isAfter(moment(this.start));
-  }
-  public set endAfterStart(v) {}
-
-  time_end: string;
-
-  public get title(): string {
-    return `${this.time_start}~${this.time_end} ${this.nameOfSale}`;
-  }
-  public set title(v) {}
-
-  private _actionOfSale: CustomerClassification;
-  public get actionOfSale(): CustomerClassification {
-    return this._actionOfSale;
-  }
-  public set actionOfSale(v: CustomerClassification) {
-    this._actionOfSale = v;
-  }
-  public get actionOfSaleName(): string {
-    return this.actionOfSale ? this.actionOfSale.name : null;
-  }
-  public set actionOfSaleName(v) {}
-
-  private _staff: User;
-  public get staff(): User {
-    return this._staff;
-  }
-  public set staff(v: User) {
-    this._staff = v;
+  public get dateDisplay(): string {
+    return moment(this.saleDate).format('YYYY-MM-DD');
   }
 
-  private _customer: Customer;
-  public get customer(): Customer {
-    return this._customer;
-  }
-  public set customer(v: Customer) {
-    this._customer = v;
-  }
-  public get customerName(): string {
-    return this.customer ? this.customer.customerName : null;
-  }
-  public set customerName(v) {}
+  dateBinding: Date;
 
   constructor() {
     super();
-    this.customer = new Customer();
-    this.time_start = moment().format('HH:mm');
-    this.date = moment().toDate();
-    this.time_end = moment().format('HH:mm');
-    this.actionOfSale = new CustomerClassification();
-    this.staff = new User();
+    this.dateBinding = new Date();
   }
 
   deserialize(input: Partial<SaleActivityInterface>): SaleActivity {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
     Object.assign(this, input);
 
-    this.date = input.date || moment(input.dateStart).toDate();
-    this.time_start = input.time_start || moment(input.dateStart).format('HH:mm');
-    this.time_end = input.time_end || moment(input.dateEnd).format('HH:mm');
-
-    if (input.staff instanceof User) {
-      this.staff = input.staff;
-    } else {
-      this.staff = new User().deserialize({
-        fullName: input.staff,
-        email: input.staffMail,
-        id: input.staffId,
-      });
-    }
-
-    this.actionOfSale =
-      input.actionOfSale instanceof CustomerClassification
-        ? input.actionOfSale
-        : new CustomerClassification().deserialize(input.actionOfSale);
+    this.dateBinding = input.saleDate instanceof Date ? input.saleDate : new Date(input.saleDate);
 
     this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
+
+    this.assignedStaff =
+      input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
+
+    this.statusOfProcess =
+      input.statusOfProcess instanceof CustomerClassification
+        ? input.statusOfProcess
+        : new CustomerClassification().deserialize(input.statusOfProcess);
 
     return this;
   }
@@ -122,12 +129,10 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
   public toJSON() {
     return {
       customerId: this.customer ? this.customer.id : null,
-      dateStart: moment(`${this.date_str} ${this.time_start}`, 'YYYY-MM-DD HH:mm').toISOString(),
-      dateEnd: moment(`${this.date_str} ${this.time_end}`, 'YYYY-MM-DD HH:mm').toISOString(),
-      nameOfSale: this.nameOfSale || null,
-      staff: this.staff ? this.staff.fullName : null,
-      staffId: this.staff ? this.staff.id : null,
-      actionOfSaleId: this.actionOfSale ? this.actionOfSale.id : null,
+      assignedStaffId: this.assignedStaff ? this.assignedStaff.id : null,
+      statusOfProcessId: this.statusOfProcess ? this.statusOfProcess.id : null,
+      note: this.note || null,
+      saleDate: this.date_str,
     };
   }
 }

@@ -108,9 +108,9 @@
         [clearable]="true"
         [loading]="isLoadingStaff"
         placeholder="please select staff"
-        [searchable]="false"
-        name="staff"
-        [(ngModel)]="scheduler.staff"
+        [searchable]="true"
+        name="assignedStaff"
+        [(ngModel)]="scheduler.assignedStaff"
         bindLabel="code_full_name"
         required>
       </ng-select>

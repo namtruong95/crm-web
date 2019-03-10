@@ -116,10 +116,10 @@
           [clearable]="true"
           [loading]="isLoadingStaff"
           placeholder="please select staff"
-          [searchable]="false"
-          name="staff"
+          [searchable]="true"
+          name="assignedStaff"
           [compareWith]="compareWithFn"
-          [(ngModel)]="scheduler.staff"
+          [(ngModel)]="scheduler.assignedStaff"
           bindLabel="code_full_name"
           required>
         </ng-select>

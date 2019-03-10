@@ -15,10 +15,10 @@ import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
 import { EMITTER_TYPE } from 'constants/emitter';
-import { SaleActivity2 } from 'models/sale-activity-2';
+import { SaleActivity } from 'models/sale-activity';
 import { CustomerClassification } from 'models/customer-classification';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
-import { SaleActivity2Service } from 'shared/services/sale-activity-2.service';
+import { SaleActivityService } from 'shared/services/sale-activity.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
@@ -30,7 +30,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class TimelineModalEditComponent implements OnInit {
   public isLoading = false;
 
-  public saleActivity: SaleActivity2 = new SaleActivity2();
+  public saleActivity: SaleActivity = new SaleActivity();
 
   public customers: Observable<Customer[]> = of([]);
   public customerInput$ = new Subject<string>();
@@ -50,33 +50,47 @@ export class TimelineModalEditComponent implements OnInit {
     private _userSv: UserService,
     private _notify: NotifyService,
     private _customerClassificationSv: CustomerClassificationService,
-    private _saleActivity2Sv: SaleActivity2Service,
+    private _saleActivitySv: SaleActivityService,
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
     this._getStaffs();
     this._statusOfProcess();
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),
@@ -128,7 +142,7 @@ export class TimelineModalEditComponent implements OnInit {
   public updateSareActivity() {
     this.isLoading = true;
 
-    this._saleActivity2Sv.updateSaleActivity(this.saleActivity.id, this.saleActivity.toJSON()).subscribe(
+    this._saleActivitySv.updateSaleActivity(this.saleActivity.id, this.saleActivity.toJSON()).subscribe(
       (res) => {
         this.close('reload');
         this.isLoading = false;

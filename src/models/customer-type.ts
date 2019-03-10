@@ -19,6 +19,9 @@ export class CustomerType extends BaseModel implements Deserializable<CustomerTy
   }
 
   deserialize(input: Partial<CustomerTypeInterface>): CustomerType {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

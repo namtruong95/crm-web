@@ -6,6 +6,9 @@ import { Marker } from 'interfaces/maker';
 import { User } from './user';
 import { BaseModelInterface, BaseModel } from './base.model';
 import { Deserializable } from 'shared/interfaces/deserializable';
+import { Branch } from './branch';
+import { District } from './district';
+import { Township } from './township';
 
 interface CustomerInterface extends BaseModelInterface {
   customerName: string;
@@ -29,6 +32,12 @@ interface CustomerInterface extends BaseModelInterface {
   typeOfSale: CustomerClassification;
   typeOfSaleId: number;
   assignedStaff: User;
+  branchId: number;
+  branch: Branch;
+  districtId: number;
+  district: District;
+  townshipId: number;
+  township: Township;
 }
 
 export class Customer extends BaseModel implements Deserializable<Customer> {
@@ -128,8 +137,18 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
     this._assignedStaff = v;
   }
   public get userName(): string {
+    return this.assignedStaff ? this.assignedStaff.userName : null;
+  }
+  public get fullName(): string {
     return this.assignedStaff ? this.assignedStaff.fullName : null;
   }
+
+  branchId: number;
+  branch: Branch;
+  districtId: number;
+  district: District;
+  townshipId: number;
+  township: Township;
 
   constructor() {
     super();
@@ -143,6 +162,10 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
   }
 
   deserialize(input: Partial<CustomerInterface>): Customer {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
 
     Object.assign(this, input);
@@ -172,16 +195,20 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
     this.assignedStaff =
       input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
 
+    this.branch = input.branch instanceof Branch ? input.branch : new Branch().deserialize(input.branch);
+    this.district = input.district instanceof District ? input.district : new District().deserialize(input.district);
+    this.township = input.township instanceof Township ? input.township : new Township().deserialize(input.township);
+
     return this;
   }
 
   public setEmpty() {
-    this.customerType = null;
-    this.typeOfSale = null;
-    this.typeOfInvestment = null;
-    this.catalog = null;
-    this.assignedStaff = null;
-    this.customerDateBinding = new Date();
+    this.customerType = this.customerType.id ? this.customerType : null;
+    this.typeOfSale = this.typeOfSale.id ? this.typeOfSale : null;
+    this.typeOfInvestment = this.typeOfInvestment.id ? this.typeOfInvestment : null;
+    this.catalog = this.catalog.id ? this.catalog : null;
+    this.assignedStaff = this.assignedStaff.id ? this.assignedStaff : null;
+    this.customerDateBinding = this.customerDateBinding || new Date();
   }
 
   public toJSON() {
@@ -202,6 +229,9 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
       typeOfSaleId: this.typeOfSale ? this.typeOfSale.id : null,
       contactName: this.contactName || null,
       assignedStaffId: this.assignedStaff ? this.assignedStaff.id : null,
+      branchId: this.branchId || null,
+      districtId: this.districtId || null,
+      townshipId: this.townshipId || null,
     };
   }
 

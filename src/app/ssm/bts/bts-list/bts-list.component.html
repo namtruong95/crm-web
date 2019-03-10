@@ -12,13 +12,17 @@
           Address
           <i class="fa {{ getClassOrder('address') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('state')">
+        <th class="cursor-pointer" (click)="addOrder('branchName')">
           State/Region
-          <i class="fa {{ getClassOrder('state') }}"></i>
+          <i class="fa {{ getClassOrder('branchName') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('townShip')">
+        <th class="cursor-pointer" (click)="addOrder('districtName')">
+          District
+          <i class="fa {{ getClassOrder('districtName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('townshipName')">
           TownShip
-          <i class="fa {{ getClassOrder('townShip') }}"></i>
+          <i class="fa {{ getClassOrder('townshipName') }}"></i>
         </th>
       </tr>
     </thead>
@@ -30,8 +34,9 @@
         </td>
         <td>{{ bts.siteCode }}</td>
         <td>{{ bts.address }}</td>
-        <td>{{ bts.state }}</td>
-        <td>{{ bts.townShip }}</td>
+        <td>{{ bts.branchName }}</td>
+        <td>{{ bts.districtName }}</td>
+        <td>{{ bts.townshipName }}</td>
       </tr>
       <tr [ngClass]="{ 'hidden': btsList.length > 0 }">
         <td colspan="5" class="text-center">

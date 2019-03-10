@@ -45,9 +45,9 @@
         [clearable]="true"
         [loading]="isLoadingStaff"
         placeholder="please select staff"
-        [searchable]="false"
-        name="staff"
-        [(ngModel)]="careActivity.staff"
+        [searchable]="true"
+        name="assignedStaff"
+        [(ngModel)]="careActivity.assignedStaff"
         bindLabel="code_full_name">
       </ng-select>
     </div>

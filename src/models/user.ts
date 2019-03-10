@@ -16,7 +16,13 @@ interface UserInterface extends BaseModelInterface {
 }
 
 export class User extends BaseModel implements Deserializable<User> {
-  userName: string;
+  private _userName: string;
+  public get userName(): string {
+    return this._userName;
+  }
+  public set userName(v: string) {
+    this._userName = v ? v.toLowerCase() : '';
+  }
 
   private _firstName: string;
   public get firstName(): string {
@@ -58,6 +64,10 @@ export class User extends BaseModel implements Deserializable<User> {
   }
 
   deserialize(input: Partial<UserInterface>): User {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
     Object.assign(this, input);
 

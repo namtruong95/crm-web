@@ -54,15 +54,15 @@ export class CcmCreateComponent implements OnInit {
   ngOnInit() {
     this.careActivity.customer = null;
     this.careActivity.status = null;
-    this.careActivity.staff = null;
-    this._searchCustomers();
+    this.careActivity.assignedStaff = null;
+    this._initSearchCustomers();
     this._getStaffs();
   }
 
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
@@ -74,22 +74,36 @@ export class CcmCreateComponent implements OnInit {
     );
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),
@@ -124,7 +138,7 @@ export class CcmCreateComponent implements OnInit {
           this.careActivity = new CustomerCareActivity();
           this.careActivity.customer = null;
           this.careActivity.status = null;
-          this.careActivity.staff = null;
+          this.careActivity.assignedStaff = null;
         }, 0);
       },
     );

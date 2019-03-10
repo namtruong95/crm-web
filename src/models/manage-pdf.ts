@@ -14,6 +14,9 @@ export class ManagePdf extends BaseModel implements Deserializable<ManagePdf> {
   }
 
   deserialize(input: Partial<ManagePdfInterface>): ManagePdf {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

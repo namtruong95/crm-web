@@ -14,6 +14,9 @@ export class BaseModel implements Deserializable<BaseModel> {
   userId: number;
 
   deserialize(input: Partial<BaseModelInterface>): BaseModel {
+    if (!input) {
+      return;
+    }
     Object.assign(this, input);
     return this;
   }

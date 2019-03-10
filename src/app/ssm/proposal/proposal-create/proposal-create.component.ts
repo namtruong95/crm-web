@@ -10,8 +10,6 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { CustomerService } from 'shared/services/customer.service';
-import { EventEmitterService } from 'shared/utils/event-emitter.service';
-import { NotifyService } from 'shared/utils/notify.service';
 import { Proposal } from 'models/proposal';
 import { NgForm } from '@angular/forms';
 
@@ -27,33 +25,43 @@ export class ProposalCreateComponent implements OnInit {
   public customerInput$ = new Subject<string>();
   public isLoadingCusotmer = false;
 
-  constructor(
-    private _customerSv: CustomerService,
-    private _emitter: EventEmitterService,
-    private _notify: NotifyService,
-  ) {}
+  constructor(private _customerSv: CustomerService) {}
 
   ngOnInit() {
     this.proposal.customer = null;
-    this._searchCustomers();
+    this._initSearchCustomers();
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

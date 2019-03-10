@@ -21,8 +21,8 @@ export class UserCreateComponent implements OnInit {
   public rules = RegExp;
   public isLoading = false;
 
-  // branchs
-  public branchs: Branch[] = [];
+  // branches
+  public branches: Branch[] = [];
   public isLoadingBranch = false;
 
   constructor(
@@ -40,7 +40,7 @@ export class UserCreateComponent implements OnInit {
     this.isLoadingBranch = true;
     this._branchSv.getBranchList().subscribe(
       (res) => {
-        this.branchs = res.branches;
+        this.branches = res.branches;
         this.isLoadingBranch = false;
       },
       (errors) => {
@@ -51,18 +51,16 @@ export class UserCreateComponent implements OnInit {
   }
 
   public checkAndCreateUser(form: NgForm) {
-    this._createUser(form);
-
-    // this.isLoading = true;
-    // this._userSv.kcCreateUser(this.user.kcToJSON()).subscribe(
-    //   (res) => {
-    //     this._createUser(form);
-    //   },
-    //   (errors) => {
-    //     this.isLoading = false;
-    //     this._notify.error(errors);
-    //   },
-    // );
+    this.isLoading = true;
+    this._userSv.kcCreateUser(this.user.kcToJSON()).subscribe(
+      (res) => {
+        this._createUser(form);
+      },
+      (errors) => {
+        this.isLoading = false;
+        this._notify.error(errors);
+      },
+    );
   }
 
   private _createUser(form: NgForm) {

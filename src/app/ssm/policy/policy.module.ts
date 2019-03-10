@@ -18,7 +18,11 @@ const routes: Routes = [
         loadChildren: './policy-create/policy-create.module#PolicyCreateModule',
       },
       {
-        path: 'pdf',
+        path: 'folders',
+        loadChildren: './policy-manage-folder/policy-manage-folder.module#PolicyManageFolderModule',
+      },
+      {
+        path: 'folders/:id',
         loadChildren: './policy-manage-pdf/policy-manage-pdf.module#PolicyManagePdfModule',
       },
       {

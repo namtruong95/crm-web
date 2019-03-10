@@ -65,7 +65,7 @@
     <tbody>
       <tr *ngFor="let quotation of quotationList;">
         <td>
-          <button type="button" class="mr-1 btn btn-info" (click)="exportQuotation(quotation.id)"><i class="fa fa-file"></i></button>
+          <button type="button" class="mr-1 btn btn-info" appBtnDblClick (click)="exportQuotation(quotation.id)"><i class="far fa-file-pdf"></i></button>
           <button type="button" class="mr-1 btn btn-info" (click)="editQuotation(quotation)"><i class="fa fa-edit"></i></button>
           <button type="button" class="mr-1 btn btn-danger" (click)="removeQuotation(quotation)"><i class="fa fa-trash"></i></button>
         </td>

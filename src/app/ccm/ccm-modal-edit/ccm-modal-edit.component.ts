@@ -53,14 +53,14 @@ export class CcmModalEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
     this._getStaffs();
   }
 
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
@@ -72,22 +72,36 @@ export class CcmModalEditComponent implements OnInit {
     );
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),
@@ -110,13 +124,13 @@ export class CcmModalEditComponent implements OnInit {
     this.isLoading = true;
     this._careActivitySv.updateCareActivity(this.careActivity.id, this.careActivity.toJSON()).subscribe(
       (res) => {
-        this.isLoading = true;
+        this.isLoading = false;
         this._notify.success('update care activity success');
         this.close('reload');
       },
       (errors) => {
         this._notify.error(errors);
-        this.isLoading = true;
+        this.isLoading = false;
       },
     );
   }

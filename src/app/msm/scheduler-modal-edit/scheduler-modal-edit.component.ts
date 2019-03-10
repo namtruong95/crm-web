@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
-import { SaleActivity } from 'models/sale-activity';
+import { CustomerSaleActivity } from 'models/customer-sale-activity';
 import { Customer } from 'models/customer';
 import { CustomerService } from 'shared/services/customer.service';
 import { Subject } from 'rxjs/Subject';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { distinctUntilChanged, debounceTime, switchMap, tap, catchError } from 'rxjs/operators';
 import { NotifyService } from 'shared/utils/notify.service';
 import { ActionOfSale } from 'constants/action-of-sale';
-import { SaleActivityService } from 'shared/services/sale-activity.service';
+import { CustomerSaleActivityService } from 'shared/services/customer-sale-activity.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { CustomerClassification } from 'models/customer-classification';
@@ -27,7 +27,7 @@ import { UserService } from 'shared/services/user.service';
 export class SchedulerModalEditComponent implements OnInit {
   public DATEPICKER_CONFIG = DATEPICKER_CONFIG;
   public staffs: User[] = [];
-  public scheduler: SaleActivity = new SaleActivity();
+  public scheduler: CustomerSaleActivity = new CustomerSaleActivity();
   public isLoading = false;
   public isLoadingStaff = false;
   public isLoadingCusotmer = false;
@@ -44,7 +44,7 @@ export class SchedulerModalEditComponent implements OnInit {
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
     private _customerSv: CustomerService,
-    private _saleSactivitySv: SaleActivityService,
+    private _customerSaleActivitySv: CustomerSaleActivityService,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _customerClassificationSv: CustomerClassificationService,
@@ -52,7 +52,7 @@ export class SchedulerModalEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._searchCustomers();
+    this._initSearchCustomers();
     this._typeOfContact();
     this._getStaffs();
   }
@@ -60,7 +60,7 @@ export class SchedulerModalEditComponent implements OnInit {
   private _getStaffs() {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsersInBranch().subscribe(
       (res) => {
         this.staffs = res;
         this.isLoadingStaff = false;
@@ -99,7 +99,7 @@ export class SchedulerModalEditComponent implements OnInit {
     }
     // call api update scheduler
     this.isLoading = true;
-    this._saleSactivitySv.updateSaleActivities(this.scheduler.id, this.scheduler.toJSON()).subscribe(
+    this._customerSaleActivitySv.updateSaleActivities(this.scheduler.id, this.scheduler.toJSON()).subscribe(
       (res) => {
         this._emitter.publishData({
           type: EMITTER_TYPE.UPDATE_SALE_ACTIVITY,
@@ -120,22 +120,36 @@ export class SchedulerModalEditComponent implements OnInit {
     this._bsModalRef.hide();
   }
 
-  private _searchCustomers() {
+  private _initSearchCustomers() {
+    this._customerSv
+      .filterCustomers({
+        page: 0,
+        size: 100,
+        sort: 'asc',
+        column: 'id',
+      })
+      .subscribe((res) => {
+        this._searchCustomers(res.customerList);
+      });
+  }
+
+  private _searchCustomers(customers: Customer[]) {
     this.customers = concat(
-      of([]), // default items
+      of(customers), // default items
       this.customerInput$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.isLoadingCusotmer = true)),
         switchMap((term) =>
           this._customerSv
-            .searchCustomers({
+            .filterCustomers({
               page: 0,
               size: 100,
               sort: 'asc',
               column: 'id',
-              txtSearch: term,
+              txtSearch: term || '',
             })
+            .map((res) => res.customerList)
             .pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.isLoadingCusotmer = false)),

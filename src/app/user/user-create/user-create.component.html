@@ -91,23 +91,23 @@
       <div class="form-group">
         <label for="role">Branch <i class="required">&#40;*&#41;</i></label>
         <ng-select
-          [items]="branchs"
+          [items]="branches"
           class="text-left"
           [closeOnSelect]="true"
           [clearable]="true"
           [loading]="isLoadingBranch"
           placeholder="please select branch"
           [searchable]="false"
-          name="branchs"
+          name="branches"
           [(ngModel)]="user.branchId"
-          #Role="ngModel"
+          #Branch="ngModel"
           bindLabel="name"
           bindValue="id"
           required>
         </ng-select>
 
         <div class="invalid-feedback"
-          *ngIf="Role.errors?.required">
+          *ngIf="Branch.errors?.required">
           Please select branch
         </div>
       </div>

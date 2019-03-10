@@ -7,7 +7,7 @@ import { Deserializable } from 'shared/interfaces/deserializable';
 
 interface CustomerCareActivityInterface extends BaseModelInterface {
   customer: Customer;
-  staff: User;
+  assignedStaff: User;
   date: any;
   dateBinding: Date;
   reason: string;
@@ -16,20 +16,11 @@ interface CustomerCareActivityInterface extends BaseModelInterface {
   giftPrice: string;
   dateActivity: string;
   dateActivityFormat: string;
-  staffId: number;
-  staffMail: string;
-  saleCare: string;
+  assignedStaffId: number;
 }
 
 export class CustomerCareActivity extends BaseModel implements Deserializable<CustomerCareActivity> {
-  private _customer: Customer;
-  public get customer(): Customer {
-    return this._customer;
-  }
-  public set customer(v: Customer) {
-    this._customer = v;
-  }
-
+  customer: Customer;
   get customerName(): string {
     return this.customer ? this.customer.customerName : null;
   }
@@ -43,16 +34,10 @@ export class CustomerCareActivity extends BaseModel implements Deserializable<Cu
     return this.customer ? this.customer.position : null;
   }
 
-  private _staff: User;
-  public get staff(): User {
-    return this._staff;
-  }
-  public set staff(v: User) {
-    this._staff = v;
-  }
+  assignedStaff: User;
 
   public get staffName(): string {
-    return this.staff ? this.staff.fullName : null;
+    return this.assignedStaff ? this.assignedStaff.fullName : null;
   }
 
   date: any;
@@ -94,10 +79,14 @@ export class CustomerCareActivity extends BaseModel implements Deserializable<Cu
 
     this.date = new Date();
     this.dateBinding = new Date();
-    this.staff = new User();
+    this.assignedStaff = new User();
   }
 
   deserialize(input: Partial<CustomerCareActivityInterface>): CustomerCareActivity {
+    if (!input) {
+      return;
+    }
+    super.deserialize(input);
     Object.assign(this, input);
 
     if (input.dateActivity) {
@@ -106,12 +95,8 @@ export class CustomerCareActivity extends BaseModel implements Deserializable<Cu
     }
 
     this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
-
-    this.staff = new User().deserialize({
-      id: input.staffId,
-      email: input.staffMail,
-      fullName: input.saleCare,
-    });
+    this.assignedStaff =
+      input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
 
     this.giftPrice = (+input.giftPrice).format();
     return this;
@@ -125,8 +110,7 @@ export class CustomerCareActivity extends BaseModel implements Deserializable<Cu
       reason: this.reason || null,
       giftPrice: this.giftPrice.toNumber() || 0,
       status: this.status || null,
-      saleCare: this.staff ? this.staff.fullName : null,
-      staffId: this.staff ? this.staff.id : null,
+      assignedStaffId: this.assignedStaff ? this.assignedStaff.id : null,
     };
   }
 }

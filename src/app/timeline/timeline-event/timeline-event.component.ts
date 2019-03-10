@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SaleActivity2 } from 'models/sale-activity-2';
+import { SaleActivity } from 'models/sale-activity';
 
 @Component({
   selector: 'app-timeline-event',
@@ -8,7 +8,7 @@ import { SaleActivity2 } from 'models/sale-activity-2';
 })
 export class TimelineEventComponent implements OnInit {
   @Input('event')
-  public event: SaleActivity2;
+  public event: SaleActivity;
 
   constructor() {}
 
