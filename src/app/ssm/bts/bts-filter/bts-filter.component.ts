@@ -210,6 +210,6 @@ export class BtsFilterComponent implements OnInit {
   }
 
   public downloadTemplate() {
-    Helpers.downloadFileFromUri('/assets/Template_BTS_v1.0.0.xlsx', 'Template BTS.xlsx');
+    Helpers.downloadFileFromUri('/assets/Template_BTS_v1.0.1.xlsx', 'Template BTS.xlsx');
   }
 }
