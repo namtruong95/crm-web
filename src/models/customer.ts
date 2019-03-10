@@ -6,6 +6,9 @@ import { Marker } from 'interfaces/maker';
 import { User } from './user';
 import { BaseModelInterface, BaseModel } from './base.model';
 import { Deserializable } from 'shared/interfaces/deserializable';
+import { Branch } from './branch';
+import { District } from './district';
+import { Township } from './township';
 
 interface CustomerInterface extends BaseModelInterface {
   customerName: string;
@@ -30,8 +33,11 @@ interface CustomerInterface extends BaseModelInterface {
   typeOfSaleId: number;
   assignedStaff: User;
   branchId: number;
+  branch: Branch;
   districtId: number;
+  district: District;
   townshipId: number;
+  township: Township;
 }
 
 export class Customer extends BaseModel implements Deserializable<Customer> {
@@ -138,8 +144,11 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
   }
 
   branchId: number;
-  townshipId: number;
+  branch: Branch;
   districtId: number;
+  district: District;
+  townshipId: number;
+  township: Township;
 
   constructor() {
     super();
@@ -153,6 +162,10 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
   }
 
   deserialize(input: Partial<CustomerInterface>): Customer {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
 
     Object.assign(this, input);
@@ -181,6 +194,10 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
 
     this.assignedStaff =
       input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
+
+    this.branch = input.branch instanceof Branch ? input.branch : new Branch().deserialize(input.branch);
+    this.district = input.district instanceof District ? input.district : new District().deserialize(input.district);
+    this.township = input.township instanceof Township ? input.township : new Township().deserialize(input.township);
 
     return this;
   }

@@ -91,40 +91,80 @@
 
       <div class="col-lg-6 col-md-12">
         <div class="form-group">
-          <label for="state">State/Region <i class="required">&#40;*&#41;</i></label>
-          <input type="text" id="state"
-            autocomplete="new-state"
-            class="form-control"
-            name="state"
-            [ngClass]="{ 'is-invalid': State.dirty && State.errors }"
-            #State="ngModel"
-            required
-            placeholder="please enter state/region"
-            [(ngModel)]="bts.state">
+          <label for="Region">State/Region <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="branches"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingBranch"
+            placeholder="please select state/region"
+            [searchable]="false"
+            name="branches"
+            [(ngModel)]="bts.branchId"
+            (ngModelChange)="getDistrictList()"
+            #Region="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
 
           <div class="invalid-feedback"
-            *ngIf="State.errors?.required">
-            Please enter state/region
+            *ngIf="Region.errors?.required">
+            Please select state/region
           </div>
         </div>
       </div>
 
       <div class="col-lg-6 col-md-12">
         <div class="form-group">
-          <label for="townShip">Township <i class="required">&#40;*&#41;</i></label>
-          <input type="text" id="townShip"
-            autocomplete="new-townShip"
-            class="form-control"
-            name="townShip"
-            [ngClass]="{ 'is-invalid': TownShip.dirty && TownShip.errors }"
-            #TownShip="ngModel"
-            required
-            placeholder="please enter township"
-            [(ngModel)]="bts.townShip">
+          <label for="District">District <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="districts"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingDistrict"
+            placeholder="please select district"
+            [searchable]="false"
+            name="districts"
+            [(ngModel)]="bts.districtId"
+            (ngModelChange)="getTownshipList()"
+            #District="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
 
           <div class="invalid-feedback"
-            *ngIf="TownShip.errors?.required">
-            Please enter township
+            *ngIf="District.errors?.required">
+            Please select district
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="role">Township <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="townships"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingTownship"
+            placeholder="please select township"
+            [searchable]="false"
+            name="townships"
+            [(ngModel)]="bts.townshipId"
+            #Role="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="Role.errors?.required">
+            Please select township
           </div>
         </div>
       </div>

@@ -97,6 +97,9 @@ export class Policy extends BaseModel implements Deserializable<Policy> {
   }
 
   deserialize(input: Partial<PolicyInterface>): Policy {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
 

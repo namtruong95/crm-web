@@ -12,6 +12,9 @@ export class Folder extends BaseModel implements Deserializable<Folder> {
   }
 
   deserialize(input: Partial<FolderInterface>): Folder {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

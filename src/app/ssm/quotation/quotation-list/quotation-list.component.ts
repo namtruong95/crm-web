@@ -1,5 +1,5 @@
 import { Quotation } from 'models/quotation';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QueryBuilder } from 'shared/utils/query-builder';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -26,7 +26,9 @@ interface OrderQuotation {
   templateUrl: './quotation-list.component.html',
   styleUrls: ['./quotation-list.component.scss'],
 })
-export class QuotationListComponent implements OnInit {
+export class QuotationListComponent implements OnInit, OnDestroy {
+  public isLoadingExportPdf = false;
+
   public query: QueryBuilder = new QueryBuilder();
   public quotationList: Quotation[] = [];
 
@@ -54,6 +56,10 @@ export class QuotationListComponent implements OnInit {
   ngOnInit() {
     this._filterQuotations();
     this._onEventEmitter();
+  }
+
+  ngOnDestroy() {
+    this._subscriber.unsubscribe();
   }
 
   private _onEventEmitter() {
@@ -166,12 +172,15 @@ export class QuotationListComponent implements OnInit {
     const params: any = {
       quotationId: id,
     };
+    this.isLoadingExportPdf = true;
 
     this._quotationSv.exportQuotation(params).subscribe(
       (res) => {
         saveAs(res, `quotation-${moment().unix()}.pdf`);
+        this.isLoadingExportPdf = false;
       },
       (errors) => {
+        this.isLoadingExportPdf = false;
         this._notify.error(errors);
       },
     );

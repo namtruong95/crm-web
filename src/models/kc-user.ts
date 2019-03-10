@@ -18,6 +18,9 @@ export class KeyCloakUser implements Deserializable<KeyCloakUser> {
   fullName: string;
 
   deserialize(input: Partial<KeyCloakUserInterface>): KeyCloakUser {
+    if (!input) {
+      return;
+    }
     Object.assign(this, input);
     this.fullName = input.fullName || `${input.firstName || ''} ${input.lastName || ''}`.trim() || input.username;
     return this;

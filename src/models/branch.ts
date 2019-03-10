@@ -12,6 +12,9 @@ export class Branch extends BaseModel implements Deserializable<Branch> {
   }
 
   deserialize(input: Partial<BranchInterface>): Branch {
+    if (!input) {
+      return;
+    }
     super.deserialize(input);
     Object.assign(this, input);
     return this;

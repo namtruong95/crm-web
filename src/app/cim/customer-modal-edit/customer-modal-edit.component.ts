@@ -220,6 +220,12 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
   }
 
   public getDistrictList() {
+    if (!this.customer.branchId) {
+      this.districts = [];
+      this.customer.districtId = null;
+      return;
+    }
+
     this.isLoadingDistrict = true;
     const opts = {
       branchId: this.customer.branchId,
@@ -238,6 +244,12 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
   }
 
   public getTownshipList() {
+    if (!this.customer.districtId) {
+      this.townships = [];
+      this.customer.townshipId = null;
+      return;
+    }
+
     this.isLoadingTownship = true;
     const opts = {
       districtId: this.customer.districtId,
@@ -246,7 +258,6 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._branchSv.getTownshipList(opts).subscribe(
       (res) => {
         this.townships = res.townships;
-
         this.isLoadingTownship = false;
       },
       (errors) => {

@@ -24,6 +24,8 @@ import * as moment from 'moment';
   styleUrls: ['./proposal-filter.component.scss'],
 })
 export class ProposalFilterComponent implements OnInit {
+  public isLoading = false;
+
   public filterTerm: any = {
     customer: null,
     typeOfService: null,
@@ -194,11 +196,15 @@ export class ProposalFilterComponent implements OnInit {
       params.serviceTermId = this.filterTerm.serviceTerm.id;
     }
 
+    this.isLoading = true;
+
     this._proposalSv.exportProposal(params).subscribe(
       (res) => {
+        this.isLoading = false;
         saveAs(res, `proposal-${moment().unix()}.pdf`);
       },
       (errors) => {
+        this.isLoading = false;
         this._notify.error(errors);
       },
     );

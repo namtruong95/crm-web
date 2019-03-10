@@ -104,6 +104,10 @@ export class SaleActivity extends BaseModel implements Deserializable<SaleActivi
   }
 
   deserialize(input: Partial<SaleActivityInterface>): SaleActivity {
+    if (!input) {
+      return;
+    }
+
     super.deserialize(input);
     Object.assign(this, input);
 

@@ -2,15 +2,31 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Bts } from 'models/bts';
 import { DownloadService } from './download.service';
+import { RootScopeService } from 'app/services/root-scope.service';
+import { RoleService } from 'app/role.service';
+import { Roles } from 'app/guard/roles';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BtsService {
-  constructor(private _api: ApiService, private _download: DownloadService) {}
+  constructor(
+    private _api: ApiService,
+    private _download: DownloadService,
+    private _rootScope: RootScopeService,
+    private _role: RoleService,
+  ) {}
 
-  public filterBTS(params?: any) {
-    return this._api.get(`bts/filters`, params).map((res) => {
+  public filterBTS(opts: any = {}) {
+    const _opts: any = {
+      role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+    };
+
+    if (this._role.is_branch_director || this._role.is_branch_sale_staff || this._role.is_hq_sale_staff) {
+      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+    }
+
+    return this._api.get(`bts/filters`, { ..._opts, ...opts }).map((res) => {
       res.data.btsList = res.data.btsList.map((item) => new Bts().deserialize(item));
       return res.data;
     });
@@ -35,7 +51,15 @@ export class BtsService {
     });
   }
 
-  public exportBts(params?: any) {
-    return this._download.get(`bts/export`, params);
+  public exportBts(opts: any = {}) {
+    const _opts: any = {
+      role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+    };
+
+    if (this._role.is_branch_director || this._role.is_branch_sale_staff || this._role.is_hq_sale_staff) {
+      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+    }
+
+    return this._download.get(`bts/export`, { ..._opts, ...opts });
   }
 }
