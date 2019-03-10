@@ -234,7 +234,6 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._branchSv.getDistrictList(opts).subscribe(
       (res) => {
         this.districts = res.districts;
-        this.customer.districtId = null;
         this.isLoadingDistrict = false;
       },
       (errors) => {
@@ -259,7 +258,6 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._branchSv.getTownshipList(opts).subscribe(
       (res) => {
         this.townships = res.townships;
-        this.customer.townshipId = null;
         this.isLoadingTownship = false;
       },
       (errors) => {
