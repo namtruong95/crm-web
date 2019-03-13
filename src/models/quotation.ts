@@ -21,9 +21,7 @@ interface QuotationInterface extends BaseModelInterface {
   timeForProvide: number;
   serviceTerm: CustomerClassification;
   bts: Bts;
-  staff: User;
-  saleStaff: string;
-  staffMail: string;
+  assignedStaff: User;
   staffId: number;
 }
 
@@ -148,15 +146,9 @@ export class Quotation extends BaseModel implements Deserializable<Quotation> {
     this._reduceOtc = +v;
   }
 
-  private _staff: User;
-  public get staff(): User {
-    return this._staff;
-  }
-  public set staff(v: User) {
-    this._staff = v;
-  }
+  assignedStaff: User;
   public get staffName(): string {
-    return this.staff ? this.staff.fullName : '';
+    return this.assignedStaff ? this.assignedStaff.fullName : '';
   }
 
   private _serviceTerm: CustomerClassification;
@@ -217,7 +209,7 @@ export class Quotation extends BaseModel implements Deserializable<Quotation> {
     this.serviceTerm = new CustomerClassification();
     this.typeOfService = new CustomerClassification();
     this.bts = new Bts();
-    this.staff = new User();
+    this.assignedStaff = new User();
   }
 
   deserialize(input: Partial<QuotationInterface>): Quotation {
@@ -230,11 +222,8 @@ export class Quotation extends BaseModel implements Deserializable<Quotation> {
     this.otc = (+input.otc).format();
     this.mrc = (+input.mrc).format();
 
-    this.staff = new User().deserialize({
-      fullName: input.saleStaff,
-      email: input.staffMail,
-      id: input.staffId,
-    });
+    this.assignedStaff =
+      input.assignedStaff instanceof User ? input.assignedStaff : new User().deserialize(input.assignedStaff);
 
     this.customer = input.customer instanceof Customer ? input.customer : new Customer().deserialize(input.customer);
 
@@ -268,9 +257,7 @@ export class Quotation extends BaseModel implements Deserializable<Quotation> {
       realPrice: this.totalTax || null,
       timeForHire: this.timeForHire || null,
       timeForProvide: this.timeForProvide || null,
-      saleStaff: this.staff ? this.staff.fullName : null,
-      staffMail: this.staff ? this.staff.email : null,
-      staffId: this.staff ? this.staff.id : null,
+      staffId: this.assignedStaff ? this.assignedStaff.id : null,
       btsId: this.bts ? this.bts.id : null,
     };
   }

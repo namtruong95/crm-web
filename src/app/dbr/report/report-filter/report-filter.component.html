@@ -49,6 +49,7 @@
           [searchable]="false"
           name="branches"
           [(ngModel)]="filterTerm.branchId"
+          (ngModelChange)="changeBranch()"
           #Region="ngModel"
           bindLabel="name"
           bindValue="id">
@@ -56,7 +57,7 @@
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-6 form-group">
+    <div class="col-lg-3 col-md-6 form-group" *ngIf="roleAccessStaff">
       <label for="Name">Staff</label>
       <ng-select
         [items]="staffs"

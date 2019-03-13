@@ -45,6 +45,10 @@ export class ReportFilterComponent implements OnInit {
     return this._role.is_admin || this._role.is_sale_director;
   }
 
+  get roleAccessStaff(): boolean {
+    return this.roleAccess || this._role.is_branch_director;
+  }
+
   constructor(
     private _notify: NotifyService,
     private _role: RoleService,
@@ -73,19 +77,30 @@ export class ReportFilterComponent implements OnInit {
     }
   }
 
-  private _getStaffs() {
-    this.isLoadingStaff = true;
+  changeBranch() {
+    this._getStaffs();
+  }
 
-    this._userSv.getAllUsersInBranch().subscribe(
-      (res) => {
-        this.staffs = res;
-        this.isLoadingStaff = false;
-      },
-      (errors) => {
-        this.isLoadingStaff = false;
-        this._notify.error(errors);
-      },
-    );
+  private _getStaffs() {
+    if (this.roleAccessStaff) {
+      this.isLoadingStaff = true;
+      const opts: any = {};
+
+      if (this.filterTerm.branchId) {
+        opts.branchId = this.filterTerm.branchId;
+      }
+
+      this._userSv.getAllUsersInBranch(opts).subscribe(
+        (res) => {
+          this.staffs = res;
+          this.isLoadingStaff = false;
+        },
+        (errors) => {
+          this.isLoadingStaff = false;
+          this._notify.error(errors);
+        },
+      );
+    }
   }
 
   public exportReport() {
@@ -97,10 +112,10 @@ export class ReportFilterComponent implements OnInit {
     const params: any = {};
 
     if (this.filterTerm.dateStart) {
-      params.datestart = moment(this.filterTerm.dateStart).format('YYYY-MM-DD');
+      params.dateFrom = moment(this.filterTerm.dateStart).format('YYYY-MM-DD');
     }
     if (this.filterTerm.dateEnd) {
-      params.dateend = moment(this.filterTerm.dateEnd).format('YYYY-MM-DD');
+      params.dateTo = moment(this.filterTerm.dateEnd).format('YYYY-MM-DD');
     }
     if (this.filterTerm.assignedStaff) {
       params.assignedStaffId = this.filterTerm.assignedStaff.id;
@@ -110,7 +125,5 @@ export class ReportFilterComponent implements OnInit {
     }
 
     this.changeFilter.emit(params);
-
-    // emitter event filter
   }
 }
