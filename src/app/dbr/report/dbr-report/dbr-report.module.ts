@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DbrReportComponent } from './dbr-report.component';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ReportService } from 'shared/services/report.service';
 
 const routes: Routes = [
   {
@@ -31,5 +32,6 @@ const routes: Routes = [
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes), FormsModule],
   declarations: [DbrReportComponent],
+  providers: [ReportService],
 })
 export class DbrReportModule {}
