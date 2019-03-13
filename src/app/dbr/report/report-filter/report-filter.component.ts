@@ -90,7 +90,7 @@ export class ReportFilterComponent implements OnInit {
         opts.branchId = this.filterTerm.branchId;
       }
 
-      this._userSv.getAllUsersInBranch(opts).subscribe(
+      this._userSv.getAllUsers(opts).subscribe(
         (res) => {
           this.staffs = res;
           this.isLoadingStaff = false;
