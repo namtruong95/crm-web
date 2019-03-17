@@ -29,13 +29,15 @@ export class UserService {
 
   public getAllUsers(opts: any = {}) {
     if (this._role.is_admin || this._role.is_branch_director || this._role.is_sale_director) {
-      const _opts = {
+      const _opts: any = {
         role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
-        branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
-        ...opts,
       };
 
-      return this._api.get(`users/get-all`, _opts).map((res) => {
+      if (this._role.is_branch_director) {
+        _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+      }
+
+      return this._api.get(`users/get-all`, { ..._opts, ...opts }).map((res) => {
         return res.data.listUsers.map((item) => new User().deserialize(item));
       });
     }

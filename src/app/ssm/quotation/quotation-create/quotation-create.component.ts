@@ -86,7 +86,7 @@ export class QuotationCreateComponent implements OnInit {
     this.quotation.customer = null;
     this.quotation.serviceTerm = null;
     this.quotation.typeOfService = null;
-    this.quotation.staff = null;
+    this.quotation.assignedStaff = null;
 
     this._initSearchCustomers();
     this._getServicesterm();
@@ -225,6 +225,7 @@ export class QuotationCreateComponent implements OnInit {
           this.quotation.customer = null;
           this.quotation.serviceTerm = null;
           this.quotation.typeOfService = null;
+          this.quotation.assignedStaff = null;
         }, 0);
       },
     );
