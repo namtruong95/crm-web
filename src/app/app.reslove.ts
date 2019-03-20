@@ -7,6 +7,7 @@ import { Roles } from './guard/roles';
 import { RootScopeService } from './services/root-scope.service';
 import { User } from 'models/user';
 import { Helpers } from 'shared/utils/helpers';
+import { NotifyService } from 'shared/utils/notify.service';
 
 @Injectable()
 export class AppResolve implements Resolve<any> {
@@ -15,6 +16,7 @@ export class AppResolve implements Resolve<any> {
     private _userSv: UserService,
     private _rootScope: RootScopeService,
     private _router: Router,
+    private _notify: NotifyService,
   ) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
@@ -36,6 +38,7 @@ export class AppResolve implements Resolve<any> {
     } catch (errors) {
       this._router.navigate(['/404']);
       Helpers.setLoading(false);
+      this._notify.warning("this user doesn't exists!");
       return;
     }
   }
