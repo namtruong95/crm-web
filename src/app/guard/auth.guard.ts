@@ -22,7 +22,7 @@ export class AuthGuard extends KeycloakAuthGuard {
         return resolve(true);
       } else {
         if (!this.roles || this.roles.length === 0) {
-          this.router.navigate(['/404']);
+          this.router.navigate(['/']);
           return resolve(false);
         }
 
@@ -31,7 +31,7 @@ export class AuthGuard extends KeycloakAuthGuard {
             return resolve(true);
           }
         }
-        this.router.navigate(['/404']);
+        this.router.navigate(['/']);
         return resolve(false);
       }
     });
