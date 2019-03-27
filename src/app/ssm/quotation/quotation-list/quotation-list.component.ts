@@ -114,6 +114,7 @@ export class QuotationListComponent implements OnInit, OnDestroy {
 
     this._openModal(QuotationModalDeleteComponent, config);
   }
+
   public addOrder(columnName: string) {
     const index = this._orderArr.findIndex((item) => item.columnName === columnName);
 

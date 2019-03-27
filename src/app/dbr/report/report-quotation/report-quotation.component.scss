@@ -1,0 +1,15 @@
+.quotation-table.table {
+  thead th,
+  tbody td {
+    min-width: 200px;
+
+    &:first-child {
+      max-width: 150px;
+    }
+
+    &:nth-child(12),
+    &:nth-child(13) {
+      min-width: 230px;
+    }
+  }
+}
