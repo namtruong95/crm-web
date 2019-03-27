@@ -16,6 +16,8 @@ import { UserService } from 'shared/services/user.service';
 export class ReportFilterComponent implements OnInit {
   @Output()
   changeFilter: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  changeTermPreviewReport: EventEmitter<any> = new EventEmitter<any>();
 
   public filterTerm = {
     dateStart: null,
@@ -23,6 +25,7 @@ export class ReportFilterComponent implements OnInit {
     branchId: null,
     assignedStaff: null,
   };
+
   public get isEndAfterFrom(): boolean {
     return (
       !!this.filterTerm.dateStart &&
@@ -59,6 +62,7 @@ export class ReportFilterComponent implements OnInit {
   ngOnInit() {
     this._getBranchList();
     this._getStaffs();
+    this.previewReport();
   }
 
   private _getBranchList() {
@@ -103,12 +107,7 @@ export class ReportFilterComponent implements OnInit {
     }
   }
 
-  public exportReport() {
-    if (this.isEndAfterFrom) {
-      this._notify.warning('Please select the end time after the start time');
-      return;
-    }
-
+  private _filterTermToJSON() {
     const params: any = {};
 
     if (this.filterTerm.dateStart) {
@@ -124,6 +123,24 @@ export class ReportFilterComponent implements OnInit {
       params.branchId = this.filterTerm.branchId;
     }
 
-    this.changeFilter.emit(params);
+    return params;
+  }
+
+  public exportReport() {
+    if (this.isEndAfterFrom) {
+      this._notify.warning('Please select the end time after the start time');
+      return;
+    }
+
+    this.changeFilter.emit(this._filterTermToJSON());
+  }
+
+  public previewReport() {
+    if (this.isEndAfterFrom) {
+      this._notify.warning('Please select the end time after the start time');
+      return;
+    }
+
+    this.changeTermPreviewReport.emit(this._filterTermToJSON());
   }
 }
