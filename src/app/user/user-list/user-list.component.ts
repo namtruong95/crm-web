@@ -104,7 +104,6 @@ export class UserListComponent implements OnInit, OnDestroy {
     const subscribe = this._modalService.onHidden.subscribe((reason: string) => {
       subscribe.unsubscribe();
       if (reason === 'reload') {
-        this.query.resetQuery();
         this._getUsers();
       }
     });
