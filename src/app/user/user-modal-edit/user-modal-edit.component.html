@@ -1,0 +1,155 @@
+<div class="modal-header">
+  <h5 class="modal-title">Update User</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="modal-body user-edit">
+  <form #UserEdit="ngForm" novalidate>
+    <div class="row mb-4">
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="userName">User Name</label>
+          <input type="text" id="userName"
+            autocomplete="new-userName"
+            class="form-control form-control-plaintext"
+            [ngClass]="{ 'is-invalid': UserName.dirty && UserName.errors }"
+            name="userName"
+            placeholder="please enter user name"
+            [(ngModel)]="user.userName"
+            #UserName="ngModel"
+            required
+            readonly
+            [pattern]="rules.userName">
+
+          <div class="invalid-feedback"
+            *ngIf="UserName.errors?.required">
+            Please enter user name
+          </div>
+
+          <div class="invalid-feedback"
+            *ngIf="UserName.errors?.pattern">
+            Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="role">Role</label>
+          <ng-select
+            [items]="ROLES"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="false"
+            placeholder="please select role"
+            [searchable]="false"
+            name="role"
+            [(ngModel)]="user.role"
+            #Role="ngModel"
+            bindLabel="label"
+            bindValue="value"
+            required
+            readonly
+            disabled>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="Role.errors?.required">
+            Please select role
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="fullName">Full Name <i class="required">&#40;*&#41;</i></label>
+          <input type="text" id="fullName"
+            autocomplete="new-fullName"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': FullName.dirty && FullName.errors }"
+            name="fullName"
+            placeholder="please enter full name"
+            [(ngModel)]="user.fullName"
+            #FullName="ngModel"
+            required>
+
+          <div class="invalid-feedback"
+            *ngIf="FullName.errors?.required">
+            Please enter full name
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="role">Branch <i class="required">&#40;*&#41;</i></label>
+          <ng-select
+            [items]="branches"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingBranch"
+            placeholder="please select branch"
+            [searchable]="false"
+            name="branches"
+            [(ngModel)]="user.branchId"
+            #Branch="ngModel"
+            bindLabel="name"
+            bindValue="id"
+            required>
+          </ng-select>
+
+          <div class="invalid-feedback"
+            *ngIf="Branch.errors?.required">
+            Please select branch
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="EmailEdit">Email</label>
+          <input type="text" id="EmailEdit"
+            autocomplete="new-email"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': EmailEdit.dirty && EmailEdit.errors }"
+            name="email_edit"
+            placeholder="please enter email"
+            [(ngModel)]="user.email"
+            #EmailEdit="ngModel"
+            [pattern]="rules.email">
+
+          <div class="invalid-feedback"
+            *ngIf="EmailEdit.errors?.pattern">
+            The email address format is incorrect
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="text" id="phone"
+            autocomplete="new-phone"
+            class="form-control"
+            name="phone"
+            placeholder="please enter phone"
+            [(ngModel)]="user.phone">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group text-center">
+      <button type="button" class="btn btn-secondary w-25 mr-2" (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-primary w-25 ml-2"
+        (click)="updateUser()"
+        [disabled]="isLoading || UserEdit.form.invalid">
+        OK
+        <i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+      </button>
+    </div>
+  </form>
+</div>

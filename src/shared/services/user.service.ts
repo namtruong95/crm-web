@@ -65,6 +65,10 @@ export class UserService {
     return this._api.post(`users`, data);
   }
 
+  public updateUser(id: number, data: any) {
+    return this._api.put(`users/${id}`, data);
+  }
+
   public kcCreateUser(data: any) {
     return this._kcApi.post(`users`, data);
   }
