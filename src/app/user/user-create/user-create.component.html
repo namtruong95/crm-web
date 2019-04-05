@@ -46,47 +46,6 @@
       </div>
     </div>
 
-
-    <div class="col-lg-6 col-md-12">
-      <div class="form-group">
-        <label for="FirstName">First Name <i class="required">&#40;*&#41;</i></label>
-        <input type="text" id="FirstName"
-          autocomplete="new-firstName"
-          class="form-control"
-          [ngClass]="{ 'is-invalid': FirstName.dirty && FirstName.errors }"
-          name="firstName"
-          placeholder="please enter first name"
-          [(ngModel)]="user.firstName"
-          #FirstName="ngModel"
-          required>
-
-        <div class="invalid-feedback"
-          *ngIf="FirstName.errors?.required">
-          Please enter first name
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-6 col-md-12">
-      <div class="form-group">
-        <label for="LastName">Last Name <i class="required">&#40;*&#41;</i></label>
-        <input type="text" id="LastName"
-          autocomplete="new-LastName"
-          class="form-control"
-          [ngClass]="{ 'is-invalid': LastName.dirty && LastName.errors }"
-          name="lastName"
-          placeholder="please enter last name"
-          [(ngModel)]="user.lastName"
-          #LastName="ngModel"
-          required>
-
-        <div class="invalid-feedback"
-          *ngIf="LastName.errors?.required">
-          Please enter last name
-        </div>
-      </div>
-    </div>
-
     <div class="col-lg-6 col-md-12">
       <div class="form-group">
         <label for="role">Branch <i class="required">&#40;*&#41;</i></label>
@@ -156,18 +115,6 @@
           *ngIf="Role.errors?.required">
           Please select role
         </div>
-      </div>
-    </div>
-
-    <div class="col-lg-6 col-md-12">
-      <div class="form-group">
-        <label for="Department">Department</label>
-        <input type="text" id="Department"
-          autocomplete="new-department"
-          class="form-control"
-          name="department"
-          placeholder="please enter department"
-          [(ngModel)]="user.department">
       </div>
     </div>
 

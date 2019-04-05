@@ -4,7 +4,8 @@
     min-width: 200px;
 
     &:first-child {
-      max-width: 150px;
+      min-width: 100px;
+      max-width: 100px;
     }
   }
 }

@@ -3,7 +3,7 @@
   <table class="table user-table">
     <thead>
       <tr>
-        <!-- <th>Action</th> -->
+        <th>Action</th>
         <th class="cursor-pointer" (click)="addOrder('userName')">
           User Name
           <i class="fa {{ getClassOrder('userName') }}"></i>
@@ -15,10 +15,6 @@
         <th class="cursor-pointer" (click)="addOrder('fullName')">
           Full Name
           <i class="fa {{ getClassOrder('fullName') }}"></i>
-        </th>
-        <th class="cursor-pointer" (click)="addOrder('department')">
-          Department
-          <i class="fa {{ getClassOrder('department') }}"></i>
         </th>
         <th class="cursor-pointer" (click)="addOrder('email')">
           Email
@@ -32,14 +28,12 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of userList;">
-        <!-- <td>
+        <td>
           <button type="button" class="mr-1 btn btn-info" (click)="editUser(user)"><i class="fa fa-edit"></i></button>
-          <button type="button" class="mr-1 btn btn-danger" (click)="removeUser(user)"><i class="fa fa-trash"></i></button>
-        </td> -->
+        </td>
         <td>{{ user.userName }}</td>
         <td>{{ user.role }}</td>
         <td>{{ user.fullName }}</td>
-        <td>{{ user.department }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.phone }}</td>
       </tr>

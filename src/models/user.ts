@@ -12,6 +12,7 @@ interface UserInterface extends BaseModelInterface {
   department: string;
   email: string;
   phone: string;
+  phoneNumber: string;
   branchId: number;
 }
 
@@ -70,19 +71,18 @@ export class User extends BaseModel implements Deserializable<User> {
 
     super.deserialize(input);
     Object.assign(this, input);
-
+    if (input.phoneNumber) {
+      this.phone = input.phoneNumber;
+    }
     return this;
   }
 
   public toJSON() {
     return {
       userName: this.userName || null,
-      department: this.department || null,
       role: this.role || null,
       email: this.email || null,
-      phone: this.phone || null,
-      firstName: this.firstName || null,
-      lastName: this.lastName || null,
+      phoneNumber: this.phone || null,
       fullName: this.fullName || null,
       branchId: this.branchId || null,
     };

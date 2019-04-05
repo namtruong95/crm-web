@@ -8,6 +8,8 @@ import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from 'shared/services/user.service';
 import * as orderBy from 'lodash/orderBy';
+import * as cloneDeep from 'lodash/cloneDeep';
+import { UserModalEditComponent } from '../user-modal-edit/user-modal-edit.component';
 
 interface OrderUser {
   columnName: string;
@@ -87,10 +89,22 @@ export class UserListComponent implements OnInit, OnDestroy {
     this._getUsers();
   }
 
+  public editUser(user: User) {
+    const config = {
+      class: 'modal-lg',
+      initialState: {
+        user: cloneDeep(user),
+      },
+    };
+
+    this._openModal(UserModalEditComponent, config);
+  }
+
   private _openModal(comp, config?: ModalOptions) {
     const subscribe = this._modalService.onHidden.subscribe((reason: string) => {
       subscribe.unsubscribe();
       if (reason === 'reload') {
+        this.query.resetQuery();
         this._getUsers();
       }
     });
