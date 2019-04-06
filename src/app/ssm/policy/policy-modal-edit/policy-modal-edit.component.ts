@@ -58,7 +58,6 @@ export class PolicyModalEditComponent implements OnInit {
       size: 1000,
       sort: 'desc',
       column: 'id',
-      folderId: 1,
     };
     this.isLoadingPolicy = true;
     this._manageFileSv.getAllFiles(opts).subscribe(
