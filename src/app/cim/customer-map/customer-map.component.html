@@ -1,21 +1,27 @@
-<agm-map
-  [latitude]="lat"
-  [longitude]="lng"
-  [zoom]="zoom"
-  [disableDoubleClickZoom]="true"
-  [disableDefaultUI]="false"
-  [zoomControl]="true"
-  [gestureHandling]="'coopeative'"
-  (mapClick)="mapClicked($event)">
+<div class="gmap-wrapper">
+  <div class="search-box">
+    <input type="text" name="address" class="form-control" #Address>
+  </div>
 
-  <agm-marker
-    *ngFor="let m of markers; let i = index"
-    (markerClick)="clickedMarker(m, i)"
-    [latitude]="m.lat"
-    [longitude]="m.lng"
-    [label]="m.label"
-    [markerDraggable]="m.draggable"
-    [iconUrl]="m.iconUrl"
-    (dragEnd)="markerDragEnd(m, $event)">
-  </agm-marker>
-</agm-map>
+  <agm-map
+    [latitude]="lat"
+    [longitude]="lng"
+    [zoom]="zoom"
+    [disableDoubleClickZoom]="true"
+    [disableDefaultUI]="false"
+    [zoomControl]="true"
+    [gestureHandling]="'coopeative'"
+    (mapClick)="mapClicked($event)">
+
+    <agm-marker
+      *ngFor="let m of markers; let i = index"
+      (markerClick)="clickedMarker(m, i)"
+      [latitude]="m.lat"
+      [longitude]="m.lng"
+      [label]="m.label"
+      [markerDraggable]="m.draggable"
+      [iconUrl]="m.iconUrl"
+      (dragEnd)="markerDragEnd(m, $event)">
+    </agm-marker>
+  </agm-map>
+</div>

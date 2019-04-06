@@ -13,19 +13,16 @@ import { EMITTER_TYPE } from 'constants/emitter';
 import { CustomerService } from 'shared/services/customer.service';
 import { RegExp } from 'constants/reg-exp';
 
-import { MapsAPILoader } from '@agm/core';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
 import { NgForm } from '@angular/forms';
 
-// @ts-ignore-start
-import {} from 'googlemaps';
 import { Branch } from 'models/branch';
 import { BranchService } from 'shared/services/branch.service';
 import { Township } from 'models/township';
 import { District } from 'models/district';
-// @ts-ignore-end
+import { GmapService } from 'shared/services/gmap.service';
 
 @Component({
   selector: 'app-customer-create',
@@ -33,9 +30,6 @@ import { District } from 'models/district';
   styleUrls: ['./customer-create.component.scss'],
 })
 export class CustomerCreateComponent implements OnInit, OnDestroy {
-  @ViewChild('Address')
-  private _address: ElementRef;
-
   public customer: Customer = new Customer();
 
   // customer types
@@ -80,7 +74,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   public rules = RegExp;
 
   private _subscriber: Subscription;
-  private _geocoder;
   private _isChangeLatLng = false;
 
   constructor(
@@ -89,10 +82,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _customerSv: CustomerService,
-    private _mapsAPILoader: MapsAPILoader,
-    private _ngZone: NgZone,
     private _userSv: UserService,
     private _branchSv: BranchService,
+    private _gmapSv: GmapService,
   ) {
     document.title = 'Mytel | create new customer';
   }
@@ -102,7 +94,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this._getCustomerTypes();
     this._getTypeOfSales();
     this._getTypeOfInvestment();
-    this._initAutoCompleteGmap();
     this._onEventEmitter();
     this._getUsers();
     this._getCatalog();
@@ -115,13 +106,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
   private _onEventEmitter() {
     this._subscriber = this._emitter.caseNumber$.subscribe((data) => {
-      if (data && data.type === EMITTER_TYPE.GMAP_CLICK) {
-        this.customer.latitude = data.data.lat;
-        this.customer.longitude = data.data.lng;
+      if (data && (data.type === EMITTER_TYPE.GMAP_CLICK || data.type === EMITTER_TYPE.GMAP_PLACE_CHANGED)) {
+        if (data.data.mode === 'create') {
+          this.customer.latitude = data.data.lat;
+          this.customer.longitude = data.data.lng;
+        }
 
-        // get address with lat/long
-        this._isChangeLatLng = true;
-        this.findAddressWithLatLng();
+        return;
       }
     });
   }
@@ -148,60 +139,105 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       lat: this.customer.latitude,
       lng: this.customer.longitude,
     };
-    if (!this._geocoder) {
-      this._geocoder = new google.maps.Geocoder();
-    }
 
-    this._geocoder.geocode({ location: data }, (results, status) => {
+    this._gmapSv.findAddressWithLocation(data, (results, status) => {
       this._isChangeLatLng = false;
 
       if (status === 'OK') {
         if (results[0]) {
+          // emit zoom to latlng
           this._emitter.publishData({
-            type: EMITTER_TYPE.GMAP_CHANGE,
-            data: results[0],
-            mode: 'create',
+            type: EMITTER_TYPE.GMAP_ZOOM_TO,
+            data: {
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng(),
+              zoom: 12,
+            },
           });
 
-          this.customer.address = results[0].formatted_address;
-        } else {
-          this._notify.warning('No results found!');
+          return;
         }
+        this._notify.warning('No results found!');
       }
     });
   }
 
-  private _initAutoCompleteGmap() {
-    this._mapsAPILoader.load().then(() => {
-      const autocomplete = new google.maps.places.Autocomplete(this._address.nativeElement, {
-        types: ['address'],
-      });
+  public groupByFn = (item) => item.child.state;
 
-      autocomplete.addListener('place_changed', () => {
-        this._ngZone.run(() => {
-          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-
-          // verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-
-          this.customer.address = place.formatted_address;
-          this.customer.latitude = place.geometry.location.lat();
-          this.customer.longitude = place.geometry.location.lng();
-
-          // emitter to gmap
+  private _findAddressWithAddress(address: string, zoom: number) {
+    this._gmapSv.findAddressWithAddress(address, (results, status) => {
+      if (status === 'OK') {
+        if (results[0]) {
+          // emit zoom to latlng
           this._emitter.publishData({
-            type: EMITTER_TYPE.GMAP_CHANGE,
-            data: place,
-            mode: 'create',
+            type: EMITTER_TYPE.GMAP_ZOOM_TO,
+            data: {
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng(),
+              zoom: zoom,
+            },
           });
-        });
-      });
+
+          return;
+        }
+        this._notify.warning('No results found!');
+      }
     });
   }
 
-  public groupByFn = (item) => item.child.state;
+  public getRegionAndZoomTo() {
+    let address = '';
+
+    const iState = this.branches.findIndex((item) => item.id === this.customer.branchId);
+    if (iState >= 0) {
+      address += `${this.branches[iState].name} State, Myanmar (Burma)`;
+    }
+
+    if (address) {
+      this._findAddressWithAddress(address, 5);
+    }
+  }
+
+  public getDistrictAndZoomTo() {
+    let address = '';
+
+    const iDistrict = this.districts.findIndex((item) => item.id === this.customer.districtId);
+    if (iDistrict >= 0) {
+      address += `${this.districts[iDistrict].name} District`;
+    }
+
+    const iState = this.branches.findIndex((item) => item.id === this.customer.branchId);
+    if (iState >= 0) {
+      address += `, ${this.branches[iState].name} State, Myanmar (Burma)`;
+    }
+
+    if (address) {
+      this._findAddressWithAddress(address, 7);
+    }
+  }
+
+  public getTownshipAndZoomTo() {
+    let address = '';
+
+    const iTownship = this.townships.findIndex((item) => item.id === this.customer.townshipId);
+    if (iTownship >= 0) {
+      address += `${this.townships[iTownship].name}`;
+    }
+
+    const iDistrict = this.districts.findIndex((item) => item.id === this.customer.districtId);
+    if (iDistrict >= 0) {
+      address += `, ${this.districts[iDistrict].name} District`;
+    }
+
+    const iState = this.branches.findIndex((item) => item.id === this.customer.branchId);
+    if (iState >= 0) {
+      address += `, ${this.branches[iState].name} State, Myanmar (Burma)`;
+    }
+
+    if (address) {
+      this._findAddressWithAddress(address, 9);
+    }
+  }
 
   private _getBranchList() {
     this.isLoadingBranch = true;

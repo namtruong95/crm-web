@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Marker } from 'interfaces/maker';
 import { GMAP_DEFAULT } from 'constants/gmap';
+import { MapsAPILoader } from '@agm/core';
 
 @Component({
   selector: 'app-customer-map',
@@ -11,6 +12,9 @@ import { GMAP_DEFAULT } from 'constants/gmap';
   styleUrls: ['./customer-map.component.scss'],
 })
 export class CustomerMapComponent implements OnInit, OnDestroy {
+  @ViewChild('Address')
+  private _address: ElementRef;
+
   @Input('mode')
   private mode: string;
 
@@ -51,7 +55,7 @@ export class CustomerMapComponent implements OnInit, OnDestroy {
 
   private _subscriber: Subscription;
 
-  constructor(private _emitter: EventEmitterService) {}
+  constructor(private _emitter: EventEmitterService, private _mapsAPILoader: MapsAPILoader, private _ngZone: NgZone) {}
 
   ngOnInit() {
     this.markers = [
@@ -64,6 +68,46 @@ export class CustomerMapComponent implements OnInit, OnDestroy {
       },
     ];
     this._onEventEmitter();
+    this._initAutoCompleteGmap();
+  }
+
+  private _initAutoCompleteGmap() {
+    this._mapsAPILoader.load().then(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this._address.nativeElement, {
+        types: ['address'],
+      });
+
+      autocomplete.addListener('place_changed', () => {
+        this._ngZone.run(() => {
+          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          // verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          this.markers = [
+            {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+              draggable: false,
+              label: place.formatted_address,
+              iconUrl: 'https://png.icons8.com/office/30/000000/administrator-male.png',
+            },
+          ];
+
+          // emit lat/lon
+          this._emitter.publishData({
+            type: EMITTER_TYPE.GMAP_PLACE_CHANGED,
+            data: {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+              mode: this.mode,
+            },
+          });
+        });
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -72,19 +116,10 @@ export class CustomerMapComponent implements OnInit, OnDestroy {
 
   private _onEventEmitter() {
     this._subscriber = this._emitter.caseNumber$.subscribe((data) => {
-      if (data && data.type === EMITTER_TYPE.GMAP_CHANGE) {
-        this.lat = data.data.geometry.location.lat();
-        this.lng = data.data.geometry.location.lng();
-        this.zoom = 12;
-        this.markers = [
-          {
-            lat: data.data.geometry.location.lat(),
-            lng: data.data.geometry.location.lng(),
-            label: data.data.formatted_address,
-            draggable: false,
-            iconUrl: 'https://png.icons8.com/office/30/000000/administrator-male.png',
-          },
-        ];
+      if (data && data.type === EMITTER_TYPE.GMAP_ZOOM_TO) {
+        this.lat = data.data.lat;
+        this.lng = data.data.lng;
+        this.zoom = data.data.zoom;
       }
     });
   }
@@ -108,6 +143,7 @@ export class CustomerMapComponent implements OnInit, OnDestroy {
       data: {
         lat: $event.coords.lat,
         lng: $event.coords.lng,
+        mode: this.mode,
       },
     });
   }
