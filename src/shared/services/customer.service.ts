@@ -34,6 +34,21 @@ export class CustomerService {
     });
   }
 
+  public filterListCustomers(opts: any = {}) {
+    const _opts: any = {
+      role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
+    };
+
+    if (this._role.is_hq_sale_staff || this._role.is_branch_sale_staff) {
+      _opts.assignedStaffId = this._rootScope.currentUser.id ? this._rootScope.currentUser.id : 0;
+    }
+
+    return this._api.get(`customers/filters`, { ..._opts, ...opts }).map((res) => {
+      res.data.customerList = res.data.customerList.map((item) => new Customer().deserialize(item));
+      return res.data;
+    });
+  }
+
   public filterCustomers(opts: any = {}) {
     const _opts: any = {
       role: this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,

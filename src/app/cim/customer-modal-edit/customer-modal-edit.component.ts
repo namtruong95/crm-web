@@ -20,6 +20,8 @@ import { Township } from 'models/township';
 import { BranchService } from 'shared/services/branch.service';
 import { District } from 'models/district';
 import { GmapService } from 'shared/services/gmap.service';
+import { RoleService } from 'app/role.service';
+import { RootScopeService } from 'app/services/root-scope.service';
 
 @Component({
   selector: 'app-customer-modal-edit',
@@ -72,6 +74,17 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
   private _subscriber: Subscription;
   private _isChangeLatLng = false;
 
+  public get canChangeBranch(): boolean {
+    return this._role.is_admin || this._role.is_sale_director || this._role.is_branch_director;
+  }
+  public get canChangeAssignedStaff(): boolean {
+    return (
+      this._role.is_hq_sale_staff ||
+      this._role.is_branch_sale_staff ||
+      (this._role.is_branch_director && this.customer.assignedBranchId === this._rootScope.currentUser.branchId)
+    );
+  }
+
   constructor(
     private _customerTypeSv: CustomerTypeService,
     private _customerClassificationSv: CustomerClassificationService,
@@ -83,6 +96,8 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     private _userSv: UserService,
     private _branchSv: BranchService,
     private _gmapSv: GmapService,
+    private _role: RoleService,
+    private _rootScope: RootScopeService,
   ) {}
 
   ngOnInit() {
@@ -90,7 +105,6 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._getCustomerTypes();
     this._getTypeOfSales();
     this._getTypeOfInvestment();
-    this._getUsers();
     this._getCatalog();
     this._onEventEmitter();
     this._getBranchList();
@@ -99,6 +113,9 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     }
     if (this.customer.districtId) {
       this.getTownshipList();
+    }
+    if (!this.canChangeBranch) {
+      this._getUsers();
     }
   }
 
@@ -302,13 +319,19 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _getUsers() {
+  private _getUsers(opts: any = {}) {
     this.isLoadingUser = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsers(opts).subscribe(
       (res) => {
         this.users = res;
         this.isLoadingUser = false;
+
+        if (!this.canChangeAssignedStaff && this.users.length > 0) {
+          this.customer.assignedStaff = this.users[0];
+          return;
+        }
+        this.customer.assignedStaff = null;
       },
       (errors) => {
         this.isLoadingUser = false;
@@ -414,5 +437,21 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
         this.isLoading = true;
       },
     );
+  }
+  public findUsers() {
+    if (!this.canChangeBranch) {
+      return;
+    }
+
+    const opts = {
+      isBranchDirector: 1,
+      branchId: this.customer.assignedBranchId,
+    };
+
+    if (this._role.is_branch_director && this._rootScope.currentUser.branchId === this.customer.assignedBranchId) {
+      opts.isBranchDirector = 0;
+    }
+
+    this._getUsers(opts);
   }
 }

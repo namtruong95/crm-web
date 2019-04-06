@@ -23,6 +23,8 @@ import { BranchService } from 'shared/services/branch.service';
 import { Township } from 'models/township';
 import { District } from 'models/district';
 import { GmapService } from 'shared/services/gmap.service';
+import { RoleService } from 'app/role.service';
+import { RootScopeService } from 'app/services/root-scope.service';
 
 @Component({
   selector: 'app-customer-create',
@@ -76,6 +78,17 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   private _subscriber: Subscription;
   private _isChangeLatLng = false;
 
+  public get canChangeBranch(): boolean {
+    return this._role.is_admin || this._role.is_sale_director || this._role.is_branch_director;
+  }
+  public get canChangeAssignedStaff(): boolean {
+    return (
+      this._role.is_hq_sale_staff ||
+      this._role.is_branch_sale_staff ||
+      (this._role.is_branch_director && this.customer.assignedBranchId === this._rootScope.currentUser.branchId)
+    );
+  }
+
   constructor(
     private _customerTypeSv: CustomerTypeService,
     private _customerClassificationSv: CustomerClassificationService,
@@ -85,6 +98,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     private _userSv: UserService,
     private _branchSv: BranchService,
     private _gmapSv: GmapService,
+    private _role: RoleService,
+    private _rootScope: RootScopeService,
   ) {
     document.title = 'Mytel | create new customer';
   }
@@ -95,9 +110,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this._getTypeOfSales();
     this._getTypeOfInvestment();
     this._onEventEmitter();
-    this._getUsers();
     this._getCatalog();
     this._getBranchList();
+
+    if (!this.canChangeBranch) {
+      this._getUsers();
+    }
   }
 
   ngOnDestroy() {
@@ -303,13 +321,19 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _getUsers() {
+  private _getUsers(opts: any = {}) {
     this.isLoadingUser = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsers(opts).subscribe(
       (res) => {
         this.users = res;
         this.isLoadingUser = false;
+
+        if (!this.canChangeAssignedStaff && this.users.length > 0) {
+          this.customer.assignedStaff = this.users[0];
+          return;
+        }
+        this.customer.assignedStaff = null;
       },
       (errors) => {
         this.isLoadingUser = false;
@@ -418,5 +442,22 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.customer.setEmpty();
       },
     );
+  }
+
+  public findUsers() {
+    if (!this.canChangeBranch) {
+      return;
+    }
+
+    const opts = {
+      isBranchDirector: 1,
+      branchId: this.customer.assignedBranchId,
+    };
+
+    if (this._role.is_branch_director && this._rootScope.currentUser.branchId === this.customer.assignedBranchId) {
+      opts.isBranchDirector = 0;
+    }
+
+    this._getUsers(opts);
   }
 }
