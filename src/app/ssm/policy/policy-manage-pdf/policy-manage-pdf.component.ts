@@ -7,7 +7,9 @@ import { ManageFileService } from 'shared/services/manage-file.service';
 import { ManagePdf } from 'models/manage-pdf';
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
-import * as moment from 'moment';
+import { FolderService } from 'shared/services/folder.service';
+import { EventEmitterService } from 'shared/utils/event-emitter.service';
+import { EMITTER_TYPE } from 'constants/emitter';
 
 @Component({
   selector: 'app-policy-manage-pdf',
@@ -29,16 +31,23 @@ export class PolicyManagePdfComponent implements OnInit {
     return this._mimeTypes.toString();
   }
 
+  get canHandlePolicy(): boolean {
+    return this._role.is_admin || this._role.is_sale_director;
+  }
+
   constructor(
     private _notify: NotifyService,
     private _uploader: UploaderService,
-    public role: RoleService,
+    private _role: RoleService,
     private _manageFileSv: ManageFileService,
     private _route: ActivatedRoute,
+    private _folderSv: FolderService,
+    private _emitter: EventEmitterService,
   ) {}
 
   ngOnInit() {
     this._getFiles();
+    this._showFolder();
   }
 
   private _getFiles() {
@@ -55,6 +64,15 @@ export class PolicyManagePdfComponent implements OnInit {
         this._notify.error(errors);
       },
     );
+  }
+
+  private _showFolder() {
+    this._folderSv.showFolder(+this._route.snapshot.paramMap.get('id')).subscribe((res) => {
+      this._emitter.publishData({
+        type: EMITTER_TYPE.CHANGE_FOLDER,
+        data: res.name,
+      });
+    });
   }
 
   public getFile() {

@@ -181,6 +181,24 @@
       </div>
     </div>
 
+    <div class="col-lg-6 col-md-12">
+      <div class="form-group">
+        <label for="File">Policy PDF </label>
+        <ng-select
+          [items]="files"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingPolicy"
+          placeholder="please select policy pdf"
+          [searchable]="true"
+          name="file"
+          [(ngModel)]="policy.file"
+          bindLabel="folder_record_id">
+        </ng-select>
+      </div>
+    </div>
+
   </div>
 
   <div class="form-group">

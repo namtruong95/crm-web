@@ -13,6 +13,7 @@ import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { PolicyService } from 'shared/services/policy.service';
 import { PolicyModalEditComponent } from '../policy-modal-edit/policy-modal-edit.component';
 import { PolicyModalDeleteComponent } from '../policy-modal-delete/policy-modal-delete.component';
+import { RoleService } from 'app/role.service';
 
 interface OrderPolicy {
   columnName: string;
@@ -43,11 +44,16 @@ export class PolicyListComponent implements OnInit, OnDestroy {
   }
   private _filterQuery: any = {};
 
+  get canHandlePolicy(): boolean {
+    return this._role.is_admin || this._role.is_sale_director;
+  }
+
   constructor(
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _modalService: BsModalService,
     private _policySv: PolicyService,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {

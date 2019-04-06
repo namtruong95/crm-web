@@ -6,12 +6,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
 import { NumbericValidatorModule } from 'shared/validators/numberic-validator/numberic-validator.module';
+import { ManageFileService } from 'shared/services/manage-file.service';
 
 @NgModule({
   imports: [CommonModule, FormsModule, NgSelectModule, ModalModule.forRoot(), NumbericValidatorModule],
   declarations: [PolicyModalEditComponent],
   entryComponents: [PolicyModalEditComponent],
   exports: [PolicyModalEditComponent],
-  providers: [CustomerClassificationService],
+  providers: [CustomerClassificationService, ManageFileService],
 })
 export class PolicyModalEditModule {}
