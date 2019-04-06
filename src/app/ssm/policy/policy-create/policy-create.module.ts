@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
 import { NumbericValidatorModule } from 'shared/validators/numberic-validator/numberic-validator.module';
+import { ManageFileService } from 'shared/services/manage-file.service';
 
 const routes: Routes = [
   {
@@ -16,6 +17,6 @@ const routes: Routes = [
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes), FormsModule, NgSelectModule, NumbericValidatorModule],
   declarations: [PolicyCreateComponent],
-  providers: [CustomerClassificationService],
+  providers: [CustomerClassificationService, ManageFileService],
 })
 export class PolicyCreateModule {}

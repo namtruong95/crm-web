@@ -1,6 +1,7 @@
 import { CustomerClassification } from './customer-classification';
 import { BaseModelInterface, BaseModel } from './base.model';
 import { Deserializable } from 'shared/interfaces/deserializable';
+import { ManagePdf } from './manage-pdf';
 
 interface PolicyInterface extends BaseModelInterface {
   policyId: number;
@@ -13,6 +14,8 @@ interface PolicyInterface extends BaseModelInterface {
   otc: string;
   mrcMin: string;
   mrcMax: string;
+  fileId: number;
+  file: ManagePdf;
 }
 
 export class Policy extends BaseModel implements Deserializable<Policy> {
@@ -89,6 +92,9 @@ export class Policy extends BaseModel implements Deserializable<Policy> {
     this._mrcMax = v;
   }
 
+  fileId: number;
+  file: ManagePdf;
+
   constructor() {
     super();
 
@@ -113,6 +119,7 @@ export class Policy extends BaseModel implements Deserializable<Policy> {
         ? input.serviceTerm
         : new CustomerClassification().deserialize(input.serviceTerm);
 
+    this.file = input.file instanceof ManagePdf ? input.file : new ManagePdf().deserialize(input.file);
     return this;
   }
 
@@ -127,6 +134,7 @@ export class Policy extends BaseModel implements Deserializable<Policy> {
       otc: this.otc.toNumber() || 0,
       mrcMin: this.mrcMin.toNumber() || 0,
       mrcMax: this.mrcMax.toNumber() || 0,
+      fileId: this.file ? this.file.id : null,
     };
   }
 }

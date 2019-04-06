@@ -8,6 +8,8 @@ import { CustomerClassification } from 'models/customer-classification';
 import { RegExp } from 'constants/reg-exp';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
 import { NgForm } from '@angular/forms';
+import { ManageFileService } from 'shared/services/manage-file.service';
+import { ManagePdf } from 'models/manage-pdf';
 
 @Component({
   selector: 'app-policy-create',
@@ -34,11 +36,16 @@ export class PolicyCreateComponent implements OnInit {
   public isLoadingServiceTerm = false;
   public serviceTerms: CustomerClassification[] = [];
 
+  // policy PDF
+  public files: ManagePdf[] = [];
+  public isLoadingPolicy = false;
+
   constructor(
     private _policySv: PolicyService,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _customerClassificationSv: CustomerClassificationService,
+    private _manageFileSv: ManageFileService,
   ) {}
 
   ngOnInit() {
@@ -46,6 +53,28 @@ export class PolicyCreateComponent implements OnInit {
     this.policy.typeOfService = null;
     this._getTypeOfServices();
     this._getServicesterm();
+    this._getFiles();
+  }
+
+  private _getFiles() {
+    const opts = {
+      page: 0,
+      size: 1000,
+      sort: 'desc',
+      column: 'id',
+      folderId: 1,
+    };
+    this.isLoadingPolicy = true;
+    this._manageFileSv.getAllFiles(opts).subscribe(
+      (res) => {
+        this.files = res;
+        this.isLoadingPolicy = false;
+      },
+      (errors) => {
+        this.isLoadingPolicy = false;
+        this._notify.error(errors);
+      },
+    );
   }
 
   public createPolicy(form: NgForm) {

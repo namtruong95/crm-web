@@ -11,7 +11,6 @@ interface UserInterface extends BaseModelInterface {
   role: string;
   department: string;
   email: string;
-  phone: string;
   phoneNumber: string;
   branchId: number;
 }

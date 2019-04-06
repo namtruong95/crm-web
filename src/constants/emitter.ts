@@ -25,4 +25,5 @@ export const EMITTER_TYPE = {
   CREATE_USER: 'user:create',
   CREATE_SALE_ACTIVITY_2: 'saleActivity2:create',
   FILTER_SALE_ACTIVITY_2: 'saleActivity2:filter',
+  CHANGE_FOLDER: 'folder:change',
 };

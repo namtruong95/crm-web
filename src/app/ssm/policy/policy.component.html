@@ -1,7 +1,16 @@
 <nav class="nav nav-tabs cim-tabs mb-4">
   <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'filters']" routerLinkActive="active">Policy Information</a>
-  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'create']" routerLinkActive="active">Policy Create</a>
-  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'folders']" routerLinkActive="active">Policy Pdf</a>
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'create']" routerLinkActive="active" *ngIf="canHandlePolicy">Policy Create</a>
+  <a class="nav-item nav-link" [routerLink]="['/ssm', 'policy', 'folders']" routerLinkActive="active" *ngIf="canHandlePolicy">Policy Pdf</a>
+</nav>
+
+<nav aria-label="breadcrumb" [hidden]="!isHiddenList">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="javascript:void(0)" [routerLink]="['/ssm/policy/folders']">ROOT</a>
+    </li>
+    <li class="breadcrumb-item active" [hidden]="!folderName" aria-current="page">{{ folderName }}</li>
+  </ol>
 </nav>
 
 <router-outlet></router-outlet>
