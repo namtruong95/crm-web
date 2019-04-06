@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
+// @ts-ignore-start
+import {} from 'googlemaps';
 
 export interface GmapParams {
   origins: string[];
@@ -8,6 +10,8 @@ export interface GmapParams {
 
 @Injectable()
 export class GmapService {
+  private _geocoder;
+
   constructor(private _mapsAPILoader: MapsAPILoader) {}
 
   public matrixDistance(params: GmapParams, callback) {
@@ -26,5 +30,21 @@ export class GmapService {
         callback,
       );
     });
+  }
+
+  public findAddressWithLocation(data: { lat: number; lng: number }, callback) {
+    if (!this._geocoder) {
+      this._geocoder = new google.maps.Geocoder();
+    }
+
+    this._geocoder.geocode({ location: data }, callback);
+  }
+
+  public findAddressWithAddress(data: string, callback) {
+    if (!this._geocoder) {
+      this._geocoder = new google.maps.Geocoder();
+    }
+
+    this._geocoder.geocode({ address: data }, callback);
   }
 }
