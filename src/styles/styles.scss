@@ -57,3 +57,26 @@ i.required {
 .bg--white {
   background-color: #fff;
 }
+
+.form-control-plaintext:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #fff;
+  outline: 0;
+  box-shadow: none;
+}
+
+.ng-select.ng-select-disabled.readonly {
+  .ng-arrow-wrapper {
+    display: none;
+  }
+
+  & > .ng-select-container {
+    background-color: #fff;
+    border-color: #fff;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}

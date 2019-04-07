@@ -3,7 +3,7 @@
   <table class="table policy-table">
     <thead>
       <tr>
-        <th>Action</th>
+        <th *ngIf="canHandlePolicy">Action</th>
         <th class="cursor-pointer" (click)="addOrder('policyName')">
           Policy Name
           <i class="fa {{ getClassOrder('policyName') }}"></i>
@@ -44,7 +44,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let policy of policyList;">
-        <td>
+        <td *ngIf="canHandlePolicy">
           <button type="button" class="mr-1 btn btn-info" (click)="editPolicy(policy)"><i class="fa fa-edit"></i></button>
           <button type="button" class="mr-1 btn btn-danger" (click)="removePolicy(policy)"><i class="fa fa-trash"></i></button>
         </td>

@@ -1,0 +1,10 @@
+.sale-activity-table.table {
+  thead th,
+  tbody td {
+    min-width: 200px;
+
+    &:first-child {
+      max-width: 150px;
+    }
+  }
+}

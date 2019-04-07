@@ -90,6 +90,27 @@
         </div>
       </div>
 
+      <div class="col-lg-6 col-md-12" [hidden]="!canChangeBranch">
+        <div class="form-group">
+          <label for="AssignForBranch">Assign For Branch</label>
+          <ng-select
+            [items]="branches"
+            class="text-left"
+            [closeOnSelect]="true"
+            [clearable]="true"
+            [loading]="isLoadingBranch"
+            placeholder="please select assign for branch"
+            [searchable]="false"
+            name="assignedBranch"
+            [(ngModel)]="customer.assignedBranchId"
+            (ngModelChange)="findUsers()"
+            #AssignForBranch="ngModel"
+            bindLabel="name"
+            bindValue="id">
+          </ng-select>
+        </div>
+      </div>
+
       <div class="col-lg-6 col-md-12 form-group">
         <label for="Name">Assigned For Sale</label>
         <ng-select
@@ -102,7 +123,8 @@
           [searchable]="true"
           name="user"
           [(ngModel)]="customer.assignedStaff"
-          bindLabel="code_full_name">
+          bindLabel="code_full_name"
+          [disabled]="!canChangeAssignedStaff">
         </ng-select>
       </div>
 
@@ -131,7 +153,6 @@
             autocomplete="new-address"
             class="form-control"
             name="address"
-            #AddressEdit
             placeholder="please enter address"
             [(ngModel)]="customer.address">
         </div>
@@ -150,7 +171,7 @@
             [searchable]="false"
             name="branches"
             [(ngModel)]="customer.branchId"
-            (ngModelChange)="getDistrictList()"
+            (ngModelChange)="getDistrictList(); getRegionAndZoomTo()"
             #Region="ngModel"
             bindLabel="name"
             bindValue="id"
@@ -177,7 +198,7 @@
             [searchable]="false"
             name="districts"
             [(ngModel)]="customer.districtId"
-            (ngModelChange)="getTownshipList()"
+            (ngModelChange)="getTownshipList(); getDistrictAndZoomTo()"
             #District="ngModel"
             bindLabel="name"
             bindValue="id"
@@ -193,7 +214,7 @@
 
       <div class="col-lg-6 col-md-12">
         <div class="form-group">
-          <label for="role">Township <i class="required">&#40;*&#41;</i></label>
+          <label for="Township">Township <i class="required">&#40;*&#41;</i></label>
           <ng-select
             [items]="townships"
             class="text-left"
@@ -204,14 +225,15 @@
             [searchable]="false"
             name="townships"
             [(ngModel)]="customer.townshipId"
-            #Role="ngModel"
+            (ngModelChange)="getTownshipAndZoomTo()"
+            #Township="ngModel"
             bindLabel="name"
             bindValue="id"
             required>
           </ng-select>
 
           <div class="invalid-feedback"
-            *ngIf="Role.errors?.required">
+            *ngIf="Township.errors?.required">
             Please select township
           </div>
         </div>

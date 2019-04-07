@@ -1,8 +1,6 @@
 export const EMITTER_TYPE = {
   FILTER_CUSTOMER: 'customer:filter',
   CREATE_CUSTOMER: 'customer:create',
-  GMAP_CHANGE: 'gmap:change',
-  GMAP_CHANGE_EDIT: 'gmap:change:edit',
   GMAP_CLICK: 'gmap:click',
   CREATE_SALE_ACTIVITY: 'saleActivity:create',
   FILTER_SALE_ACTIVITY: 'saleActivity:filter',
@@ -25,4 +23,7 @@ export const EMITTER_TYPE = {
   CREATE_USER: 'user:create',
   CREATE_SALE_ACTIVITY_2: 'saleActivity2:create',
   FILTER_SALE_ACTIVITY_2: 'saleActivity2:filter',
+  CHANGE_FOLDER: 'folder:change',
+  GMAP_PLACE_CHANGED: 'gmap:place:changed',
+  GMAP_ZOOM_TO: 'gmap:zoomTp',
 };

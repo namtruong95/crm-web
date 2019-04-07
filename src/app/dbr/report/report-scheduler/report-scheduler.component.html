@@ -1,1 +1,66 @@
-<app-report-filter (changeFilter)="exportReportScheduler($event)"></app-report-filter>
+<app-report-filter (changeFilter)="exportReportScheduler($event)" (changeTermPreviewReport)="previewReportScheduler($event)"></app-report-filter>
+
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table sale-activity-table">
+    <thead>
+      <tr>
+        <th class="cursor-pointer" (click)="addOrder('nameOfSale')">
+          Name
+          <i class="fa {{ getClassOrder('nameOfSale') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staffUserName')" *ngIf="roleAccess">
+          Staff
+          <i class="fa {{ getClassOrder('staffUserName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staffFullName')" *ngIf="roleAccess">
+          Full Name
+          <i class="fa {{ getClassOrder('staffFullName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('start')">
+          Start
+          <i class="fa {{ getClassOrder('start') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('end')">
+          End
+          <i class="fa {{ getClassOrder('end') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('actionOfSaleName')">
+          Activity Type
+          <i class="fa {{ getClassOrder('actionOfSaleName') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sAc of saleActivities;">
+        <td>{{ sAc.nameOfSale }}</td>
+        <td *ngIf="roleAccess">{{ sAc.staffUserName }}</td>
+        <td *ngIf="roleAccess">{{ sAc.staffFullName }}</td>
+        <td>{{ sAc.start }}</td>
+        <td>{{ sAc.end }}</td>
+        <td>{{ sAc.actionOfSaleName }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': saleActivities.length > 0 }">
+        <td colspan="5" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': saleActivities.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

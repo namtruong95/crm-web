@@ -4,6 +4,7 @@ import { PolicyComponent } from './policy.component';
 import { Routes, RouterModule } from '@angular/router';
 import { PolicyListModule } from './policy-list/policy-list.module';
 import { PolicyService } from 'shared/services/policy.service';
+import { Roles } from 'app/guard/roles';
 const routes: Routes = [
   {
     path: '',
@@ -16,10 +17,16 @@ const routes: Routes = [
       {
         path: 'create',
         loadChildren: './policy-create/policy-create.module#PolicyCreateModule',
+        data: {
+          roles: [Roles.MYTEL_ADMIN, Roles.SALE_DIRECTOR],
+        },
       },
       {
         path: 'folders',
         loadChildren: './policy-manage-folder/policy-manage-folder.module#PolicyManageFolderModule',
+        data: {
+          roles: [Roles.MYTEL_ADMIN, Roles.SALE_DIRECTOR],
+        },
       },
       {
         path: 'folders/:id',

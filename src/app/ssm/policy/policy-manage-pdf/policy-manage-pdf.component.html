@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col" *ngIf="role.is_sale_director">
+  <div class="col" *ngIf="canHandlePolicy">
     <button class="btn btn-primary"
       (click)="FileUpload.click()"
       [disabled]="isUploading">
@@ -23,6 +23,7 @@
   <table class="table pdf-table">
     <thead>
       <tr>
+        <th>Record ID</th>
         <th class="cursor-pointer">
           File Name
         </th>
@@ -31,10 +32,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let file of files;">
+        <td>{{ file.record_id }}</td>
         <td>{{ file.fileName }}</td>
         <td>
           <button type="button" class="mr-1 btn btn-primary" (click)="downloadFile(file)"><i class="fa fa-download"></i></button>
-          <button type="button" *ngIf="role.is_sale_director" class="mr-1 btn btn-danger" (click)="removeFile(file)"><i class="fa fa-trash"></i></button>
+          <button type="button" *ngIf="canHandlePolicy" class="mr-1 btn btn-danger" (click)="removeFile(file)"><i class="fa fa-trash"></i></button>
         </td>
       </tr>
       <tr [ngClass]="{ 'hidden': files.length > 0 }">

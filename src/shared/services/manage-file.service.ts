@@ -16,6 +16,12 @@ export class ManageFileService {
     });
   }
 
+  public getAllFiles(opts?: any) {
+    return this._api.get(`manage-file/all`, opts).map((res) => {
+      return res.data.listFile.map((item) => new ManagePdf().deserialize(item));
+    });
+  }
+
   public getFile(id: number, opts?: any) {
     return this._api.get(`manage-file/${id}`, opts);
   }

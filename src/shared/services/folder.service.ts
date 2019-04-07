@@ -18,6 +18,10 @@ export class FolderService {
     return this._api.post(`folder`, data);
   }
 
+  public showFolder(id: number) {
+    return this._api.get(`folder/${id}`).map((res) => new Folder().deserialize(res.data.folder));
+  }
+
   public updateFolder(id: number, data: any) {
     return this._api.put(`folder/${id}`, data);
   }

@@ -1,1 +1,61 @@
-<app-report-filter (changeFilter)="exportReportSaleActivity($event)"></app-report-filter>
+<app-report-filter (changeFilter)="exportReportSaleActivity($event)" (changeTermPreviewReport)="previewReportSaleActivity($event)"></app-report-filter>
+
+<div class="table-responsive py-4">
+  <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
+  <table class="table sale-activity-table">
+    <thead>
+      <tr>
+        <th class="cursor-pointer" (click)="addOrder('customer_name')">
+          Customer
+          <i class="fa {{ getClassOrder('customer_name') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staff_user_name')">
+          Staff
+          <i class="fa {{ getClassOrder('staff_user_name') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('staff_full_name')">
+          Full Name
+          <i class="fa {{ getClassOrder('staff_full_name') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('statusOfProcessName')">
+          Activity Type
+          <i class="fa {{ getClassOrder('statusOfProcessName') }}"></i>
+        </th>
+        <th class="cursor-pointer" (click)="addOrder('dateDisplay')">
+          Sale Date
+          <i class="fa {{ getClassOrder('dateDisplay') }}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let saleActivity of saleActivities;">
+        <td>{{ saleActivity.customer_name }}</td>
+        <td>{{ saleActivity.staff_user_name }}</td>
+        <td>{{ saleActivity.staff_full_name }}</td>
+        <td>{{ saleActivity.statusOfProcessName }}</td>
+        <td>{{ saleActivity.dateDisplay }}</td>
+      </tr>
+      <tr [ngClass]="{ 'hidden': saleActivities.length > 0 }">
+        <td colspan="5" class="text-center">
+          Data not found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination mt-4" [ngClass]="{ 'hidden': saleActivities.length === 0 }">
+  <pagination
+    class="pagination-md"
+    [totalItems]="query.totalElements"
+    [(ngModel)]="query.currentPage"
+    pageBtnClass="btn"
+    [itemsPerPage]="query.size"
+    [maxSize]="5"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;">
+  </pagination>
+</div>

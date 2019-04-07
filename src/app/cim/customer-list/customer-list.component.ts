@@ -84,7 +84,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       ...this._filterQuery,
     };
 
-    this._customerSv.filterCustomers(params).subscribe(
+    this._customerSv.filterListCustomers(params).subscribe(
       (res) => {
         this.query.setQuery(res);
         this.customerList = res.customerList;
@@ -136,6 +136,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
     this._openModal(CustomerModalEditComponent, config);
   }
+
   public assignedFotStaff(customer: Customer) {
     const config = {
       class: 'modal-md',

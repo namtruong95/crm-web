@@ -38,6 +38,7 @@ interface CustomerInterface extends BaseModelInterface {
   district: District;
   townshipId: number;
   township: Township;
+  assignedBranchId: number;
 }
 
 export class Customer extends BaseModel implements Deserializable<Customer> {
@@ -149,6 +150,7 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
   district: District;
   townshipId: number;
   township: Township;
+  assignedBranchId: number;
 
   constructor() {
     super();
@@ -209,6 +211,7 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
     this.catalog = this.catalog.id ? this.catalog : null;
     this.assignedStaff = this.assignedStaff.id ? this.assignedStaff : null;
     this.customerDateBinding = this.customerDateBinding || new Date();
+    this.assignedBranchId = this.assignedBranchId || null;
   }
 
   public toJSON() {
@@ -232,6 +235,7 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
       branchId: this.branchId || null,
       districtId: this.districtId || null,
       townshipId: this.townshipId || null,
+      assignedBranchId: this.assignedBranchId || null,
     };
   }
 

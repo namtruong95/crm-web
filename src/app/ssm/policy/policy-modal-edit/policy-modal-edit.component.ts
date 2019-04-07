@@ -5,6 +5,8 @@ import { PolicyService } from 'shared/services/policy.service';
 import { NotifyService } from 'shared/utils/notify.service';
 import { CustomerClassification } from 'models/customer-classification';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
+import { ManagePdf } from 'models/manage-pdf';
+import { ManageFileService } from 'shared/services/manage-file.service';
 
 @Component({
   selector: 'app-policy-modal-edit',
@@ -31,17 +33,43 @@ export class PolicyModalEditComponent implements OnInit {
   public isLoadingServiceTerm = false;
   public serviceTerms: CustomerClassification[] = [];
 
+  // policy PDF
+  public files: ManagePdf[] = [];
+  public isLoadingPolicy = false;
+
   constructor(
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
     private _policySv: PolicyService,
     private _notify: NotifyService,
     private _customerClassificationSv: CustomerClassificationService,
+    private _manageFileSv: ManageFileService,
   ) {}
 
   ngOnInit() {
     this._getTypeOfServices();
     this._getServicesterm();
+    this._getFiles();
+  }
+
+  private _getFiles() {
+    const opts = {
+      page: 0,
+      size: 1000,
+      sort: 'desc',
+      column: 'id',
+    };
+    this.isLoadingPolicy = true;
+    this._manageFileSv.getAllFiles(opts).subscribe(
+      (res) => {
+        this.files = res;
+        this.isLoadingPolicy = false;
+      },
+      (errors) => {
+        this.isLoadingPolicy = false;
+        this._notify.error(errors);
+      },
+    );
   }
 
   public updatePolicy() {

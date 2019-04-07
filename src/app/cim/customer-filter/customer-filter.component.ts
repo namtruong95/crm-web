@@ -78,6 +78,10 @@ export class CustomerFilterComponent implements OnInit, OnDestroy {
   get roleAccess(): boolean {
     return this.role.is_admin || this.role.is_sale_director;
   }
+
+  get canExportCustomer(): boolean {
+    return this.roleAccess || this.role.is_branch_director;
+  }
   constructor(
     private _customerTypeSv: CustomerTypeService,
     private _customerClassificationSv: CustomerClassificationService,
