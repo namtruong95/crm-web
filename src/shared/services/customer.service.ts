@@ -55,7 +55,10 @@ export class CustomerService {
     };
 
     if (this._role.is_branch_director) {
-      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+      _opts.branchId =
+        this._rootScope.currentUser.id && this._rootScope.currentUser.branchId
+          ? this._rootScope.currentUser.branchId
+          : 0;
     }
 
     if (this._role.is_hq_sale_staff || this._role.is_branch_sale_staff) {
@@ -86,7 +89,10 @@ export class CustomerService {
     };
 
     if (this._role.is_branch_director) {
-      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+      _opts.branchId =
+        this._rootScope.currentUser.id && this._rootScope.currentUser.branchId
+          ? this._rootScope.currentUser.branchId
+          : 0;
     }
 
     if (this._role.is_hq_sale_staff || this._role.is_branch_sale_staff) {
