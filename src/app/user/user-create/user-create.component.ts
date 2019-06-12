@@ -51,16 +51,18 @@ export class UserCreateComponent implements OnInit {
   }
 
   public checkAndCreateUser(form: NgForm) {
-    this.isLoading = true;
-    this._userSv.kcCreateUser(this.user.kcToJSON()).subscribe(
-      (res) => {
-        this._createUser(form);
-      },
-      (errors) => {
-        this.isLoading = false;
-        this._notify.error(errors);
-      },
-    );
+    this._createUser(form);
+
+    // this.isLoading = true;
+    // this._userSv.kcCreateUser(this.user.kcToJSON()).subscribe(
+    //   (res) => {
+    //     this._createUser(form);
+    //   },
+    //   (errors) => {
+    //     this.isLoading = false;
+    //     this._notify.error(errors);
+    //   },
+    // );
   }
 
   private _createUser(form: NgForm) {

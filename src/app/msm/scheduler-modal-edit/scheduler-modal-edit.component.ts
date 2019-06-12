@@ -18,6 +18,7 @@ import { CustomerClassification } from 'models/customer-classification';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
+import { RoleService } from 'app/role.service';
 
 @Component({
   selector: 'app-scheduler-modal-edit',
@@ -49,6 +50,7 @@ export class SchedulerModalEditComponent implements OnInit {
     private _emitter: EventEmitterService,
     private _customerClassificationSv: CustomerClassificationService,
     private _userSv: UserService,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {
@@ -57,12 +59,20 @@ export class SchedulerModalEditComponent implements OnInit {
     this._getStaffs();
   }
 
-  private _getStaffs() {
+  private _getStaffs(opts: any = {}) {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsersInBranch().subscribe(
+    this._userSv.getAllUsersInBranch(opts).subscribe(
       (res) => {
         this.staffs = res;
+        const index = this.staffs.findIndex(
+          (item) => this.scheduler.assignedStaff && item.id === this.scheduler.assignedStaff.id,
+        );
+
+        if (index < 0) {
+          this.scheduler.assignedStaff = null;
+        }
+
         this.isLoadingStaff = false;
       },
       (errors) => {
@@ -162,4 +172,15 @@ export class SchedulerModalEditComponent implements OnInit {
   public compareWithFn = (a, b) => {
     return a.fullName === b.fullName;
   };
+
+  public changeCustomer() {
+    if (!this._role.is_admin) {
+      return;
+    }
+    const opts: any = {};
+    if (this.scheduler.customer) {
+      opts.branchId = this.scheduler.customer.assignedBranchId;
+    }
+    this._getStaffs(opts);
+  }
 }

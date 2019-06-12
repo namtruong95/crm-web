@@ -23,7 +23,10 @@ export class BtsService {
     };
 
     if (this._role.is_branch_director || this._role.is_branch_sale_staff || this._role.is_hq_sale_staff) {
-      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+      _opts.branchId =
+        this._rootScope.currentUser.id && this._rootScope.currentUser.branchId
+          ? this._rootScope.currentUser.branchId
+          : 0;
     }
 
     return this._api.get(`bts/filters`, { ..._opts, ...opts }).map((res) => {
@@ -57,7 +60,10 @@ export class BtsService {
     };
 
     if (this._role.is_branch_director || this._role.is_branch_sale_staff || this._role.is_hq_sale_staff) {
-      _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+      _opts.branchId =
+        this._rootScope.currentUser.id && this._rootScope.currentUser.branchId
+          ? this._rootScope.currentUser.branchId
+          : 0;
     }
 
     return this._download.get(`bts/export`, { ..._opts, ...opts });

@@ -27,14 +27,17 @@ export class UserService {
     });
   }
 
-  public getAllUsers(opts: any = {}) {
+  public getAllUsers(opts: any = {}): Observable<User[]> {
     if (this._role.is_admin || this._role.is_branch_director || this._role.is_sale_director) {
       const _opts: any = {
         role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,
       };
 
       if (this._role.is_branch_director) {
-        _opts.branchId = this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0;
+        _opts.branchId =
+          this._rootScope.currentUser.id && this._rootScope.currentUser.branchId
+            ? this._rootScope.currentUser.branchId
+            : 0;
       }
 
       return this._api.get(`users/get-all`, { ..._opts, ...opts }).map((res) => {
@@ -52,7 +55,10 @@ export class UserService {
           ? this._rootScope.currentUser.role
           : Roles.BRANCH_DIRECTOR
         : Roles.MYTEL_ADMIN,
-      branchId: this._rootScope.currentUser.id ? this._rootScope.currentUser.branchId : 0,
+      branchId:
+        this._rootScope.currentUser.id && this._rootScope.currentUser.branchId
+          ? this._rootScope.currentUser.branchId
+          : 0,
       ...opts,
     };
 
