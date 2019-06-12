@@ -27,7 +27,7 @@ export class UserService {
     });
   }
 
-  public getAllUsers(opts: any = {}) {
+  public getAllUsers(opts: any = {}): Observable<User[]> {
     if (this._role.is_admin || this._role.is_branch_director || this._role.is_sale_director) {
       const _opts: any = {
         role: !!this._rootScope.currentUser.id ? this._rootScope.currentUser.role : Roles.MYTEL_ADMIN,

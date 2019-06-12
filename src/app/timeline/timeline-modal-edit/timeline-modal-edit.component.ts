@@ -14,13 +14,12 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { DATEPICKER_CONFIG } from 'constants/datepicker-config';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
-import { EMITTER_TYPE } from 'constants/emitter';
 import { SaleActivity } from 'models/sale-activity';
 import { CustomerClassification } from 'models/customer-classification';
 import { CustomerClassificationService } from 'shared/services/customer-classification.service';
 import { SaleActivityService } from 'shared/services/sale-activity.service';
-import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { RoleService } from 'app/role.service';
 
 @Component({
   selector: 'app-timeline-modal-edit',
@@ -53,6 +52,7 @@ export class TimelineModalEditComponent implements OnInit {
     private _saleActivitySv: SaleActivityService,
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {
@@ -100,12 +100,20 @@ export class TimelineModalEditComponent implements OnInit {
     );
   }
 
-  private _getStaffs() {
+  private _getStaffs(opts: any = {}) {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsers(opts).subscribe(
       (res) => {
         this.staffs = res;
+        const index = this.staffs.findIndex(
+          (item) => this.saleActivity.assignedStaff && item.id === this.saleActivity.assignedStaff.id,
+        );
+
+        if (index < 0) {
+          this.saleActivity.assignedStaff = null;
+        }
+
         this.isLoadingStaff = false;
       },
       (errors) => {
@@ -157,5 +165,16 @@ export class TimelineModalEditComponent implements OnInit {
   public close(reason?: string) {
     this._modalService.setDismissReason(reason);
     this._bsModalRef.hide();
+  }
+
+  public changeCustomer() {
+    if (!this._role.is_admin) {
+      return;
+    }
+    const opts: any = {};
+    if (this.saleActivity.customer) {
+      opts.branchId = this.saleActivity.customer.assignedBranchId;
+    }
+    this._getStaffs(opts);
   }
 }

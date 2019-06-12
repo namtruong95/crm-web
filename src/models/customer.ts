@@ -205,11 +205,11 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
   }
 
   public setEmpty() {
-    this.customerType = this.customerType.id ? this.customerType : null;
-    this.typeOfSale = this.typeOfSale.id ? this.typeOfSale : null;
-    this.typeOfInvestment = this.typeOfInvestment.id ? this.typeOfInvestment : null;
-    this.catalog = this.catalog.id ? this.catalog : null;
-    this.assignedStaff = this.assignedStaff.id ? this.assignedStaff : null;
+    this.customerType = this.customerType && this.customerType.id ? this.customerType : null;
+    this.typeOfSale = this.typeOfSale && this.typeOfSale.id ? this.typeOfSale : null;
+    this.typeOfInvestment = this.typeOfInvestment && this.typeOfInvestment.id ? this.typeOfInvestment : null;
+    this.catalog = this.catalog && this.catalog.id ? this.catalog : null;
+    this.assignedStaff = this.assignedStaff && this.assignedStaff.id ? this.assignedStaff : null;
     this.customerDateBinding = this.customerDateBinding || new Date();
     this.assignedBranchId = this.assignedBranchId || null;
   }
