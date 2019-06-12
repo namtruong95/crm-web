@@ -30,6 +30,7 @@
           [searchable]="true"
           name="customer"
           [(ngModel)]="scheduler.customer"
+          (ngModelChange)="changeCustomer()"
           bindLabel="customerName"
           [typeahead]="customerInput$"
           required>

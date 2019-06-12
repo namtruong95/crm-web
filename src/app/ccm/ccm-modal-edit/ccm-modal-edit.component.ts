@@ -20,6 +20,7 @@ import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { User } from 'models/user';
 import { UserService } from 'shared/services/user.service';
+import { RoleService } from 'app/role.service';
 
 @Component({
   selector: 'app-ccm-modal-edit',
@@ -50,6 +51,7 @@ export class CcmModalEditComponent implements OnInit {
     private _bsModalRef: BsModalRef,
     private _modalService: BsModalService,
     private _userSv: UserService,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {
@@ -57,12 +59,20 @@ export class CcmModalEditComponent implements OnInit {
     this._getStaffs();
   }
 
-  private _getStaffs() {
+  private _getStaffs(opts: any = {}) {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsersInBranch().subscribe(
+    this._userSv.getAllUsersInBranch(opts).subscribe(
       (res) => {
         this.staffs = res;
+        const index = this.staffs.findIndex(
+          (item) => this.careActivity.assignedStaff && item.id === this.careActivity.assignedStaff.id,
+        );
+
+        if (index < 0) {
+          this.careActivity.assignedStaff = null;
+        }
+
         this.isLoadingStaff = false;
       },
       (errors) => {
@@ -141,5 +151,16 @@ export class CcmModalEditComponent implements OnInit {
       return;
     }
     this.careActivity.giftPrice = this.GiftPrice.nativeElement.value.toNumber().format();
+  }
+
+  public changeCustomer() {
+    if (!this._role.is_admin) {
+      return;
+    }
+    const opts: any = {};
+    if (this.careActivity.customer) {
+      opts.branchId = this.careActivity.customer.assignedBranchId;
+    }
+    this._getStaffs(opts);
   }
 }

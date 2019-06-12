@@ -22,6 +22,7 @@ import { EMITTER_TYPE } from 'constants/emitter';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { RoleService } from 'app/role.service';
 
 @Component({
   selector: 'app-timeline-create',
@@ -55,6 +56,7 @@ export class TimelineCreateComponent implements OnInit {
     private _emitter: EventEmitterService,
     private _route: ActivatedRoute,
     private _router: Router,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {
@@ -120,12 +122,20 @@ export class TimelineCreateComponent implements OnInit {
     );
   }
 
-  private _getStaffs() {
+  private _getStaffs(opts: any = {}) {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsers().subscribe(
+    this._userSv.getAllUsers(opts).subscribe(
       (res) => {
         this.staffs = res;
+
+        const index = this.staffs.findIndex(
+          (item) => this.saleActivity.assignedStaff && item.id === this.saleActivity.assignedStaff.id,
+        );
+
+        if (index < 0) {
+          this.saleActivity.assignedStaff = null;
+        }
         this.isLoadingStaff = false;
       },
       (errors) => {
@@ -181,5 +191,16 @@ export class TimelineCreateComponent implements OnInit {
         }, 0);
       },
     );
+  }
+
+  public changeCustomer() {
+    if (!this._role.is_admin) {
+      return;
+    }
+    const opts: any = {};
+    if (this.saleActivity.customer) {
+      opts.branchId = this.saleActivity.customer.assignedBranchId;
+    }
+    this._getStaffs(opts);
   }
 }

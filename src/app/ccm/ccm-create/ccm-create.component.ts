@@ -20,6 +20,7 @@ import { CareActivityService } from 'shared/services/care-activity.service';
 import { UserService } from 'shared/services/user.service';
 import { User } from 'models/user';
 import { NgForm } from '@angular/forms';
+import { RoleService } from 'app/role.service';
 
 @Component({
   selector: 'app-ccm-create',
@@ -49,6 +50,7 @@ export class CcmCreateComponent implements OnInit {
     private _notify: NotifyService,
     private _careActivitySv: CareActivityService,
     private _userSv: UserService,
+    private _role: RoleService,
   ) {}
 
   ngOnInit() {
@@ -59,12 +61,20 @@ export class CcmCreateComponent implements OnInit {
     this._getStaffs();
   }
 
-  private _getStaffs() {
+  private _getStaffs(opts: any = {}) {
     this.isLoadingStaff = true;
 
-    this._userSv.getAllUsersInBranch().subscribe(
+    this._userSv.getAllUsersInBranch(opts).subscribe(
       (res) => {
         this.staffs = res;
+        const index = this.staffs.findIndex(
+          (item) => this.careActivity.assignedStaff && item.id === this.careActivity.assignedStaff.id,
+        );
+
+        if (index < 0) {
+          this.careActivity.assignedStaff = null;
+        }
+
         this.isLoadingStaff = false;
       },
       (errors) => {
@@ -150,5 +160,16 @@ export class CcmCreateComponent implements OnInit {
       return;
     }
     this.careActivity.giftPrice = this.GiftPrice.nativeElement.value.toNumber().format();
+  }
+
+  public changeCustomer() {
+    if (!this._role.is_admin) {
+      return;
+    }
+    const opts: any = {};
+    if (this.careActivity.customer) {
+      opts.branchId = this.careActivity.customer.assignedBranchId;
+    }
+    this._getStaffs(opts);
   }
 }

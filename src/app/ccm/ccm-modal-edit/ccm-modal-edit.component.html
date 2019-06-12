@@ -20,6 +20,7 @@
           [searchable]="true"
           name="customer"
           [(ngModel)]="careActivity.customer"
+          (ngModelChange)="changeCustomer()"
           bindLabel="customerName"
           [typeahead]="customerInput$"
           required>
