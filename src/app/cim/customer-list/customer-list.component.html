@@ -8,9 +8,9 @@
           Customer Name
           <i class="fa {{ getClassOrder('customerName') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('address')">
+        <th class="cursor-pointer" (click)="addOrder('address_display')">
           Address
-          <i class="fa {{ getClassOrder('address') }}"></i>
+          <i class="fa {{ getClassOrder('address_display') }}"></i>
         </th>
         <th class="cursor-pointer" (click)="addOrder('userName')">
           Assigned Staff
@@ -70,7 +70,7 @@
           <button type="button" class="mr-1 btn btn-danger" (click)="removeCustomer(customer)"><i class="fa fa-trash"></i></button>
         </td>
         <td>{{ customer.customerName }}</td>
-        <td>{{ customer.address }}</td>
+        <td>{{ customer.address_display }}</td>
         <td>{{ customer.userName }}</td>
         <td>{{ customer.fullName }}</td>
         <td>{{ customer.catalogName }}</td>

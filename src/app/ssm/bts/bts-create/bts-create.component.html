@@ -30,7 +30,6 @@
           [ngClass]="{ 'is-invalid': Address.dirty && Address.errors }"
           #Address="ngModel"
           required
-          #Address
           placeholder="please enter address"
           [(ngModel)]="bts.address">
 
@@ -52,7 +51,9 @@
           #Latitude="ngModel"
           required
           placeholder="please enter latitude"
-          [(ngModel)]="bts.latitude">
+          [(ngModel)]="bts.latitude"
+          (ngModelChange)="changeLatLng()"
+          (blur)="findAddressWithLatLng()">
 
         <div class="invalid-feedback"
           *ngIf="Latitude.errors?.required">
@@ -72,7 +73,9 @@
           #Longitude="ngModel"
           required
           placeholder="please enter longitude"
-          [(ngModel)]="bts.longitude">
+          [(ngModel)]="bts.longitude"
+          (ngModelChange)="changeLatLng()"
+          (blur)="findAddressWithLatLng()">
 
         <div class="invalid-feedback"
           *ngIf="Longitude.errors?.required">
@@ -94,7 +97,7 @@
           [searchable]="false"
           name="branches"
           [(ngModel)]="bts.branchId"
-          (ngModelChange)="getDistrictList()"
+          (ngModelChange)="getDistrictList(); getRegionAndZoomTo()"
           #Region="ngModel"
           bindLabel="name"
           bindValue="id"
@@ -121,7 +124,7 @@
           [searchable]="false"
           name="districts"
           [(ngModel)]="bts.districtId"
-          (ngModelChange)="getTownshipList()"
+          (ngModelChange)="getTownshipList(); getDistrictAndZoomTo()"
           #District="ngModel"
           bindLabel="name"
           bindValue="id"
@@ -137,7 +140,7 @@
 
     <div class="col-md-12">
       <div class="form-group">
-        <label for="role">Township <i class="required">&#40;*&#41;</i></label>
+        <label for="Township">Township <i class="required">&#40;*&#41;</i></label>
         <ng-select
           [items]="townships"
           class="text-left"
@@ -148,14 +151,15 @@
           [searchable]="false"
           name="townships"
           [(ngModel)]="bts.townshipId"
-          #Role="ngModel"
+          (ngModelChange)="getTownshipAndZoomTo()"
+          #Township="ngModel"
           bindLabel="name"
           bindValue="id"
           required>
         </ng-select>
 
         <div class="invalid-feedback"
-          *ngIf="Role.errors?.required">
+          *ngIf="Township.errors?.required">
           Please select township
         </div>
       </div>

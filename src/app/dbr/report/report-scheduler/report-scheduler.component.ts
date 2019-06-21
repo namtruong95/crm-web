@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import { QueryBuilder } from 'shared/utils/query-builder';
 import { CustomerSaleActivity } from 'models/customer-sale-activity';
 import * as orderBy from 'lodash/orderBy';
+import { RoleService } from 'app/role.service';
 
 interface OrderCustomer {
   columnName: string;
@@ -35,8 +36,11 @@ export class ReportSchedulerComponent implements OnInit {
     });
   }
   private _filterQuery: any = {};
+  get roleAccess(): boolean {
+    return this.role.is_admin || this.role.is_sale_director;
+  }
 
-  constructor(private _notify: NotifyService, private _reportSv: ReportService) {}
+  constructor(private _notify: NotifyService, private _reportSv: ReportService, public role: RoleService) {}
 
   ngOnInit() {}
 

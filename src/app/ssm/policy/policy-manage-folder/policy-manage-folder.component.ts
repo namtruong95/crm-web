@@ -15,6 +15,7 @@ import * as cloneDeep from 'lodash/cloneDeep';
 })
 export class PolicyManageFolderComponent implements OnInit {
   public folders: Folder[] = [];
+  public isLoading = false;
 
   constructor(
     private _modalService: BsModalService,
@@ -32,12 +33,15 @@ export class PolicyManageFolderComponent implements OnInit {
   }
 
   private _getListFolders() {
+    this.isLoading = true;
     this._folderSv.getListFolder().subscribe(
       (res) => {
         this.folders = res;
+        this.isLoading = false;
       },
       (errors) => {
         this._notify.error(errors);
+        this.isLoading = false;
       },
     );
   }

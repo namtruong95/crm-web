@@ -8,3 +8,16 @@ agm-map {
     margin-top: 20px;
   }
 }
+
+.gmap-wrapper {
+  height: 100%;
+  position: relative;
+
+  .search-box {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    margin: 10px;
+    width: 50%;
+  }
+}

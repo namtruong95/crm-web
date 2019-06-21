@@ -55,6 +55,20 @@ export class Customer extends BaseModel implements Deserializable<Customer> {
     return !!this.address && !!this.latitude && !!this.longitude;
   }
 
+  public get address_display(): string {
+    let address = this.address;
+    if (this.branch) {
+      address += `, ${this.branch.name}`;
+    }
+    if (this.district) {
+      address += `, ${this.district.name}`;
+    }
+    if (this.township) {
+      address += `, ${this.township.name}`;
+    }
+    return address;
+  }
+
   private _catalog: CustomerClassification;
   public get catalog(): CustomerClassification {
     return this._catalog;

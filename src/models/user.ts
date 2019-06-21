@@ -49,7 +49,11 @@ export class User extends BaseModel implements Deserializable<User> {
   }
 
   public get code_full_name(): string {
-    return `${this.userName} - ${this.fullName}`;
+    let name = this.userName;
+    if (this.fullName) {
+      name += `- ${this.fullName}`;
+    }
+    return name;
   }
 
   password: string;

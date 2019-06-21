@@ -102,6 +102,10 @@ export class PolicyManagePdfComponent implements OnInit {
       });
     });
 
+    if (!data.length) {
+      return;
+    }
+
     this._uploadFile(data);
   }
 

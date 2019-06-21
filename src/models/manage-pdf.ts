@@ -1,6 +1,7 @@
 import { BaseModelInterface, BaseModel } from './base.model';
 import { Deserializable } from 'shared/interfaces/deserializable';
 import { Folder } from './folder';
+
 interface ManagePdfInterface extends BaseModelInterface {
   fileName: string;
   fileType: string;
@@ -20,7 +21,7 @@ export class ManagePdf extends BaseModel implements Deserializable<ManagePdf> {
   }
 
   get folder_record_id(): string {
-    return `${this.folder ? this.folder.name : 'ROOT'} - ${this.record_id}`;
+    return `${this.folder ? this.folder.name : 'ROOT'} - ${this.fileName}`;
   }
 
   constructor() {
