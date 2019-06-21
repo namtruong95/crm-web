@@ -205,6 +205,10 @@ export class QuotationModalEditComponent implements OnInit {
       return;
     }
 
+    if (this.quotation.customer.assignedStaff) {
+      this.quotation.assignedStaff = this.quotation.customer.assignedStaff;
+    }
+
     if (this.btsList.length === 0) {
       this._notify.warning('bts not found');
       return;

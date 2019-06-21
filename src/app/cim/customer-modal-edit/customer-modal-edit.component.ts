@@ -109,10 +109,10 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._onEventEmitter();
     this._getBranchList();
     if (this.customer.branchId) {
-      this.getDistrictList();
+      this.getDistrictList(false);
     }
     if (this.customer.districtId) {
-      this.getTownshipList();
+      this.getTownshipList(false);
     }
     if (!this.canChangeBranch) {
       this._getUsers();
@@ -271,10 +271,11 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  public getDistrictList() {
+  public getDistrictList(initLoad = true) {
     if (!this.customer.branchId) {
       this.districts = [];
       this.customer.districtId = null;
+
       return;
     }
 
@@ -286,6 +287,9 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._branchSv.getDistrictList(opts).subscribe(
       (res) => {
         this.districts = res.districts;
+        if (initLoad) {
+          this.customer.districtId = null;
+        }
         this.isLoadingDistrict = false;
       },
       (errors) => {
@@ -295,7 +299,7 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  public getTownshipList() {
+  public getTownshipList(initLoad = true) {
     if (!this.customer.districtId) {
       this.townships = [];
       this.customer.townshipId = null;
@@ -310,6 +314,9 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
     this._branchSv.getTownshipList(opts).subscribe(
       (res) => {
         this.townships = res.townships;
+        if (initLoad) {
+          this.customer.townshipId = null;
+        }
         this.isLoadingTownship = false;
       },
       (errors) => {
@@ -443,10 +450,12 @@ export class CustomerModalEditComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const opts = {
-      isBranchDirector: 1,
-      branchId: this.customer.assignedBranchId,
-    };
+    const opts: any = {};
+
+    if (this.customer.assignedBranchId) {
+      opts.branchId = this.customer.assignedBranchId;
+      opts.isBranchDirector = 1;
+    }
 
     if (this._role.is_branch_director && this._rootScope.currentUser.branchId === this.customer.assignedBranchId) {
       opts.isBranchDirector = 0;

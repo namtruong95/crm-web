@@ -449,10 +449,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const opts = {
-      isBranchDirector: 1,
-      branchId: this.customer.assignedBranchId,
-    };
+    const opts: any = {};
+
+    if (this.customer.assignedBranchId) {
+      opts.branchId = this.customer.assignedBranchId;
+      opts.isBranchDirector = 1;
+    }
 
     if (this._role.is_branch_director && this._rootScope.currentUser.branchId === this.customer.assignedBranchId) {
       opts.isBranchDirector = 0;

@@ -1,29 +1,24 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Bts } from 'models/bts';
 import { BtsService } from 'shared/services/bts.service';
 import { NotifyService } from 'shared/utils/notify.service';
 import { EventEmitterService } from 'shared/utils/event-emitter.service';
 import { EMITTER_TYPE } from 'constants/emitter';
 import { NgForm } from '@angular/forms';
-
-// @ts-ignore-start
-import {} from 'googlemaps';
 import { Branch } from 'models/branch';
 import { District } from 'models/district';
 import { Township } from 'models/township';
 import { BranchService } from 'shared/services/branch.service';
-// @ts-ignore-end
+import { GmapService } from 'shared/services/gmap.service';
+import { Subscription } from 'rxjs/Subscription';
+import { RegExp } from 'constants/reg-exp';
 
 @Component({
   selector: 'app-bts-create',
   templateUrl: './bts-create.component.html',
   styleUrls: ['./bts-create.component.scss'],
 })
-export class BtsCreateComponent implements OnInit {
-  @ViewChild('Address')
-  private _address: ElementRef;
-
+export class BtsCreateComponent implements OnInit, OnDestroy {
   public bts: Bts = new Bts();
   public isLoading = false;
 
@@ -39,18 +34,154 @@ export class BtsCreateComponent implements OnInit {
   public townships: Township[] = [];
   public isLoadingTownship = false;
 
+  private _subscriber: Subscription;
+  private _isChangeLatLng = false;
+
   constructor(
-    private _mapsAPILoader: MapsAPILoader,
-    private _ngZone: NgZone,
     private _notify: NotifyService,
     private _emitter: EventEmitterService,
     private _btsSv: BtsService,
     private _branchSv: BranchService,
+    private _gmapSv: GmapService,
   ) {}
 
   ngOnInit() {
-    this._initAutoCompleteGmap();
     this._getBranchList();
+    this._onEventEmitter();
+  }
+
+  ngOnDestroy() {
+    if (this._subscriber) {
+      this._subscriber.unsubscribe();
+    }
+  }
+
+  private _onEventEmitter() {
+    this._subscriber = this._emitter.caseNumber$.subscribe((data) => {
+      if (data && (data.type === EMITTER_TYPE.GMAP_CLICK || data.type === EMITTER_TYPE.GMAP_PLACE_CHANGED)) {
+        if (data.data.mode === 'create') {
+          this.bts.latitude = data.data.lat;
+          this.bts.longitude = data.data.lng;
+        }
+      }
+    });
+  }
+
+  public changeLatLng() {
+    this._isChangeLatLng = true;
+  }
+
+  public findAddressWithLatLng() {
+    if (!this.bts.latitude || !this.bts.longitude || !this._isChangeLatLng) {
+      return;
+    }
+
+    if (!RegExp.latitude.test(this.bts.latitude.toString()) || !RegExp.longitude.test(this.bts.longitude.toString())) {
+      this._notify.warning('latitude or longitude format is incorrect!');
+      return;
+    }
+
+    // call api
+    const data = {
+      lat: this.bts.latitude,
+      lng: this.bts.longitude,
+    };
+
+    this._gmapSv.findAddressWithLocation(data, (results, status) => {
+      this._isChangeLatLng = false;
+
+      if (status === 'OK') {
+        if (results[0]) {
+          // emit zoom to latlng
+          this._emitter.publishData({
+            type: EMITTER_TYPE.GMAP_ZOOM_TO,
+            data: {
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng(),
+              zoom: 12,
+            },
+          });
+
+          return;
+        }
+        this._notify.warning('No results found!');
+      }
+    });
+  }
+
+  private _findAddressWithAddress(address: string, zoom: number) {
+    this._gmapSv.findAddressWithAddress(address, (results, status) => {
+      if (status === 'OK') {
+        if (results[0]) {
+          // emit zoom to latlng
+          this._emitter.publishData({
+            type: EMITTER_TYPE.GMAP_ZOOM_TO,
+            data: {
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng(),
+              zoom: zoom,
+            },
+          });
+
+          return;
+        }
+        this._notify.warning('No results found!');
+      }
+    });
+  }
+
+  public getRegionAndZoomTo() {
+    let address = '';
+
+    const iState = this.branches.findIndex((item) => item.id === this.bts.branchId);
+    if (iState >= 0) {
+      address += `${this.branches[iState].name} State, Myanmar (Burma)`;
+    }
+
+    if (address) {
+      this._findAddressWithAddress(address, 5);
+    }
+  }
+
+  public getDistrictAndZoomTo() {
+    let address = '';
+
+    const iDistrict = this.districts.findIndex((item) => item.id === this.bts.districtId);
+    if (iDistrict >= 0) {
+      address += `${this.districts[iDistrict].name} District`;
+    }
+
+    const iState = this.branches.findIndex((item) => item.id === this.bts.branchId);
+    if (iState >= 0) {
+      address += `, ${this.branches[iState].name} State, Myanmar (Burma)`;
+    }
+
+    if (address) {
+      this._findAddressWithAddress(address, 7);
+    }
+  }
+
+  public getTownshipAndZoomTo() {
+    let address = '';
+
+    const iTownship = this.townships.findIndex((item) => item.id === this.bts.townshipId);
+    if (iTownship >= 0) {
+      address += `${this.townships[iTownship].name}`;
+    }
+
+    const iDistrict = this.districts.findIndex((item) => item.id === this.bts.districtId);
+    if (iDistrict >= 0) {
+      address += `, ${this.districts[iDistrict].name} District`;
+    }
+
+    const iState = this.branches.findIndex((item) => item.id === this.bts.branchId);
+    if (iState >= 0) {
+      address += `, ${this.branches[iState].name} State, Myanmar (Burma)`;
+    }
+
+    if (address) {
+      this._findAddressWithAddress(address, 9);
+    }
   }
 
   private _getBranchList() {
@@ -113,34 +244,6 @@ export class BtsCreateComponent implements OnInit {
         this._notify.error(errors);
       },
     );
-  }
-
-  private _initAutoCompleteGmap() {
-    this._mapsAPILoader.load().then(() => {
-      const autocomplete = new google.maps.places.Autocomplete(this._address.nativeElement, {
-        types: ['address'],
-      });
-
-      autocomplete.addListener('place_changed', () => {
-        this._ngZone.run(() => {
-          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-
-          // verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-
-          this.bts.address = place.formatted_address;
-          this.bts.latitude = place.geometry.location.lat();
-          this.bts.longitude = place.geometry.location.lng();
-
-          this._emitter.publishData({
-            type: EMITTER_TYPE.GMAP_BTS_CREATE,
-            data: this.bts.markerToJSON(),
-          });
-        });
-      });
-    });
   }
 
   public createBts(form: NgForm) {
