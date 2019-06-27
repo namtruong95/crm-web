@@ -9,6 +9,7 @@
     "serve:local": "./node_modules/.bin/ng serve --configuration=local --port=3000",
     "serve:dev": "./node_modules/.bin/ng serve --configuration=dev --port=3000",
     "build:stg": "rm -rf crm_web.zip && ./node_modules/.bin/ng build --configuration=stg --progress=false && yarn compress",
+    "build:dev": "rm -rf crm_web.zip && ./node_modules/.bin/ng build --configuration=dev --progress=false && yarn compress",
     "build:prod": "rm -rf crm_web.zip && ./node_modules/.bin/ng build --configuration=prod --progress=false && yarn compress",
     "compress": "./node_modules/.bin/gulp compress",
     "compressSrc": "rm -rf src.zip && ./node_modules/.bin/gulp compressSrc",

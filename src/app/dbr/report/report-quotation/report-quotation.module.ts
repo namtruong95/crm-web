@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReportQuotationComponent } from './report-quotation.component';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ReportFilterModule } from '../report-filter/report-filter.module';
+import { ReportQuotationFilterModule } from '../report-quotation-filter/report-quotation-filter.module';
 import { ReportService } from 'shared/services/report.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 
@@ -14,7 +14,13 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), FormsModule, ReportFilterModule, PaginationModule.forRoot()],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    ReportQuotationFilterModule,
+    PaginationModule.forRoot(),
+  ],
   declarations: [ReportQuotationComponent],
   providers: [ReportService],
 })
