@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReportCustomerCareComponent } from './report-customer-care.component';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ReportFilterModule } from '../report-filter/report-filter.module';
+import { ReportCustomerCareFilterModule } from '../report-customer-care-filter/report-customer-care-filter.module';
 import { ReportService } from 'shared/services/report.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 
@@ -14,7 +14,13 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), FormsModule, ReportFilterModule, PaginationModule.forRoot()],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    ReportCustomerCareFilterModule,
+    PaginationModule.forRoot(),
+  ],
   declarations: [ReportCustomerCareComponent],
   providers: [ReportService],
 })

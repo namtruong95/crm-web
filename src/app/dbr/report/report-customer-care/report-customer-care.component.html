@@ -1,4 +1,4 @@
-<app-report-filter (changeFilter)="exportReportCustomerCare($event)" (changeTermPreviewReport)="previewReportCustomerCare($event)"></app-report-filter>
+<app-report-customer-care-filter (changeFilter)="exportReportCustomerCare($event)" (changeTermPreviewReport)="previewReportCustomerCare($event)"></app-report-customer-care-filter>
 
 <div class="table-responsive py-4">
   <span>Showing {{ query.from }} to {{ query.to }} of {{ query.totalElements }} entries</span>
@@ -21,9 +21,9 @@
           Position
           <i class="fa {{ getClassOrder('customerPosition') }}"></i>
         </th>
-        <th class="cursor-pointer" (click)="addOrder('dateActivityFormat')">
+        <th class="cursor-pointer" (click)="addOrder('createdDateFormat')">
           Date
-          <i class="fa {{ getClassOrder('dateActivityFormat') }}"></i>
+          <i class="fa {{ getClassOrder('createdDateFormat') }}"></i>
         </th>
         <th class="cursor-pointer" (click)="addOrder('reason')">
           Reason
@@ -53,7 +53,7 @@
         <td>{{ careActivity.customerAddress }}</td>
         <td>{{ careActivity.customerContactName }}</td>
         <td>{{ careActivity.customerPosition }}</td>
-        <td>{{ careActivity.dateActivityFormat }}</td>
+        <td>{{ careActivity.createdDateFormat }}</td>
         <td>{{ careActivity.reason }}</td>
         <td>{{ careActivity.type }}</td>
         <td>{{ careActivity.statusStr }}</td>

@@ -1,0 +1,88 @@
+<form novalidate class="pt-2">
+  <div class="row">
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="typeOfService">Service Term</label>
+      <ng-select
+        [items]="typeOfServices"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingTypeOfService"
+        placeholder="please select service term"
+        [searchable]="false"
+        name="typeOfServices"
+        [(ngModel)]="filterTerm.typeOfServiceId"
+        bindLabel="name"
+        bindValue="id">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group">
+      <label for="serviceTerm">Type Of Service</label>
+      <ng-select
+        [items]="serviceTerms"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingServiceTerm"
+        placeholder="please select type of service"
+        [searchable]="false"
+        name="serviceTerm"
+        [(ngModel)]="filterTerm.serviceTermId"
+        bindLabel="name"
+        bindValue="id">
+      </ng-select>
+    </div>
+
+    <div class="col-lg-3 col-md-6" *ngIf="roleAccess">
+      <div class="form-group">
+        <label for="Region">Branch</label>
+        <ng-select
+          [items]="branches"
+          class="text-left"
+          [closeOnSelect]="true"
+          [clearable]="true"
+          [loading]="isLoadingBranch"
+          placeholder="please select region"
+          [searchable]="false"
+          name="branches"
+          [(ngModel)]="filterTerm.branchId"
+          (ngModelChange)="changeBranch()"
+          #Region="ngModel"
+          bindLabel="name"
+          bindValue="id">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 form-group" *ngIf="roleAccessStaff">
+      <label for="Name">Staff</label>
+      <ng-select
+        [items]="staffs"
+        class="text-left"
+        [closeOnSelect]="true"
+        [clearable]="true"
+        [loading]="isLoadingStaff"
+        placeholder="please select staff"
+        [searchable]="true"
+        name="assignedStaff"
+        [(ngModel)]="filterTerm.assignedStaff"
+        bindLabel="code_full_name">
+      </ng-select>
+    </div>
+
+    <div class="col-12 form-group report-filter__btn">
+      <button type="button" class="btn btn-primary mr-2"
+        (click)="exportReport()">
+        <i class="fa fa-download mr-2"></i>
+        Export
+      </button>
+
+      <button type="button" class="btn btn-primary mr-2"
+        (click)="previewReport()">
+        <i class="fa fa-search mr-2"></i>
+        Preview
+      </button>
+    </div>
+  </div>
+</form>

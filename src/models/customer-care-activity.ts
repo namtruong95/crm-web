@@ -14,7 +14,7 @@ interface CustomerCareActivityInterface extends BaseModelInterface {
   type: string;
   status: string;
   giftPrice: string;
-  dateActivity: string;
+  dateActivity: number;
   dateActivityFormat: string;
   assignedStaffId: number;
 }
@@ -72,7 +72,11 @@ export class CustomerCareActivity extends BaseModel implements Deserializable<Cu
     this._giftPrice = v;
   }
 
+  dateActivity: number;
   dateActivityFormat: string;
+  public get createdDateFormat(): string {
+    return moment(this.dateActivity).format('DD/MM/YYYY');
+  }
 
   constructor() {
     super();

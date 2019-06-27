@@ -37,17 +37,7 @@ export class ApiService {
     const headers = this._generateHeaders();
     const path = urljoin(this.apiUrl, url);
 
-    let params = new HttpParams();
-
-    if (opts) {
-      Object.keys(opts).map((k) => {
-        if ((opts[k] && opts[k].constructor === Boolean) || opts[k] === false) {
-          params = params.append(k, Number(opts[k]).toString());
-        } else {
-          params = params.append(k, opts[k]);
-        }
-      });
-    }
+    const params = this._initParams(opts);
 
     return this._httpClient
       .get(path, {
@@ -108,5 +98,37 @@ export class ApiService {
       .catch((errors: HttpErrorResponse) => {
         return Observable.throw(errors);
       });
+  }
+
+  private _initParams(opts: any = {}): HttpParams {
+    let params = new HttpParams();
+
+    if (opts) {
+      Object.keys(opts).map((k) => {
+        if (opts[k] === null || opts[k] === undefined) {
+          return;
+        }
+        if (opts[k] === false) {
+          params = params.append(k, Number(opts[k]).toString());
+        }
+
+        switch (opts[k].constructor) {
+          case Boolean:
+            params = params.append(k, Number(opts[k]).toString());
+            break;
+          case Array:
+            opts[k].map((v) => {
+              params = params.append(`${k}[]`, v);
+            });
+            break;
+
+          default:
+            params = params.append(k, opts[k]);
+            break;
+        }
+      });
+    }
+
+    return params;
   }
 }
